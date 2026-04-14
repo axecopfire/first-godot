@@ -439,42 +439,45 @@ func _setup_npc_dialogues() -> void:
 	for npc in npcs_node.get_children():
 		match npc.npc_name:
 			"Merchant":
-				npc.inventory_dialogues = {
-					"Gold Coin": PackedStringArray(["Ah, gold! A person of means!\nLet me show the premium wares.", "This silk is worth ten\ntimes that coin!"]),
-					"Sword": PackedStringArray(["A fine blade you carry!\nI have sheaths of finest leather.", "Weapons are good for trade\nin these parts."]),
-					"Bread": PackedStringArray(["Bread? The baker's work\nis adequate, I suppose.", "I deal in finer things,\nbut everyone must eat."]),
-					"Herb": PackedStringArray(["Herbs from the healer?\nI could sell those overseas!", "The Eastern kingdoms pay\nwell for medicinal plants."]),
-					"Bread,Gold Coin": PackedStringArray(["Gold AND provisions?\nYou're well-prepared!", "I can outfit you for\nany adventure... for a price."]),
-					"Gold Coin,Sword": PackedStringArray(["Armed and wealthy!\nYou must be an adventurer.", "I have maps to treasure\nif you're interested..."]),
-					"Bread,Gold Coin,Herb,Sword": PackedStringArray(["You carry quite the collection!\nA true adventurer's kit.", "With all that, you could\nconquer a small kingdom!", "I'm impressed... and a\nlittle jealous."]),
+				npc.greeting_items = "Well now, let me see\nwhat you've got there..."
+				npc.greeting_all = "By the Eastern stars!\nYou carry quite the collection!"
+				npc.item_reactions = {
+					"Bread": "Bread? The baker's work\nis adequate, I suppose.",
+					"Gold Coin": "Ah, gold! Now you have\nmy full attention.",
+					"Herb": "Herbs from the healer?\nI could sell those overseas!",
+					"Sword": "A fine blade! I have\nsheaths of the finest leather.",
 				}
+				npc.npc_closing = "Come see me when you're\nready to make a deal!"
 			"Baker":
-				npc.inventory_dialogues = {
-					"Bread": PackedStringArray(["I see you found my\nextra loaf! Good taste!", "Nothing like fresh bread\nfor the road."]),
-					"Sword": PackedStringArray(["A sword?! Please don't\nwave that near my flour!", "Warriors need to eat too.\nBread for the journey?"]),
-					"Herb": PackedStringArray(["Ooh, herbs! I could use\nsome rosemary for my rolls.", "The herbalist grows the\nbest seasonings."]),
-					"Gold Coin": PackedStringArray(["Gold! You could buy my\nentire day's baking!", "I mostly trade in copper,\nbut gold works too!"]),
-					"Bread,Herb": PackedStringArray(["Bread and herbs together?\nMaking a fine sandwich!", "Add some cheese and you've\ngot a feast!"]),
-					"Bread,Gold Coin,Herb,Sword": PackedStringArray(["My bread alongside all those\ntreasures? I'm honored!", "You've got everything\nfor an adventure!", "Don't forget to eat\nthe bread before it goes stale!"]),
+				npc.greeting_items = "Oh! A customer with\ninteresting things!"
+				npc.greeting_all = "My goodness, you've been\nall over the market!"
+				npc.item_reactions = {
+					"Bread": "I see you found my\nextra loaf! Good taste!",
+					"Gold Coin": "Gold! You could buy my\nentire day's baking!",
+					"Herb": "Ooh, herbs! I could use\nsome rosemary for my rolls.",
+					"Sword": "A sword?! Please don't\nwave that near my flour!",
 				}
+				npc.npc_closing = "Enjoy the market, and\ndon't skip meals!"
 			"Blacksmith":
-				npc.inventory_dialogues = {
-					"Sword": PackedStringArray(["A fine blade! Did you\nfind that in my scrap pile?", "I can sharpen that for you.\nLooks like it needs work."]),
-					"Gold Coin": PackedStringArray(["Gold, eh? I could forge\nyou a proper weapon.", "A golden hilt would make\nany sword magnificent!"]),
-					"Bread": PackedStringArray(["Bread won't protect you\nin a fight, friend.", "Though a stale loaf could\nknock someone out..."]),
-					"Herb": PackedStringArray(["Herbs? I burn myself\nso often, those could help!", "The herbalist's salves\nsaved my hands many times."]),
-					"Gold Coin,Sword": PackedStringArray(["Gold AND a sword?\nLet me upgrade that blade!", "For that gold, I'll make\nit the sharpest in the land!"]),
-					"Bread,Gold Coin,Herb,Sword": PackedStringArray(["A full adventurer's pack!\nYou're ready for anything.", "The sword is the key piece.\nEverything else is comfort.", "Come back if the blade\nneeds maintenance!"]),
+				npc.greeting_items = "Hmm, what's that\nyou've got there?"
+				npc.greeting_all = "A full adventurer's pack!\nNow THAT is impressive."
+				npc.item_reactions = {
+					"Bread": "Bread won't protect you\nin a fight, friend.",
+					"Gold Coin": "Gold, eh? I could forge\nyou a proper weapon.",
+					"Herb": "Herbs? I burn myself\nso often, those could help!",
+					"Sword": "A fine blade! Did you find\nthat in my scrap pile?",
 				}
+				npc.npc_closing = "Stay sharp out there.\nLiterally."
 			"Herbalist":
-				npc.inventory_dialogues = {
-					"Herb": PackedStringArray(["You found my herb bundle!\nThose are freshly picked.", "Mix them with water\nfor a healing tea."]),
-					"Sword": PackedStringArray(["A weapon? I prefer\npeaceful remedies myself.", "Though sword wounds do\nkeep me in business..."]),
-					"Bread": PackedStringArray(["Bread is medicine for\nthe soul, I always say!", "Pair it with my herbal tea\nfor a healing meal."]),
-					"Gold Coin": PackedStringArray(["Gold can't buy health...\nbut it CAN buy my potions!", "I have rare ingredients\nif you have the coin."]),
-					"Gold Coin,Herb": PackedStringArray(["With gold and those herbs,\nI can brew something special!", "A master potion requires\nrare ingredients AND funding."]),
-					"Bread,Gold Coin,Herb,Sword": PackedStringArray(["Bread for sustenance, herbs\nfor healing, gold for trade...", "And a sword for when\nall else fails!", "You're the most prepared\nperson I've ever met!"]),
+				npc.greeting_items = "Ooh, what treasures\ndo you bring me today?"
+				npc.greeting_all = "Bread, herbs, gold, steel...\nYou're the most prepared\nperson I've ever met!"
+				npc.item_reactions = {
+					"Bread": "Bread is medicine for\nthe soul, I always say!",
+					"Gold Coin": "Gold can't buy health...\nbut it CAN buy my potions!",
+					"Herb": "You found my herb bundle!\nThose are freshly picked.",
+					"Sword": "A weapon? I prefer\npeaceful remedies myself.",
 				}
+				npc.npc_closing = "Nature provides all\nwe truly need!"
 
 func _on_inventory_changed() -> void:
 	if inventory_label == null:

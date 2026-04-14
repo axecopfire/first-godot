@@ -9,7 +9,10 @@ var sprite: Sprite2D
 var label: Label
 var interaction_area: Area2D
 
-var inventory_dialogues: Dictionary = {}
+var item_reactions: Dictionary = {}
+var greeting_items: String = ""
+var greeting_all: String = ""
+var npc_closing: String = ""
 var nearby_player: Node2D = null
 var active_dialogue: PackedStringArray = []
 
@@ -67,7 +70,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and is_player_nearby:
 		if not showing_dialogue:
 			showing_dialogue = true
-			active_dialogue = _select_dialogue()
+			active_dialogue = _build_dialogue()
 			current_line = 0
 			_show_line()
 		else:
@@ -78,47 +81,37 @@ func _unhandled_input(event: InputEvent) -> void:
 				_show_line()
 		get_viewport().set_input_as_handled()
 
-func _select_dialogue() -> PackedStringArray:
+func _build_dialogue() -> PackedStringArray:
 	if nearby_player == null or not nearby_player.has_method("get_inventory"):
 		return dialogue_lines
 
 	var inv: Array = nearby_player.get_inventory()
+	if inv.is_empty():
+		return dialogue_lines
 
-	# Try exact match with full inventory (sorted)
+	var lines: Array[String] = []
+
+	# Choose greeting based on item count
+	if inv.size() >= 4 and greeting_all != "":
+		lines.append(greeting_all)
+	elif greeting_items != "":
+		lines.append(greeting_items)
+
+	# Add per-item reactions in sorted order for determinism
 	var sorted_inv = inv.duplicate()
 	sorted_inv.sort()
-	var full_key = ",".join(sorted_inv)
-	if full_key != "" and full_key in inventory_dialogues:
-		return inventory_dialogues[full_key]
+	for item_name in sorted_inv:
+		if item_name in item_reactions:
+			lines.append(item_reactions[item_name])
 
-	# Try matching subsets from largest to smallest
-	for size in range(sorted_inv.size(), 0, -1):
-		var combos = _get_combinations(sorted_inv, size)
-		for combo in combos:
-			var key = ",".join(combo)
-			if key in inventory_dialogues:
-				return inventory_dialogues[key]
+	# Add closing
+	if npc_closing != "":
+		lines.append(npc_closing)
 
-	return dialogue_lines
+	if lines.is_empty():
+		return dialogue_lines
 
-func _get_combinations(arr: Array, size: int) -> Array:
-	if size == arr.size():
-		return [arr]
-	if size == 1:
-		var result = []
-		for item in arr:
-			result.append([item])
-		return result
-	if size <= 0:
-		return []
-	var result = []
-	for i in range(arr.size() - size + 1):
-		var sub_combos = _get_combinations(arr.slice(i + 1), size - 1)
-		for sub in sub_combos:
-			var combo = [arr[i]]
-			combo.append_array(sub)
-			result.append(combo)
-	return result
+	return PackedStringArray(lines)
 
 func _show_line() -> void:
 	if label and current_line < active_dialogue.size():
