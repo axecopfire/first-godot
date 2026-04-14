@@ -9,6 +9,10 @@ var sprite: Sprite2D
 var label: Label
 var interaction_area: Area2D
 
+var inventory_dialogues: Dictionary = {}
+var nearby_player: Node2D = null
+var active_dialogue: PackedStringArray = []
+
 var start_position := Vector2.ZERO
 var wander_target := Vector2.ZERO
 var wander_timer := 0.0
@@ -63,18 +67,62 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and is_player_nearby:
 		if not showing_dialogue:
 			showing_dialogue = true
+			active_dialogue = _select_dialogue()
 			current_line = 0
 			_show_line()
 		else:
 			current_line += 1
-			if current_line >= dialogue_lines.size():
+			if current_line >= active_dialogue.size():
 				_hide_dialogue()
 			else:
 				_show_line()
+		get_viewport().set_input_as_handled()
+
+func _select_dialogue() -> PackedStringArray:
+	if nearby_player == null or not nearby_player.has_method("get_inventory"):
+		return dialogue_lines
+
+	var inv: Array = nearby_player.get_inventory()
+
+	# Try exact match with full inventory (sorted)
+	var sorted_inv = inv.duplicate()
+	sorted_inv.sort()
+	var full_key = ",".join(sorted_inv)
+	if full_key != "" and full_key in inventory_dialogues:
+		return inventory_dialogues[full_key]
+
+	# Try matching subsets from largest to smallest
+	for size in range(sorted_inv.size(), 0, -1):
+		var combos = _get_combinations(sorted_inv, size)
+		for combo in combos:
+			var key = ",".join(combo)
+			if key in inventory_dialogues:
+				return inventory_dialogues[key]
+
+	return dialogue_lines
+
+func _get_combinations(arr: Array, size: int) -> Array:
+	if size == arr.size():
+		return [arr]
+	if size == 1:
+		var result = []
+		for item in arr:
+			result.append([item])
+		return result
+	if size <= 0:
+		return []
+	var result = []
+	for i in range(arr.size() - size + 1):
+		var sub_combos = _get_combinations(arr.slice(i + 1), size - 1)
+		for sub in sub_combos:
+			var combo = [arr[i]]
+			combo.append_array(sub)
+			result.append(combo)
+	return result
 
 func _show_line() -> void:
-	if label:
-		label.text = dialogue_lines[current_line]
+	if label and current_line < active_dialogue.size():
+		label.text = active_dialogue[current_line]
 		label.visible = true
 
 func _hide_dialogue() -> void:
@@ -85,8 +133,10 @@ func _hide_dialogue() -> void:
 func _on_interaction_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		is_player_nearby = true
+		nearby_player = body
 
 func _on_interaction_area_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		is_player_nearby = false
+		nearby_player = null
 		_hide_dialogue()

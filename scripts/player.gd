@@ -1,7 +1,10 @@
 extends CharacterBody2D
 
+signal inventory_changed
+
 const SPEED = 200.0
 
+var inventory: Array[String] = []
 var sprite: Sprite2D
 var last_direction := Vector2.DOWN
 var anim_timer := 0.0
@@ -63,3 +66,21 @@ func _update_sprite_frame() -> void:
 	atlas.atlas = player_texture
 	atlas.region = Rect2(anim_frame * 16, row * 16, 16, 16)
 	sprite.texture = atlas
+
+func add_item(item_name: String) -> void:
+	inventory.append(item_name)
+	inventory_changed.emit()
+
+func remove_item(item_name: String) -> bool:
+	var idx = inventory.find(item_name)
+	if idx >= 0:
+		inventory.remove_at(idx)
+		inventory_changed.emit()
+		return true
+	return false
+
+func has_item(item_name: String) -> bool:
+	return item_name in inventory
+
+func get_inventory() -> Array[String]:
+	return inventory
