@@ -12,6 +12,8 @@ var tile_textures: Array[Texture2D] = []
 var map_data: Array = []
 var player: CharacterBody2D
 var camera: Camera2D
+var inventory_label: Label
+var drop_hint_label: Label
 
 func _ready() -> void:
 	_load_textures()
@@ -19,8 +21,10 @@ func _ready() -> void:
 	_draw_map()
 	_place_market_stalls()
 	_place_decorations()
+	_place_pickup_items()
 	_create_player()
 	_spawn_npcs()
+	_setup_npc_dialogues()
 	_build_walls()
 	_create_ui()
 
@@ -110,6 +114,7 @@ func _create_player() -> void:
 	camera.position_smoothing_speed = 8.0
 	camera.make_current()
 	player.add_child(camera)
+	player.inventory_changed.connect(_on_inventory_changed)
 
 func _place_market_stalls() -> void:
 	var stall_tex = ImageTexture.create_from_image(Image.load_from_file("res://textures/market_stall.png"))
@@ -324,7 +329,7 @@ func _create_ui() -> void:
 	add_child(canvas)
 
 	var hint = Label.new()
-	hint.text = "WASD / Arrows to move  |  E to talk"
+	hint.text = "WASD to move | E to interact | Q to drop item"
 	hint.position = Vector2(10, 10)
 	hint.add_theme_font_size_override("font_size", 14)
 	hint.add_theme_color_override("font_color", Color(1, 1, 1, 0.6))
@@ -334,3 +339,210 @@ func _create_ui() -> void:
 	var tween = create_tween()
 	tween.tween_interval(5.0)
 	tween.tween_property(hint, "modulate:a", 0.0, 2.0)
+
+	# Inventory HUD (top-right corner)
+	var inv_panel = PanelContainer.new()
+	inv_panel.name = "InventoryPanel"
+	inv_panel.position = Vector2(900, 10)
+	inv_panel.add_theme_stylebox_override("panel", _create_inv_panel_style())
+
+	var vbox = VBoxContainer.new()
+	inv_panel.add_child(vbox)
+
+	var inv_title = Label.new()
+	inv_title.text = "Inventory"
+	inv_title.add_theme_font_size_override("font_size", 12)
+	inv_title.add_theme_color_override("font_color", Color(1, 0.85, 0.4))
+	vbox.add_child(inv_title)
+
+	inventory_label = Label.new()
+	inventory_label.name = "InventoryLabel"
+	inventory_label.text = "(empty)"
+	inventory_label.add_theme_font_size_override("font_size", 10)
+	inventory_label.add_theme_color_override("font_color", Color.WHITE)
+	vbox.add_child(inventory_label)
+
+	drop_hint_label = Label.new()
+	drop_hint_label.name = "DropHint"
+	drop_hint_label.text = ""
+	drop_hint_label.add_theme_font_size_override("font_size", 8)
+	drop_hint_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.5))
+	vbox.add_child(drop_hint_label)
+
+	canvas.add_child(inv_panel)
+
+func _create_inv_panel_style() -> StyleBoxFlat:
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0.6)
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	style.content_margin_left = 8
+	style.content_margin_right = 8
+	style.content_margin_top = 4
+	style.content_margin_bottom = 4
+	return style
+
+func _place_pickup_items() -> void:
+	var item_script = load("res://scripts/pickup_item.gd")
+	var items_config = [
+		{"name": "Bread", "pos": Vector2(29, 13) * TILE_SIZE, "color": Color(0.82, 0.65, 0.35)},
+		{"name": "Sword", "pos": Vector2(11, 19) * TILE_SIZE, "color": Color(0.7, 0.7, 0.75)},
+		{"name": "Herb", "pos": Vector2(29, 22) * TILE_SIZE, "color": Color(0.2, 0.7, 0.3)},
+		{"name": "Gold Coin", "pos": Vector2(18, 8) * TILE_SIZE, "color": Color(1.0, 0.85, 0.2)},
+	]
+
+	var items_node = Node2D.new()
+	items_node.name = "Items"
+	add_child(items_node)
+
+	for cfg in items_config:
+		var item_name: String = cfg["name"]
+		var item = Area2D.new()
+		item.name = item_name.replace(" ", "")
+		item.set_script(item_script)
+		item.item_name = item_name
+		item.position = cfg["pos"]
+		item.collision_layer = 0
+		item.collision_mask = 1
+
+		var sprite = Sprite2D.new()
+		sprite.name = "Sprite2D"
+		var img = Image.create(12, 12, false, Image.FORMAT_RGBA8)
+		img.fill(cfg["color"])
+		sprite.texture = ImageTexture.create_from_image(img)
+		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		item.add_child(sprite)
+
+		var lbl = Label.new()
+		lbl.name = "ItemLabel"
+		lbl.text = item_name
+		lbl.position = Vector2(-20, -18)
+		lbl.add_theme_font_size_override("font_size", 6)
+		lbl.add_theme_color_override("font_color", Color.WHITE)
+		lbl.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+		lbl.add_theme_constant_override("shadow_offset_x", 1)
+		lbl.add_theme_constant_override("shadow_offset_y", 1)
+		item.add_child(lbl)
+
+		var col = CollisionShape2D.new()
+		var shape = CircleShape2D.new()
+		shape.radius = 14
+		col.shape = shape
+		item.add_child(col)
+
+		items_node.add_child(item)
+
+func _setup_npc_dialogues() -> void:
+	var npcs_node = get_node("NPCs")
+	for npc in npcs_node.get_children():
+		match npc.npc_name:
+			"Merchant":
+				npc.inventory_dialogues = {
+					"Gold Coin": PackedStringArray(["Ah, gold! A person of means!\nLet me show the premium wares.", "This silk is worth ten\ntimes that coin!"]),
+					"Sword": PackedStringArray(["A fine blade you carry!\nI have sheaths of finest leather.", "Weapons are good for trade\nin these parts."]),
+					"Bread": PackedStringArray(["Bread? The baker's work\nis adequate, I suppose.", "I deal in finer things,\nbut everyone must eat."]),
+					"Herb": PackedStringArray(["Herbs from the healer?\nI could sell those overseas!", "The Eastern kingdoms pay\nwell for medicinal plants."]),
+					"Bread,Gold Coin": PackedStringArray(["Gold AND provisions?\nYou're well-prepared!", "I can outfit you for\nany adventure... for a price."]),
+					"Gold Coin,Sword": PackedStringArray(["Armed and wealthy!\nYou must be an adventurer.", "I have maps to treasure\nif you're interested..."]),
+					"Bread,Gold Coin,Herb,Sword": PackedStringArray(["You carry quite the collection!\nA true adventurer's kit.", "With all that, you could\nconquer a small kingdom!", "I'm impressed... and a\nlittle jealous."]),
+				}
+			"Baker":
+				npc.inventory_dialogues = {
+					"Bread": PackedStringArray(["I see you found my\nextra loaf! Good taste!", "Nothing like fresh bread\nfor the road."]),
+					"Sword": PackedStringArray(["A sword?! Please don't\nwave that near my flour!", "Warriors need to eat too.\nBread for the journey?"]),
+					"Herb": PackedStringArray(["Ooh, herbs! I could use\nsome rosemary for my rolls.", "The herbalist grows the\nbest seasonings."]),
+					"Gold Coin": PackedStringArray(["Gold! You could buy my\nentire day's baking!", "I mostly trade in copper,\nbut gold works too!"]),
+					"Bread,Herb": PackedStringArray(["Bread and herbs together?\nMaking a fine sandwich!", "Add some cheese and you've\ngot a feast!"]),
+					"Bread,Gold Coin,Herb,Sword": PackedStringArray(["My bread alongside all those\ntreasures? I'm honored!", "You've got everything\nfor an adventure!", "Don't forget to eat\nthe bread before it goes stale!"]),
+				}
+			"Blacksmith":
+				npc.inventory_dialogues = {
+					"Sword": PackedStringArray(["A fine blade! Did you\nfind that in my scrap pile?", "I can sharpen that for you.\nLooks like it needs work."]),
+					"Gold Coin": PackedStringArray(["Gold, eh? I could forge\nyou a proper weapon.", "A golden hilt would make\nany sword magnificent!"]),
+					"Bread": PackedStringArray(["Bread won't protect you\nin a fight, friend.", "Though a stale loaf could\nknock someone out..."]),
+					"Herb": PackedStringArray(["Herbs? I burn myself\nso often, those could help!", "The herbalist's salves\nsaved my hands many times."]),
+					"Gold Coin,Sword": PackedStringArray(["Gold AND a sword?\nLet me upgrade that blade!", "For that gold, I'll make\nit the sharpest in the land!"]),
+					"Bread,Gold Coin,Herb,Sword": PackedStringArray(["A full adventurer's pack!\nYou're ready for anything.", "The sword is the key piece.\nEverything else is comfort.", "Come back if the blade\nneeds maintenance!"]),
+				}
+			"Herbalist":
+				npc.inventory_dialogues = {
+					"Herb": PackedStringArray(["You found my herb bundle!\nThose are freshly picked.", "Mix them with water\nfor a healing tea."]),
+					"Sword": PackedStringArray(["A weapon? I prefer\npeaceful remedies myself.", "Though sword wounds do\nkeep me in business..."]),
+					"Bread": PackedStringArray(["Bread is medicine for\nthe soul, I always say!", "Pair it with my herbal tea\nfor a healing meal."]),
+					"Gold Coin": PackedStringArray(["Gold can't buy health...\nbut it CAN buy my potions!", "I have rare ingredients\nif you have the coin."]),
+					"Gold Coin,Herb": PackedStringArray(["With gold and those herbs,\nI can brew something special!", "A master potion requires\nrare ingredients AND funding."]),
+					"Bread,Gold Coin,Herb,Sword": PackedStringArray(["Bread for sustenance, herbs\nfor healing, gold for trade...", "And a sword for when\nall else fails!", "You're the most prepared\nperson I've ever met!"]),
+				}
+
+func _on_inventory_changed() -> void:
+	if inventory_label == null:
+		return
+	var inv = player.get_inventory()
+	if inv.is_empty():
+		inventory_label.text = "(empty)"
+		drop_hint_label.text = ""
+	else:
+		var lines = PackedStringArray()
+		for i in range(inv.size()):
+			lines.append(str(i + 1) + ". " + inv[i])
+		inventory_label.text = "\n".join(lines)
+		drop_hint_label.text = "Q to drop last item"
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("drop_item") and player != null:
+		var inv = player.get_inventory()
+		if inv.size() > 0:
+			var dropped_item_name = inv[inv.size() - 1]
+			player.remove_item(dropped_item_name)
+			_spawn_dropped_item(dropped_item_name, player.global_position + Vector2(0, 20))
+
+func _spawn_dropped_item(item_name: String, pos: Vector2) -> void:
+	var item_colors = {
+		"Bread": Color(0.82, 0.65, 0.35),
+		"Sword": Color(0.7, 0.7, 0.75),
+		"Herb": Color(0.2, 0.7, 0.3),
+		"Gold Coin": Color(1.0, 0.85, 0.2),
+	}
+	var color = item_colors.get(item_name, Color.WHITE)
+
+	var item_script = load("res://scripts/pickup_item.gd")
+	var item = Area2D.new()
+	item.name = item_name.replace(" ", "") + "_dropped"
+	item.set_script(item_script)
+	item.item_name = item_name
+	item.position = pos
+	item.collision_layer = 0
+	item.collision_mask = 1
+
+	var sprite = Sprite2D.new()
+	sprite.name = "Sprite2D"
+	var img = Image.create(12, 12, false, Image.FORMAT_RGBA8)
+	img.fill(color)
+	sprite.texture = ImageTexture.create_from_image(img)
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	item.add_child(sprite)
+
+	var lbl = Label.new()
+	lbl.name = "ItemLabel"
+	lbl.text = item_name
+	lbl.position = Vector2(-20, -18)
+	lbl.add_theme_font_size_override("font_size", 6)
+	lbl.add_theme_color_override("font_color", Color.WHITE)
+	lbl.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+	lbl.add_theme_constant_override("shadow_offset_x", 1)
+	lbl.add_theme_constant_override("shadow_offset_y", 1)
+	item.add_child(lbl)
+
+	var col = CollisionShape2D.new()
+	var shape = CircleShape2D.new()
+	shape.radius = 14
+	col.shape = shape
+	item.add_child(col)
+
+	var items_node = get_node_or_null("Items")
+	if items_node:
+		items_node.add_child(item)
+	else:
+		add_child(item)
