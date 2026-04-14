@@ -1,0 +1,5 @@
+res://scripts/main.gd
+res://scripts/generate_textures.gd
+res://scripts/npc.gd
+res://scripts/player.gd
+res://scripts/texture_generator.gd
