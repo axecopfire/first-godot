@@ -448,6 +448,11 @@ func _setup_npc_dialogues() -> void:
 					"Sword": "A fine blade! I have\nsheaths of the finest leather.",
 				}
 				npc.npc_closing = "Come see me when you're\nready to make a deal!"
+				npc.combo_reactions = [
+					{"items": ["Gold Coin", "Sword"], "line": "Armed and wealthy!\nI have maps to treasure\nif you're interested..."},
+					{"items": ["Bread", "Gold Coin"], "line": "Gold AND provisions?\nYou're well-prepared\nfor a journey!"},
+					{"items": ["Herb", "Sword"], "line": "A blade and healing herbs...\nplanning something dangerous?"},
+				]
 			"Baker":
 				npc.greeting_items = "Oh! A customer with\ninteresting things!"
 				npc.greeting_all = "My goodness, you've been\nall over the market!"
@@ -458,6 +463,11 @@ func _setup_npc_dialogues() -> void:
 					"Sword": "A sword?! Please don't\nwave that near my flour!",
 				}
 				npc.npc_closing = "Enjoy the market, and\ndon't skip meals!"
+				npc.combo_reactions = [
+					{"items": ["Bread", "Herb"], "line": "Bread and herbs together?\nYou're making a fine sandwich!"},
+					{"items": ["Bread", "Gold Coin"], "line": "My bread AND gold?\nYou're my favorite customer!"},
+					{"items": ["Bread", "Sword"], "line": "A warrior who eats well\nfights well, I always say!"},
+				]
 			"Blacksmith":
 				npc.greeting_items = "Hmm, what's that\nyou've got there?"
 				npc.greeting_all = "A full adventurer's pack!\nNow THAT is impressive."
@@ -468,6 +478,11 @@ func _setup_npc_dialogues() -> void:
 					"Sword": "A fine blade! Did you find\nthat in my scrap pile?",
 				}
 				npc.npc_closing = "Stay sharp out there.\nLiterally."
+				npc.combo_reactions = [
+					{"items": ["Gold Coin", "Sword"], "line": "Gold AND a sword?\nLet me upgrade that blade\nfor you!"},
+					{"items": ["Herb", "Sword"], "line": "Herbs to heal, steel to fight.\nA wise combination!"},
+					{"items": ["Bread", "Sword"], "line": "Bread and a blade...\nthe essentials of any quest!"},
+				]
 			"Herbalist":
 				npc.greeting_items = "Ooh, what treasures\ndo you bring me today?"
 				npc.greeting_all = "Bread, herbs, gold, steel...\nYou're the most prepared\nperson I've ever met!"
@@ -478,6 +493,11 @@ func _setup_npc_dialogues() -> void:
 					"Sword": "A weapon? I prefer\npeaceful remedies myself.",
 				}
 				npc.npc_closing = "Nature provides all\nwe truly need!"
+				npc.combo_reactions = [
+					{"items": ["Gold Coin", "Herb"], "line": "With gold and those herbs,\nI can brew something\ntruly special!"},
+					{"items": ["Bread", "Herb"], "line": "Bread and herbs make a\nhealing meal. Very wise!"},
+					{"items": ["Herb", "Sword"], "line": "My herbs can mend\nwhat that blade might wound."},
+				]
 
 func _on_inventory_changed() -> void:
 	if inventory_label == null:

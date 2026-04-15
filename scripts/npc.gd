@@ -13,6 +13,7 @@ var item_reactions: Dictionary = {}
 var greeting_items: String = ""
 var greeting_all: String = ""
 var npc_closing: String = ""
+var combo_reactions: Array = []  # Array of {"items": [...], "line": "..."}
 var nearby_player: Node2D = null
 var active_dialogue: PackedStringArray = []
 
@@ -103,6 +104,16 @@ func _build_dialogue() -> PackedStringArray:
 	for item_name in sorted_inv:
 		if item_name in item_reactions:
 			lines.append(item_reactions[item_name])
+
+	# Add combo reactions — special lines when specific item groups are all present
+	for combo in combo_reactions:
+		var all_present := true
+		for required_item in combo["items"]:
+			if required_item not in inv:
+				all_present = false
+				break
+		if all_present:
+			lines.append(combo["line"])
 
 	# Add closing
 	if npc_closing != "":
