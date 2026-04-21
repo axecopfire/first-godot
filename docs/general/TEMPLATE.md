@@ -45,3 +45,10 @@
 ### Tier 2
 
 ### Tier 3
+
+## General
+## Intelligence
+## Strength
+## Wisdom
+## Dexterity
+## Charisma

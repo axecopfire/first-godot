@@ -28,3 +28,9 @@ Each of these could possibly be districts
 # General Layout
 - [winding middle eastern streets](https://www.reddit.com/r/AskHistorians/comments/4km883/what_were_medieval_arabianeastern_towns_like/#:~:text=From%20a%20broad%20perspective%2C%20the,might%20be%20worth%20a%20read.)?
 
+# Districts
+- Farming
+- University
+- Religious
+- Guild
+- Poor

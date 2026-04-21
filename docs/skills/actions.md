@@ -18,6 +18,7 @@
 ### Tier 1
 - lug (carry heavy items)
 - salute (pay respect)
+- hunt
 
 ### Tier 2
 - yell (intimidate)
@@ -51,6 +52,7 @@
 - hide
 - sneak
 - gamble (endear)
+- poach
 
 ### Tier 2
 - lie
