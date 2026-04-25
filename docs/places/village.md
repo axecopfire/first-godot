@@ -166,3 +166,86 @@ the house itself is private and guarded.
 The manor is the late-game location. The player has no reason and no ability to enter early.
 As relationships and reputation grow, the manor opens up: first the courtyard, then the
 house, and eventually an audience with Don Álvaro himself.
+
+## Village Map
+
+```mermaid
+graph TB
+    classDef manor fill:#8B4513,color:#fff,stroke:#5C3010,stroke-width:2px
+    classDef field fill:#228B22,color:#fff,stroke:#006400,stroke-width:2px
+    classDef square fill:#DAA520,color:#000,stroke:#B8860B,stroke-width:2px
+    classDef building fill:#CD853F,color:#000,stroke:#8B6914,stroke-width:1px
+    classDef danger fill:#8B0000,color:#fff,stroke:#5C0000,stroke-width:2px
+    classDef safe fill:#4682B4,color:#fff,stroke:#2F5F8F,stroke-width:2px
+    classDef start fill:#6A0DAD,color:#fff,stroke:#4B0082,stroke-width:2px
+    classDef water fill:#4169E1,color:#fff,stroke:#2850A0,stroke-width:1px
+
+    Manor["🏰 MANOR — Hilltop<br/>Don Álvaro · Munir · Catalina<br/>Courtyard · Stables · Well<br/><i>late-game location</i>"]:::manor
+
+    Manor ===|"road west"| Square
+
+    subgraph Fields["🌾 FIELDS — West of Village"]
+        direction LR
+        Wheat["🌾 Wheat & Barley<br/>Ines · Qadir"]:::field
+        Flax["🌿 Flax<br/>Tomás"]:::field
+        Beehives["🐝 Beehives<br/>Bashir<br/><i>safest outdoor area</i>"]:::safe
+        Pasture["🐑 Pasture<br/>Layla<br/><i>open sight lines</i>"]:::field
+    end
+
+    Fields ===|"road"| Square
+
+    Acequia["〰️ ACEQUIA<br/>irrigation canal<br/>from stream"]:::water
+    Acequia -.->|"feeds"| Fields
+    Acequia -.->|"feeds"| Square
+    Acequia -.->|"drops to"| Mill
+
+    Alley["🏚️ ALLEY<br/>Player wakes here"]:::start
+    Alley -->|"north alley"| Square
+
+    subgraph NorthQuarter["North Quarter"]
+        direction LR
+        Church["⛪ CHURCH<br/>Fr. Domingo<br/>herb garden behind<br/><i>sanctuary if trusted</i>"]:::safe
+        Workshop["🏺 WORKSHOP<br/>Zahra<br/>kiln · books · glazes<br/><i>scholar career path</i>"]:::building
+        School["📚 SCHOOL<br/>Maestro al-Rashid<br/>chalkboard · scripts<br/><i>language barrier cracks here</i>"]:::building
+    end
+
+    Church --- Workshop
+    Workshop ---|"near"| School
+
+    subgraph Square["⛲ MARKET SQUARE — Village Heart"]
+        direction TB
+        Fountain["⛲ Stone Fountain<br/>acequia-fed"]:::water
+        Grocer["🥬 Grocer Stall — Fatima<br/><i>clear view, risky theft</i>"]:::building
+        Goods["🏺 Household Goods — Yusuf<br/><i>cluttered, easier theft</i>"]:::building
+        Travelers["🧳 Traveler Stalls<br/><i>exotic items, unpredictable</i>"]:::building
+        Livestock["🐐 Livestock Pen — Old Hamid<br/><i>sound cover from animals</i>"]:::building
+    end
+
+    NorthQuarter -->|"alley"| Square
+
+    Tailor["🧵 TAILOR<br/>Maryam<br/><i>quiet, rarely patrolled</i>"]:::safe
+    Tailor ---|"back alley"| Church
+    Tailor -->|"alley"| Square
+
+    subgraph EastSide["East Side"]
+        direction TB
+        Warehouse["📦 WAREHOUSE<br/>Rafiq · Salim · Nura<br/>grain · oil · food stores<br/><i>locked at night</i>"]:::building
+        Barracks["⚔️ BARRACKS<br/>Cap. Rodrigo<br/>weapon rack · prison cell<br/><i>most dangerous building</i>"]:::danger
+    end
+
+    Square ==>|"warehouse lane east"| EastSide
+    Warehouse ---|"back exit alley"| Barracks
+
+    subgraph SouthSide["South Side"]
+        direction LR
+        Blacksmith["⚒️ BLACKSMITH<br/>Ibrahim · Tarik<br/>forge · tools · blades<br/><i>sound cover from hammering</i>"]:::building
+        Mill["⚙️ MILL<br/>Abbas<br/>waterwheel · flour<br/><i>good hiding spot</i>"]:::safe
+    end
+
+    Square -->|"south alley"| SouthSide
+```
+
+**Color key:** brown = manor (late-game), green = fields, blue = safe zones (low suspicion),
+gold/tan = market square and general buildings, dark red = barracks/prison (most dangerous),
+purple = starting alley. The acequia flows from a stream through the fields, feeds the
+market square fountain, and drops to power the mill waterwheel.
