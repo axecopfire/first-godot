@@ -1,0 +1,31 @@
+
+- Market stalls
+    - Grocer
+    - Seller of household items
+    - Rotating out of town travelers
+    - Livestock sales
+- Warehouse
+    - Warehouse manager
+    - Couple of folks helping
+- Blacksmith
+    - Blacksmith
+    - Apprentice
+- Mill
+    - Miller
+- Church
+    - Preacher
+- Workshop
+    - Artisan
+- Tailor
+    - Tailor
+- Barracks
+    - Guards
+- School
+    - teacher
+- Fields
+    - peasants managing staples wheat, honey, barley, flax
+    - shepherds pasture
+    - Field manager
+- Manor
+    - Local lord
+    - staff
