@@ -7,6 +7,11 @@ func _ready() -> void:
 	_ensure_dirs()
 	if not FileAccess.file_exists("res://textures/player.png"):
 		_generate_all()
+	else:
+		# Regenerate tiles.png if it lacks the WATER tile (older 80x16 strip).
+		var tiles_img = Image.load_from_file("res://textures/tiles.png")
+		if tiles_img == null or tiles_img.get_width() < 96:
+			_create_tiles()
 	# Transition to main scene (must be deferred — can't swap scene during _ready)
 	get_tree().call_deferred("change_scene_to_file", "res://scenes/main.tscn")
 
@@ -120,7 +125,7 @@ func _create_npcs() -> void:
 		img.save_png("res://textures/npc_" + cfg["name"] + ".png")
 
 func _create_tiles() -> void:
-	var img = Image.create(80, 16, false, Image.FORMAT_RGBA8)
+	var img = Image.create(96, 16, false, Image.FORMAT_RGBA8)
 	img.fill(Color(0, 0, 0, 0))
 
 	# Grass
@@ -156,6 +161,14 @@ func _create_tiles() -> void:
 	for x in range(64, 80):
 		for yl in [4, 8, 12]:
 			img.set_pixel(x, yl, Color(0.55, 0.5, 0.45))
+	# Water (acequia)
+	for x in range(80, 96):
+		for y in range(0, 16):
+			var b = randf_range(0.55, 0.7)
+			img.set_pixel(x, y, Color(0.2, 0.4, b))
+	for x in range(80, 96):
+		for yl in [3, 9, 13]:
+			img.set_pixel(x, yl, Color(0.45, 0.65, 0.85))
 
 	img.save_png("res://textures/tiles.png")
 
