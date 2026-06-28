@@ -1,7 +1,7 @@
 ---
 title: Creative Brief
 description: One-page handoff for creative director, separating locked constraints from open creative territory
-ms.date: 2026-04-19
+ms.date: 2026-06-27
 ---
 
 ## Play the Prototype First
@@ -19,6 +19,16 @@ interaction is a risk. Over time, small acts of generosity crack the walls betwe
 and the people around you. The game is about earning a place in a world that doesn't
 want you there.
 
+## Core Premise
+
+The player character is an AI entity learning to live among humans. This truth is hidden
+from the player until a late-game reveal.
+
+Suspicion represents social mismatch, not only criminal heat. You trigger suspicion when
+you fail to match expected human behavior, language, timing, and routine. You reduce
+suspicion by learning local norms, communicating more naturally, and building trust that
+others can publicly validate.
+
 ## Locked (non-negotiable)
 
 These constraints define the game. They are not changing.
@@ -27,17 +37,20 @@ These constraints define the game. They are not changing.
   context for where they are or why.
 - Top-down 2D: the camera perspective and visual format.
 - The player cannot speak: no dialogue choices, no voice, no text input. Communication
-  happens through actions (stealing, gifting, helping, hiding).
+  happens through actions (gifting, helping, studying, praying, hiding, and social signaling).
+- Hidden identity: the player is an AI learning human social behavior, revealed near the
+  end rather than at the start.
+- Suspicion model: treat suspicion as a humanity-fit signal first and a law-enforcement
+  trigger second.
 
 ## The Core Loop (working, open to reshaping)
 
-The prototype implements this sequence:
+The prototype should converge on this sequence:
 
 1. Explore while avoiding attention (suspicion rises the longer you're visible).
-2. Steal items to survive (spikes suspicion further).
-3. Gift stolen items to NPCs who didn't witness the theft (lowers suspicion, builds
-   relationship).
-4. Build enough trust with an NPC to earn friendship and protection.
+2. Perform witnessed actions that different factions interpret differently.
+3. Manage opposing trust and suspicion outcomes (for example, study helps academia but alarms church).
+4. Use gifts and routine conformity to repair relationships and unlock safer options.
 5. Survive the night. Repeat.
 
 The mechanics work. The numbers, pacing, and feel are all open to adjustment. See

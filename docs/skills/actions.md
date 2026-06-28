@@ -1,3 +1,15 @@
+---
+title: Action Skills
+description: Action vocabulary grouped by attribute tiers for social signaling and progression
+ms.date: 2026-06-27
+ms.topic: reference
+keywords:
+  - actions
+  - skills
+  - progression
+estimated_reading_time: 4
+---
+
 ## Base Skills
 
 ### Tier 1
@@ -56,7 +68,7 @@
 
 ### Tier 2
 - lie
-- steal
+- pick lock
 - cheat
 
 ## Charisma

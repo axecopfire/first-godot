@@ -1,14 +1,18 @@
 ---
 title: Game Design
 description: Story graph, narrative phases, mechanics, and player controls for the medieval market survival game
-ms.date: 2026-04-18
+ms.date: 2026-06-27
 ---
 
 ## Overview
 
 You wake in an alley off a foreign town square market. No one speaks your language. Every moment you
-spend visible in the market raises suspicion. Get caught and you die. Learn to steal, gift, befriend,
-and survive, or rise through the criminal underworld.
+spend failing to match expected local behavior raises suspicion. Get caught and you die. Learn to mimic
+social norms, choose faction-signaling actions, gift, befriend, and survive while navigating competing
+faction expectations.
+
+The hidden premise is that you are an AI learning to function among humans. The player should discover
+this only near the end, but all mechanics should reinforce that learning arc from the start.
 
 ## Story Graph
 
@@ -21,7 +25,7 @@ flowchart TD
     subgraph CORE ["CORE LOOP"]
         B[market_exploration]
         C[stealth_mode]
-        D[stole_item]
+        D[faction_signal_action]
     end
 
     subgraph SUSPICION ["SUSPICION ESCALATION"]
@@ -51,8 +55,8 @@ flowchart TD
         S[need_food]
     end
 
-    subgraph CRIME ["CRIMINAL PATH"]
-        T[criminal_rise]
+    subgraph FACTION ["FACTION TENSION"]
+        T[faction_alignment_shift]
     end
 
     subgraph CAREERS ["CAREER BRANCHES"]
@@ -66,8 +70,8 @@ flowchart TD
     A -->|walk into market| B
 
     B <-->|crouch/stand| C
-    B -->|steal| D
-    C -->|steal| D
+    B -->|act| D
+    C -->|act| D
     C -->|return| A
 
     B -->|suspicion 35+| E
@@ -81,10 +85,10 @@ flowchart TD
     I -->|restart| A
 
     D -->|offer gift| J
-    D -->|heat rises| E
+    D -->|witnessed by opposing faction| E
     D -->|continue| B
     D -->|hide| C
-    D -->|rep 50+| T
+    D -->|faction trust 50+| T
 
     J -->|accepted| K
     J -->|rejected| L
@@ -129,20 +133,23 @@ flowchart TB
     A6 -.->|this time sneak| A2
 ```
 
-### Phase 2: Steal and Gift
+### Phase 2: Signal and Interpret
 
-Discover items on the ground. Picking them up spikes suspicion. Giving them to an NPC who
-did not witness the theft may earn trust and a word in the foreign language.
+Choose visible social actions to test faction reactions. The same action can improve trust with one
+group and increase suspicion with another. Gifts remain a secondary repair and relationship tool.
 
 ```mermaid
 flowchart TB
-    B1[See item on ground] --> B2[Pick it up: suspicion spike]
-    B2 --> B3{Give to NPC?}
-    B3 -->|NPC saw you steal| B4[Rejected: more suspicion]
-    B3 -->|NPC did not see| B5{Gift formula}
-    B5 -->|score > 0| B6[Accepted: learn a word]
-    B5 -->|score <= 0| B4
-    B6 --> B7[Relationship increases]
+    B1[Choose action: study or pray] --> B2[Witness checks faction values]
+    B2 --> B3{Who saw it?}
+    B3 -->|Church witness study| B4[Church suspicion +5, cap +20]
+    B3 -->|Academia witness study| B5[Academia trust +7]
+    B3 -->|Church witness pray| B6[Church trust +7]
+    B3 -->|Academia witness pray| B7[Academia suspicion +5, cap +20]
+    B4 --> B8[Adjust access gates]
+    B5 --> B8
+    B6 --> B8
+    B7 --> B8
 ```
 
 ### Phase 3: Friendship
@@ -161,7 +168,7 @@ flowchart TB
 
 ### Phase 4: Survival Loop
 
-Day/night cycle of stealing food, sleeping, and avoiding patrols.
+Day and night cycle of earning food through work, favors, and faction access while avoiding patrols.
 Without shelter there is a 60% chance of arrest each night.
 
 ```mermaid
@@ -172,56 +179,116 @@ flowchart TB
     D4 -->|60% chance| D5[Guard catches you: prison]
     D4 -->|40% chance| D3
     D3 --> D6[Hunger: need food]
-    D6 --> D7[Steal more or find work]
+    D6 --> D7[Work, negotiate, or call in favors]
 ```
 
 ### Phase 5: Career Branches (placeholder)
 
-Four branching story paths. Each is a separate narrative arc that needs full design.
+Five branching story paths. Each is a separate narrative arc that needs full design.
 
 ```mermaid
 flowchart TB
-    E1[Criminal rep 50+] -.-> E2[Criminal Underworld]
-    E3[Befriend Merchant] -.-> E4[Merchant Guild]
-    E5[Befriend anyone] -.-> E6[Religious Path]
-    E5 -.-> E7[Scholar Path]
-    E1 -.-> E8[Military Recruitment]
+    E1[Criminal trust 50+] -.-> E2[Criminal Underworld]
+    E3[Merchant trust 50+] -.-> E4[Merchant Guild]
+    E5[Church trust 50+] -.-> E6[Religious Path]
+    E7[Academia trust 50+] -.-> E8[Scholar Path]
+    E9[Military trust 50+] -.-> E10[Military Recruitment]
 ```
 
 | Branch | Trigger | Theme |
 |--------|---------|-------|
 | Merchant | Befriend the Merchant NPC | Trade, negotiation, wealth |
-| Military | Criminal rep 50+ (guard captain recruits) | Discipline, combat, honor |
-| Religious | Befriend any NPC (priest offers sanctuary) | Faith, wisdom, devotion |
-| Scholar | Befriend any NPC (librarian notices language learning) | Knowledge, language, discovery |
+| Military | Military trust 50+ (guard captain recruits) | Discipline, order, honor |
+| Religious | Church trust 50+ (priest offers sanctuary) | Faith, wisdom, devotion |
+| Scholar | Academia trust 50+ (librarian notices language learning) | Knowledge, language, discovery |
+| Underworld | Criminal trust 50+ (broker offers protection network) | Covert power, favors, risk |
 
 ## Mechanics
 
-### Suspicion meter (0 to 100)
+### Dual alert model (0 to 100)
+
+The game tracks two connected pressure systems:
+
+* Individual suspicion per NPC: who personally distrusts you.
+* Faction alert per faction: how organized that group is against you.
+
+### Individual suspicion thresholds (per NPC)
 
 | Threshold | Effect |
 |-----------|--------|
-| 0 | Safe |
+| 0 | Socially passing |
 | 35 | NPCs start following |
 | 60 | Guard begins chase |
 | 80 | Arrested |
+
+### Faction alert thresholds (per faction)
+
+| Threshold | Effect |
+|-----------|--------|
+| 0 to 24 | Baseline monitoring |
+| 25 to 44 | Increased gossip and witness checks |
+| 45 to 64 | Faction scrutiny events and spot questioning |
+| 65 to 84 | Coordinated response, patrol density increases |
+| 85 to 100 | Emergency doctrine, hard access restrictions |
+
+### Persistent accuser escalation (Phase 3 unlock)
+
+One NPC can become a recurring threat even when faction alert temporarily cools.
+
+| Stage | Trigger | Behavior |
+|-------|---------|----------|
+| Vocal accuser | NPC reaches 70+ suspicion twice in 3 days | Publicly reports your actions and amplifies rumors |
+| Vendetta (Phase 3) | Same NPC reaches 80+ after a faction cooldown | Tails you, interprets ambiguous actions as hostile |
+| Coalition builder (Phase 3) | Vendetta persists 2+ days | Recruits 2 to 4 NPCs into an anti-player group |
+
+### Anti-loop recovery rules
+
+To prevent unwinnable spirals, vendetta and coalition states require social resolution options:
+
+* Two witnessed conformity successes reduce accuser strike count by 1.
+* One trusted sponsor vouch removes coalition status if faction alert is below 50.
+* Public restitution event clears vendetta if witnessed by the accuser and one neutral NPC.
+* Stealth can buy time but cannot fully clear vendetta on its own.
 
 ### Suspicion rate changes
 
 | Event | Change |
 |-------|--------|
-| Visible in market | +1.5/sec |
+| Visible in market without norm conformity | +1.5/sec |
 | Stealthing (Shift) | -0.5/sec |
-| Steal unseen | +15 |
-| Steal witnessed | +30 |
+| Language mismatch near NPC | +8 |
+| Contextual norm violation | +10 to +20 |
+| Study witnessed by church NPC | +5 (church suspicion contribution capped at 20) |
+| Study witnessed by academia NPC | +7 trust (academia) |
+| Pray witnessed by church NPC | +7 trust (church) |
+| Pray witnessed by academia NPC | +5 (academia suspicion contribution capped at 20) |
+| Share heretical technology in public | +12 church suspicion (can exceed soft caps) |
 | Friend vouches | -25 |
+| Correct routine repeated | -5 |
 | Survive a night | -10 |
 | Gift rejected | +5 |
+| Same accuser witnesses repeated mismatch | +10 accuser strike |
+| Accuser reaches strike threshold | Escalates stage |
+| Public restitution witnessed | -1 accuser stage |
+
+### Faction gate thresholds
+
+| Faction | Threshold | Effect |
+|---------|-----------|--------|
+| Church suspicion | 20 | Religious dialogue options reduced |
+| Church suspicion | 50 | Church entry blocked |
+| Church suspicion | 75 | Heretic flag; sanctuary denied |
+| Academia trust | 20 | Basic study actions unlocked |
+| Academia trust | 50 | Research actions unlocked |
+| Military suspicion | 35 | Patrol follows player |
+| Military suspicion | 60 | Forced detain checks |
+| Criminal trust | 25 | Contraband errands unlocked |
+| Criminal trust | 50 | Underworld contacts unlocked |
 
 ### Gift acceptance formula
 
 ```text
-score = itemValue * (1 + poverty) - morality * stolenCount * 5
+score = itemValue * (1 + need) + alignment_bonus - offense_memory_penalty
 ```
 
 * score > 0: accepted, relationship increases by score, player learns foreign word

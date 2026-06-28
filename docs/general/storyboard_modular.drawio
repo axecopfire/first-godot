@@ -1,0 +1,629 @@
+<mxfile host="65bd71144e">
+    <diagram id="sb-01-tutorial" name="1: Tutorial – Alley Awakening">
+        <mxGraphModel dx="488" dy="409" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1000" background="#0b1020" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="n1" value="START: Alley Awakening&#xa;Wakes in alley, guard patrol approaching&#xa;Objective: Survive as outsider" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#312e81;strokeColor=#a5b4fc;strokeWidth=2;fontColor=#eef2ff;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="420" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n2" value="Decision: What&#39;s Your Instinct?&#xa;Crime path or labor path?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="410" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n3" value="[Crime Path] Sneak or Walk?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#1c1917;strokeColor=#78716c;strokeWidth=2;fontColor=#d6d3d1;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="190" width="240" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="n4" value="Walk Openly → Spotted&#xa;Guard notices movement&#xa;Suspicion escalates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#991b1b;strokeColor=#f87171;strokeWidth=2;fontColor=#fee2e2;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="80" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n5" value="Guard Chase / Arrest&#xa;Evade or get captured&#xa;Prison transfer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#fca5a5;strokeWidth=2;fontColor=#ffe4e6;" parent="1" vertex="1">
+                    <mxGeometry x="1380" y="80" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n6" value="Release → Back to Start&#xa;Fail state taught (low cost)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#450a0a;strokeColor=#fca5a5;strokeWidth=2;fontColor=#fee2e2;" parent="1" vertex="1">
+                    <mxGeometry x="1680" y="80" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n7" value="Stealth Entry&#xa;Guards unaware&#xa;Teaches: line-of-sight, evasion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#93c5fd;strokeWidth=2;fontColor=#dbeafe;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="250" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n8" value="[Labor Path] Observe or Approach?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#1c1917;strokeColor=#78716c;strokeWidth=2;fontColor=#d6d3d1;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="640" width="240" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="n9" value="Observe Guard Patterns&#xa;Learn layout and routines&#xa;Teaches: observation, planning" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f766e;strokeColor=#5eead4;strokeWidth=2;fontColor=#ccfbf1;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="590" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n10" value="Approach NPC Directly&#xa;First social contact made&#xa;Teaches: dialogue, social mechanics" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="1080" y="760" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n11" value="CORE LOOP UNLOCKED&#xa;Village accessible&#xa;Survive + build trust" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=#38bdf8;strokeWidth=2;fontColor=#e2e8f0;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1420" y="420" width="280" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#93c5fd;" parent="1" source="n1" target="n2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="crime" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#f59e0b;fontColor=#f59e0b;fontSize=11;" parent="1" source="n2" target="n3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="labor" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#f59e0b;fontColor=#f59e0b;fontSize=11;" parent="1" source="n2" target="n8" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="walk" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#f87171;fontColor=#f87171;fontSize=11;" parent="1" source="n3" target="n4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" value="sneak" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#93c5fd;fontColor=#93c5fd;fontSize=11;" parent="1" source="n3" target="n7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#ef4444;" parent="1" source="n4" target="n5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#ef4444;" parent="1" source="n5" target="n6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#c4b5fd;" parent="1" source="n6" target="n1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1800" y="40"/>
+                            <mxPoint x="40" y="40"/>
+                            <mxPoint x="40" y="465"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#38bdf8;" parent="1" source="n7" target="n11" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" value="observe" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;fontColor=#5eead4;fontSize=11;" parent="1" source="n8" target="n9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" value="approach" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;fontColor=#86efac;fontSize=11;" parent="1" source="n8" target="n10" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#38bdf8;" parent="1" source="n9" target="n11" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#38bdf8;" parent="1" source="n10" target="n11" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="sb-02-core" name="2: Core Scavenging Loop">
+        <mxGraphModel dx="1146" dy="718" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3400" pageHeight="1200" background="#0b1020" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="n1" value="ENTRY: Core Loop Unlocked&#xa;Objective: Build resources + trust&#xa;Outcome: Theft, social, sleep branches" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=#38bdf8;strokeWidth=2;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="480" width="280" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n2" value="Explore Village&#xa;Move through areas&#xa;Find NPCs and items" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a5f;strokeColor=#7dd3fc;strokeWidth=2;fontColor=#e0f2fe;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="480" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n3" value="Decision: Take Item?&#xa;Hunger/value pressure" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="710" y="465" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n4" value="Witnessed Theft (+30)&#xa;Victim reacts immediately&#xa;Escape or bribe required" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#991b1b;strokeColor=#f87171;strokeWidth=2;fontColor=#fee2e2;" parent="1" vertex="1">
+                    <mxGeometry x="1060" y="280" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n5" value="Unseen Theft (+15)&#xa;No immediate consequence&#xa;Risk tracked silently" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1d4ed8;strokeColor=#93c5fd;strokeWidth=2;fontColor=#dbeafe;" parent="1" vertex="1">
+                    <mxGeometry x="1060" y="700" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n6" value="Decision: Gift Item?&#xa;Convert loot into trust" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="1400" y="465" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n7" value="Gift Rejected (+5 susp)&#xa;NPC suspicious of charity&#xa;Recover socially" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#991b1b;strokeColor=#fda4af;strokeWidth=2;fontColor=#ffe4e6;" parent="1" vertex="1">
+                    <mxGeometry x="1760" y="280" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n8" value="Gift Accepted + Word Learned&#xa;Build trust + language&#xa;Relationship increases +15" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="1760" y="700" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n9" value="Decision: Relationship &gt;= 40?&#xa;Hit friendship threshold" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="2100" y="465" width="300" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n10" value="Not Yet — Keep Grinding&#xa;Continue building relationship" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1c1917;strokeColor=#78716c;strokeWidth=2;fontColor=#d6d3d1;" parent="1" vertex="1">
+                    <mxGeometry x="2480" y="700" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n11" value="Befriended! + Vouch (-25)&#xa;Ally gained, heat reduced&#xa;Shelter path opens" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="2480" y="280" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n12" value="EXIT → Shelter Loop&#xa;Safety network begins" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f766e;strokeColor=#5eead4;strokeWidth=2;fontColor=#ccfbf1;" parent="1" vertex="1">
+                    <mxGeometry x="2840" y="480" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#38bdf8;" parent="1" source="n1" target="n2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#7dd3fc;" parent="1" source="n2" target="n3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="yes (seen)" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#f87171;fontColor=#f87171;fontSize=11;" parent="1" source="n3" target="n4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="yes (unseen)" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#93c5fd;fontColor=#93c5fd;fontSize=11;" parent="1" source="n3" target="n5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#f87171;" parent="1" source="n4" target="n6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#93c5fd;" parent="1" source="n5" target="n6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" value="rejected" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#f87171;fontColor=#f87171;fontSize=11;" parent="1" source="n6" target="n7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" value="accepted" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;fontColor=#86efac;fontSize=11;" parent="1" source="n6" target="n8" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#fb923c;" parent="1" source="n7" target="n2" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1890" y="200"/>
+                            <mxPoint x="510" y="200"/>
+                            <mxPoint x="510" y="480"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;" parent="1" source="n8" target="n9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" value="yes &gt;= 40" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;fontColor=#86efac;fontSize=11;" parent="1" source="n9" target="n11" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" value="no" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#78716c;fontColor=#78716c;fontSize=11;" parent="1" source="n9" target="n10" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#93c5fd;" parent="1" source="n10" target="n2" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="2610" y="860"/>
+                            <mxPoint x="510" y="860"/>
+                            <mxPoint x="510" y="570"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;" parent="1" source="n11" target="n12" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="sb-03-shelter" name="3: Relationship &amp; Shelter Loop">
+        <mxGraphModel dx="1146" dy="718" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="900" background="#0b1020" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="n1" value="ENTRY: Befriended!&#xa;NPC now recognizes you as ally&#xa;Vouch granted (-25 heat)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="380" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n2" value="Decision: Friend Poverty &gt;= 0.6?&#xa;Can they offer shelter access?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="370" width="300" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n3" value="Shelter Unlocked!&#xa;Safe rest secured&#xa;Night arrest risk removed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f766e;strokeColor=#5eead4;strokeWidth=2;fontColor=#ccfbf1;" parent="1" vertex="1">
+                    <mxGeometry x="800" y="520" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n4" value="No Shelter Yet&#xa;Friend can&#39;t help right now&#xa;Street sleep risk remains" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9a3412;strokeColor=#fb923c;strokeWidth=2;fontColor=#ffedd5;" parent="1" vertex="1">
+                    <mxGeometry x="800" y="240" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n5" value="Build More Relationships&#xa;Find other NPC allies&#xa;Try different shelter routes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1c1917;strokeColor=#78716c;strokeWidth=2;fontColor=#d6d3d1;" parent="1" vertex="1">
+                    <mxGeometry x="1140" y="240" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n6" value="Shelter Stability Score&#xa;Each source adds +20&#xa;Min: 0 (unsafe) Max: 100 (safe)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a5f;strokeColor=#7dd3fc;strokeWidth=2;fontColor=#e0f2fe;" parent="1" vertex="1">
+                    <mxGeometry x="1140" y="520" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n7" value="EXIT → Sleep Loop&#xa;Night safety level determined" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#312e81;strokeColor=#a5b4fc;strokeWidth=2;fontColor=#eef2ff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1520" y="380" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;" parent="1" source="n1" target="n2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="yes" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;fontColor=#5eead4;fontSize=11;" parent="1" source="n2" target="n3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="no" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fb923c;fontColor=#fb923c;fontSize=11;" parent="1" source="n2" target="n4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fb923c;" parent="1" source="n4" target="n5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#78716c;" parent="1" source="n5" target="n2" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1270" y="180"/>
+                            <mxPoint x="550" y="180"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;" parent="1" source="n3" target="n6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#7dd3fc;" parent="1" source="n6" target="n7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fb923c;" parent="1" source="n4" target="n7" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1400" y="285"/>
+                            <mxPoint x="1400" y="425"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="sb-04-sleep" name="4: Sleep &amp; Survival Loop">
+        <mxGraphModel dx="682" dy="409" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2600" pageHeight="1100" background="#0b1020" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="n1" value="ENTRY: Night Decision&#xa;Sun sets, guard patrols increase&#xa;Objective: Survive to dawn" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#312e81;strokeColor=#a5b4fc;strokeWidth=2;fontColor=#eef2ff;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="460" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n2" value="Decision: How do you rest?&#xa;Shelter available?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="450" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n3" value="Safe Sleep (Shelter)&#xa;Full recovery: HP 100%&#xa;Hunger -30, Suspicion resets" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="770" y="640" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n4" value="Street Sleep Risk Check&#xa;Base arrest: 60%&#xa;Scales with suspicion level" style="rhombus;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#fca5a5;strokeWidth=2;fontColor=#ffe4e6;" parent="1" vertex="1">
+                    <mxGeometry x="770" y="280" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n5" value="Street Sleep Failed — Arrested&#xa;Guards found you sleeping&#xa;Prison transfer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#450a0a;strokeColor=#fca5a5;strokeWidth=2;fontColor=#fee2e2;" parent="1" vertex="1">
+                    <mxGeometry x="1120" y="140" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n6" value="Prison → Released&#xa;Items may be confiscated&#xa;Reputation hit" style="ellipse;whiteSpace=wrap;html=1;fillColor=#450a0a;strokeColor=#fca5a5;strokeWidth=2;fontColor=#fee2e2;" parent="1" vertex="1">
+                    <mxGeometry x="1440" y="140" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n7" value="Street Sleep Survived&#xa;Close call — exhausted&#xa;Suspicion +10" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#713f12;strokeColor=#fcd34d;strokeWidth=2;fontColor=#fef9c3;" parent="1" vertex="1">
+                    <mxGeometry x="1120" y="420" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n8" value="Move All Night&#xa;No rest — explore empty village&#xa;HP -15, no arrest risk" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1c1917;strokeColor=#78716c;strokeWidth=2;fontColor=#d6d3d1;" parent="1" vertex="1">
+                    <mxGeometry x="770" y="840" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n9" value="New Day + Hunger Trigger&#xa;Pick strategy for today&#xa;→ Career Loop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=#38bdf8;strokeWidth=2;fontColor=#e2e8f0;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1500" y="560" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#a5b4fc;" parent="1" source="n1" target="n2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="shelter" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;fontColor=#86efac;fontSize=11;" parent="1" source="n2" target="n3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="no shelter" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fca5a5;fontColor=#fca5a5;fontSize=11;" parent="1" source="n2" target="n4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="move" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#78716c;fontColor=#78716c;fontSize=11;" parent="1" source="n2" target="n8" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" value="60% fail" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#f87171;fontColor=#f87171;fontSize=11;" parent="1" source="n4" target="n5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" value="40% survive" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fcd34d;fontColor=#fcd34d;fontSize=11;" parent="1" source="n4" target="n7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#ef4444;" parent="1" source="n5" target="n6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#c4b5fd;" parent="1" source="n6" target="n1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1560" y="100"/>
+                            <mxPoint x="40" y="100"/>
+                            <mxPoint x="40" y="505"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;" parent="1" source="n3" target="n9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fcd34d;" parent="1" source="n7" target="n9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#78716c;" parent="1" source="n8" target="n9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="sb-05-career" name="5: Career Decision Loop">
+        <mxGraphModel dx="682" dy="409" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2800" pageHeight="1100" background="#0b1020" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="n1" value="ENTRY: New Day + Hunger Trigger&#xa;Daily strategy decision&#xa;Labor or crime momentum?" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f172a;strokeColor=#38bdf8;strokeWidth=2;fontColor=#e2e8f0;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="460" width="280" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n2" value="Decision: Labor or Crime Spiral?&#xa;Sets long-term reputation + path" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="450" width="300" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n3" value="Crime Actions&#xa;Pickpocket / Burglary / Smuggle&#xa;Enforcement work" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#991b1b;strokeColor=#fda4af;strokeWidth=2;fontColor=#ffe4e6;" parent="1" vertex="1">
+                    <mxGeometry x="820" y="260" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n4" value="Criminal Rep +5 to +20&#xa;Crime contacts warm&#xa;Guards more suspicious" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#fca5a5;strokeWidth=2;fontColor=#ffe4e6;" parent="1" vertex="1">
+                    <mxGeometry x="1160" y="260" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n5" value="Decision: Criminal Rep &gt;= 50?&#xa;Underworld threshold" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="1500" y="245" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n6" value="Labor Actions&#xa;Apprenticeship / Guard work&#xa;Merchant tasks / Religious" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="820" y="660" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n7" value="Faction Rep +5 per action&#xa;Legitimate contacts grow&#xa;Guards trust you more" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#14532d;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="1160" y="660" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n8" value="Decision: Labor Rep &gt;= 50?&#xa;Establishment threshold" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="1500" y="645" width="280" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="n9" value="Continue Building Rep&#xa;Loop back — keep grinding&#xa;Days pass, pressure rises" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1c1917;strokeColor=#78716c;strokeWidth=2;fontColor=#d6d3d1;" parent="1" vertex="1">
+                    <mxGeometry x="1860" y="780" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n10" value="CAREER HUB UNLOCKED&#xa;Commit to arc&#xa;Endgame route selected" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#312e81;strokeColor=#a5b4fc;strokeWidth=2;fontColor=#eef2ff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1880" y="420" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="n11" value="→ Sleep Loop each night&#xa;Repeats daily alongside this loop" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a5f;strokeColor=#7dd3fc;strokeWidth=2;fontColor=#e0f2fe;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="620" width="240" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#38bdf8;" parent="1" source="n1" target="n2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="crime" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fda4af;fontColor=#fda4af;fontSize=11;" parent="1" source="n2" target="n3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="labor" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;fontColor=#86efac;fontSize=11;" parent="1" source="n2" target="n6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fda4af;" parent="1" source="n3" target="n4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fca5a5;" parent="1" source="n4" target="n5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;" parent="1" source="n6" target="n7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;" parent="1" source="n7" target="n8" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" value="yes" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#a5b4fc;fontColor=#a5b4fc;fontSize=11;" parent="1" source="n5" target="n10" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" value="yes" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#a5b4fc;fontColor=#a5b4fc;fontSize=11;" parent="1" source="n8" target="n10" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" value="no" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#78716c;fontColor=#78716c;fontSize=11;" parent="1" source="n5" target="n9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" value="no" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#78716c;fontColor=#78716c;fontSize=11;" parent="1" source="n8" target="n9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#78716c;" parent="1" source="n9" target="n1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1990" y="940"/>
+                            <mxPoint x="200" y="940"/>
+                            <mxPoint x="200" y="550"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="sb-06-endgame" name="6: Endgame – Faction Arcs &amp; Endings">
+        <mxGraphModel dx="682" dy="409" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3800" pageHeight="1500" background="#0b1020" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="hub" value="CAREER HUB&#xa;Commit to arc&#xa;Rep &gt;= 50 unlocked this" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#312e81;strokeColor=#a5b4fc;strokeWidth=2;fontColor=#eef2ff;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="640" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="arc1" value="Merchant / Crime Arc&#xa;Build trade empire or rackets&#xa;Rep: Merchant or Underworld" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#713f12;strokeColor=#fcd34d;strokeWidth=2;fontColor=#fef9c3;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="120" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="arc2" value="Military Arc&#xa;Rise through ranks&#xa;Rep: Guard / Marshal track" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#93c5fd;strokeWidth=2;fontColor=#dbeafe;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="340" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="arc3" value="Religious Arc&#xa;Serve temple, expand faith&#xa;Rep: Church authority track" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4a1d96;strokeColor=#c4b5fd;strokeWidth=2;fontColor=#ede9fe;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="560" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="arc4" value="Scholar Arc&#xa;Gain knowledge + influence&#xa;Rep: Academy / Advisor track" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f766e;strokeColor=#5eead4;strokeWidth=2;fontColor=#ccfbf1;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="780" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="arc5" value="Underworld Arc&#xa;Assassin, racketeer, enforcer&#xa;Rep: Crime empire track" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#450a0a;strokeColor=#fca5a5;strokeWidth=2;fontColor=#fee2e2;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="1000" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="q1" value="Merchant Quests (1–4)&#xa;Smuggling → Monopoly → Heist" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#292524;strokeColor=#fcd34d;strokeWidth=2;fontColor=#fef9c3;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="120" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="q2" value="Military Quests (1–4)&#xa;Trials → Defense → Siege" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e2a4a;strokeColor=#93c5fd;strokeWidth=2;fontColor=#dbeafe;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="340" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="q3" value="Religious Quests (1–4)&#xa;Missions → Heresy → Council" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2e1065;strokeColor=#c4b5fd;strokeWidth=2;fontColor=#ede9fe;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="560" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="q4" value="Scholar Quests (1–4)&#xa;Recovery → Debate → Thesis" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#042f2e;strokeColor=#5eead4;strokeWidth=2;fontColor=#ccfbf1;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="780" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="q5" value="Underworld Quests (1–4)&#xa;Contracts → Rackets → Heist" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#290000;strokeColor=#fca5a5;strokeWidth=2;fontColor=#fee2e2;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="1000" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="manor" value="Manor Audience&#xa;All factions lead here&#xa;Lord grants audience" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#111827;strokeColor=#d1d5db;strokeWidth=2;fontColor=#f9fafb;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1140" y="610" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="final" value="Final Allegiance Decision&#xa;Choose identity under power&#xa;Outcome: Ending resolved" style="rhombus;whiteSpace=wrap;html=1;fillColor=#3f3f46;strokeColor=#f59e0b;strokeWidth=2;fontColor=#f9fafb;" parent="1" vertex="1">
+                    <mxGeometry x="1510" y="595" width="300" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="end1" value="Financial Advisor&#xa;Court treasurer — control economy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="1940" y="80" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="end2" value="Marshal&#xa;Chief military officer — enforce order" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#93c5fd;strokeWidth=2;fontColor=#dbeafe;" parent="1" vertex="1">
+                    <mxGeometry x="1940" y="240" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="end3" value="Bishop&#xa;Lead the faith — guide souls" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4a1d96;strokeColor=#c4b5fd;strokeWidth=2;fontColor=#ede9fe;" parent="1" vertex="1">
+                    <mxGeometry x="1940" y="400" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="end4" value="Grand Vizier&#xa;Shadow advisor — control knowledge" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f766e;strokeColor=#5eead4;strokeWidth=2;fontColor=#ccfbf1;" parent="1" vertex="1">
+                    <mxGeometry x="1940" y="560" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="end5" value="Master of Whispers&#xa;Crime empire — rule from shadows" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#450a0a;strokeColor=#fca5a5;strokeWidth=2;fontColor=#fee2e2;" parent="1" vertex="1">
+                    <mxGeometry x="1940" y="720" width="260" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="end6" value="Executed Outlaw&#xa;Failed empire — gallows at dawn&#xa;New Game+ available" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1c1917;strokeColor=#78716c;strokeWidth=2;fontColor=#d6d3d1;" parent="1" vertex="1">
+                    <mxGeometry x="1940" y="900" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="eh1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fcd34d;" parent="1" source="hub" target="arc1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eh2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#93c5fd;" parent="1" source="hub" target="arc2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eh3" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#c4b5fd;" parent="1" source="hub" target="arc3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eh4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;" parent="1" source="hub" target="arc4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eh5" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fca5a5;" parent="1" source="hub" target="arc5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eq1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fcd34d;" parent="1" source="arc1" target="q1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eq2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#93c5fd;" parent="1" source="arc2" target="q2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eq3" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#c4b5fd;" parent="1" source="arc3" target="q3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eq4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;" parent="1" source="arc4" target="q4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="eq5" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fca5a5;" parent="1" source="arc5" target="q5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="em1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fcd34d;" parent="1" source="q1" target="manor" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="em2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#93c5fd;" parent="1" source="q2" target="manor" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="em3" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#c4b5fd;" parent="1" source="q3" target="manor" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="em4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;" parent="1" source="q4" target="manor" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="em5" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fca5a5;" parent="1" source="q5" target="manor" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="emf" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#d1d5db;" parent="1" source="manor" target="final" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ef1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;" parent="1" source="final" target="end1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ef2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#93c5fd;" parent="1" source="final" target="end2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ef3" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#c4b5fd;" parent="1" source="final" target="end3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ef4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;" parent="1" source="final" target="end4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ef5" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fca5a5;" parent="1" source="final" target="end5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ef6" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#78716c;" parent="1" source="final" target="end6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="sb-07-location-map" name="7: Village Location Map">
+        <mxGraphModel dx="682" dy="409" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3400" pageHeight="1800" background="#0b1020" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="a1" value="MANOR (late game)&#xa;Courtyard, gate, manor house" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#8b4513;strokeColor=#fbbf24;strokeWidth=2;fontColor=#fff7ed;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="800" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a2" value="FIELDS (west)&#xa;Wheat, flax, beehives, pasture" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#14532d;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="800" width="260" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a3" value="MARKET SQUARE (center)&#xa;Fountain, grocer, goods, travelers, livestock" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4a017;strokeColor=#f59e0b;strokeWidth=2;fontColor=#111827;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="800" width="320" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a4" value="WAREHOUSE (east lane)&#xa;Grain, oil, food stores" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9a3412;strokeColor=#fdba74;strokeWidth=2;fontColor=#ffedd5;" parent="1" vertex="1">
+                    <mxGeometry x="1320" y="680" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a5" value="BARRACKS (high danger)&#xa;Guard HQ, prison cell" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7f1d1d;strokeColor=#fca5a5;strokeWidth=2;fontColor=#ffe4e6;" parent="1" vertex="1">
+                    <mxGeometry x="1320" y="920" width="240" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a6" value="BLACKSMITH (south)&#xa;Forge, tools, deliveries" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#78350f;strokeColor=#f59e0b;strokeWidth=2;fontColor=#fef3c7;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="1040" width="220" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a7" value="MILL (south east)&#xa;Waterwheel, flour sacks" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e3a8a;strokeColor=#93c5fd;strokeWidth=2;fontColor=#dbeafe;" parent="1" vertex="1">
+                    <mxGeometry x="1140" y="1040" width="220" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a8" value="ALLEY START (north of square)&#xa;Player wake point" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4c1d95;strokeColor=#c4b5fd;strokeWidth=2;fontColor=#ede9fe;" parent="1" vertex="1">
+                    <mxGeometry x="910" y="620" width="220" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="a9" value="CHURCH (north west)&#xa;Sanctuary if trusted" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f766e;strokeColor=#5eead4;strokeWidth=2;fontColor=#ccfbf1;" parent="1" vertex="1">
+                    <mxGeometry x="640" y="440" width="220" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a10" value="WORKSHOP (north)&#xa;Kiln, craft, scholar books" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0369a1;strokeColor=#7dd3fc;strokeWidth=2;fontColor=#e0f2fe;" parent="1" vertex="1">
+                    <mxGeometry x="920" y="440" width="220" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a11" value="SCHOOL (north east)&#xa;Language learning start" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0f766e;strokeColor=#5eead4;strokeWidth=2;fontColor=#ccfbf1;" parent="1" vertex="1">
+                    <mxGeometry x="1200" y="440" width="220" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="a12" value="TAILOR (between north and center)&#xa;Quiet shop, back alley" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#166534;strokeColor=#86efac;strokeWidth=2;fontColor=#dcfce7;" parent="1" vertex="1">
+                    <mxGeometry x="640" y="620" width="220" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="a13" value="ACEQUIA WATER CHANNEL&#xa;Feeds fields and square fountain, powers mill" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1d4ed8;strokeColor=#93c5fd;strokeWidth=2;fontColor=#dbeafe;" parent="1" vertex="1">
+                    <mxGeometry x="520" y="1160" width="880" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" value="road west" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fbbf24;fontColor=#fbbf24;fontSize=11;" parent="1" source="a1" target="a2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e2" value="road" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;fontColor=#86efac;fontSize=11;" parent="1" source="a2" target="a3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e3" value="warehouse lane east" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fdba74;fontColor=#fdba74;fontSize=11;" parent="1" source="a3" target="a4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="rear alley" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#fca5a5;fontColor=#fca5a5;fontSize=11;" parent="1" source="a4" target="a5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e5" value="south alley" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#f59e0b;fontColor=#f59e0b;fontSize=11;" parent="1" source="a3" target="a6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e6" value="south east path" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#93c5fd;fontColor=#93c5fd;fontSize=11;" parent="1" source="a3" target="a7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e7" value="north alley" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#c4b5fd;fontColor=#c4b5fd;fontSize=11;" parent="1" source="a3" target="a8" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;" parent="1" source="a8" target="a9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#7dd3fc;" parent="1" source="a8" target="a10" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#5eead4;" parent="1" source="a8" target="a11" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" value="between" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;fontColor=#86efac;fontSize=11;" parent="1" source="a12" target="a3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e12" value="back alley" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeWidth=2;strokeColor=#86efac;fontColor=#86efac;fontSize=11;" parent="1" source="a12" target="a9" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="w1" value="feeds" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#93c5fd;fontColor=#93c5fd;fontSize=11;" parent="1" source="a13" target="a2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="w2" value="feeds fountain" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#93c5fd;fontColor=#93c5fd;fontSize=11;" parent="1" source="a13" target="a3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="w3" value="powers" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeWidth=2;strokeColor=#93c5fd;fontColor=#93c5fd;fontSize=11;" parent="1" source="a13" target="a7" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -73,6 +73,7 @@ What exists today versus what the game design calls for.
 | Item pickup and drop | Done | 4 items, press E to pick up, Q to drop |
 | Texture generation | Done | Runtime pixel art generator |
 | Suspicion meter | Not started | No tracking, no HUD bar |
+| Social mismatch events | Not started | No language or norm mismatch tracking |
 | Stealth toggle | Not started | Shift key mapped but no behavior |
 | Guard behavior | Not started | No guard NPC, no arrest mechanic |
 | Death/restart loop | Not started | No prison, no respawn |
@@ -108,14 +109,26 @@ Expose signals: `suspicion_changed`, `relationship_changed`, `day_started`.
 ### Step 3: Add the suspicion meter
 
 Create `scenes/ui/hud.tscn` with a progress bar bound to `GameState.suspicion_changed`.
-Suspicion ticks up +1.5/sec when the player is visible in the market area.
+Suspicion ticks up +1.5/sec when the player is visible in the market area without
+demonstrating local norm conformity.
 
 **Done when:** A suspicion bar appears and climbs while walking in the market.
+
+### Step 3.5: Add social mismatch sources
+
+Add two explicit suspicion event sources in `game_state.gd` and wire them to behavior
+checks in NPC interaction and world logic:
+
+* `language_mismatch`: player fails comprehension expectations in a social interaction.
+* `norm_violation`: player performs context-inappropriate behavior by location or time.
+
+**Done when:** Suspicion increase can be attributed to specific mismatch categories in logs
+and debug UI.
 
 ### Step 4: Add stealth toggle
 
 Hold Shift to enter stealth. Visual indicator (sprite tint or crouch frame). Suspicion
-decays at -0.5/sec while crouching.
+decays at -0.5/sec while crouching and out of direct social scrutiny.
 
 **Done when:** Holding Shift slows/reverses the suspicion bar.
 
@@ -125,6 +138,13 @@ At suspicion 35+ the nearest NPC follows the player. At 60+ a guard NPC begins c
 At 80+ the guard arrests the player.
 
 **Done when:** NPCs visibly react at each threshold.
+
+### Step 5.5: Add conformity recovery
+
+Track repeated norm-conforming actions (movement routes, interaction timing, and accepted
+gift patterns). Apply gradual suspicion reduction when conformity streaks are maintained.
+
+**Done when:** Player can lower suspicion through social-fit behavior, not only hiding.
 
 ### Step 6: Build the death/restart loop
 
