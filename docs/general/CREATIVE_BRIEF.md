@@ -48,7 +48,7 @@ These constraints define the game. They are not changing.
 The prototype should converge on this sequence:
 
 1. Explore while avoiding attention (suspicion rises the longer you're visible).
-2. Perform witnessed actions that different factions interpret differently.
+2. Perform witnessed actions that different institutions interpret differently.
 3. Manage opposing trust and suspicion outcomes (for example, study helps academia but alarms church).
 4. Use gifts and routine conformity to repair relationships and unlock safer options.
 5. Survive the night. Repeat.

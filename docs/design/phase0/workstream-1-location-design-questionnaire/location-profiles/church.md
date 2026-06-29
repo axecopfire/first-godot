@@ -25,14 +25,14 @@ estimated_reading_time: 4
 |---|---|
 | Short fiction intent | Sanctuary space tied to trust and social sponsorship |
 | Primary gameplay role | Safe recovery |
-| Secondary gameplay role | Faction gate |
+| Secondary gameplay role | Authority gate |
 | Risk profile and rationale | Low baseline with conditional enforcement exceptions |
 | Intended player loops supported | Stealth recovery, trust gain, night decision |
 | Explicit Phase 1 mechanic unblocked | Sponsorship-based suspicion reduction |
 
 ## Premise and guardrail checks
 
-1. Assimilation appears as permission earned by conduct and trust, not faction immunity.
+1. Assimilation appears as permission earned by conduct and trust, not institution immunity.
 2. Player learns expected behavior via ritual timing, silence norms, and mediated entry.
 3. Non-stealth reduction path comes from Father Domingo sponsorship.
 4. Sanctuary framing must avoid implying player true nature directly.
@@ -41,11 +41,11 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Clergy, minority worshipers, occasional visitors |
+| Expected witness roles and institutions | Clergy, minority worshipers, occasional visitors |
 | Always-on versus conditional witnesses | Clergy constant; others event and time dependent |
 | Dominant line-of-sight lanes and cover pockets | Doorway and altar lane are visible; side benches are low-pressure |
 | Socially appropriate, suspicious, and severe actions | Appropriate: quiet presence. Suspicious: disruptive movement. Severe: theft or violence in sanctuary |
-| Threshold visibility priority (35, 60, 80) | 35 mostly as social tension, 60 if faction conflict spills over |
+| Threshold visibility priority (35, 60, 80) | 35 mostly as social tension, 60 if institution conflict spills over |
 | Immediate NPC reactions by threshold | 35: verbal correction. 60: mediated warning. 80: sanctuary challenge by guards if sponsorship absent |
 
 ## Entry and access contracts
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Daytime open-door baseline |
 | Discouraged entry conditions | Active conflict state |
 | Forbidden entry conditions | Night without invitation |
-| Time-of-day, weather, faction deltas | Night lock enforces dependency on trust path |
+| Time-of-day, weather, institution deltas | Night lock enforces dependency on trust path |
 | Sponsorship or token required for low-friction entry | Father Domingo trust sponsorship |
 | Language or social knowledge requirement | Basic ritual respect cues |
 | Context-inappropriate actions and deltas | Loud disruption, visible theft, guard baiting |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | Recovery anchor linked to learning cluster |
 | Dead-end risk for core loops | Low if alley routes stay open |
 | Safe, risky, and ambiguous transitions | Safe from market via quiet route, ambiguous during crackdowns |
-| Chokepoints for faction control and stealth alternatives | Entry threshold should be socially controlled, not hard collision only |
+| Chokepoints for institution control and stealth alternatives | Entry threshold should be socially controlled, not hard collision only |
 | Recovery adjacency after failure or arrest | High value post-failure stabilization point |
 
 ## Keep or cut review

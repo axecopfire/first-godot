@@ -41,7 +41,7 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Supervisor, workers, rotating guard witness |
+| Expected witness roles and institutions | Supervisor, workers, rotating guard witness |
 | Always-on versus conditional witnesses | Supervisor persistent by day; guards conditional |
 | Dominant line-of-sight lanes and cover pockets | Entry and central aisles highly visible; stacks create partial occlusion |
 | Socially appropriate, suspicious, and severe actions | Appropriate: assigned handling. Suspicious: unsanctioned handling. Severe: theft, forced entry |
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Daytime work with role context |
 | Discouraged entry conditions | Idle loitering at storage aisles |
 | Forbidden entry conditions | Night forced access |
-| Time-of-day, weather, faction deltas | Night lock and elevated severity |
+| Time-of-day, weather, institution deltas | Night lock and elevated severity |
 | Sponsorship or token required for low-friction entry | Supervisor assignment token |
 | Language or social knowledge requirement | Role-specific task comprehension |
 | Context-inappropriate actions and deltas | Moving sealed goods, bypassing supervisor checks |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | Enforcement-rich branch off market hub |
 | Dead-end risk for core loops | Medium if back alley becomes one-way trap |
 | Safe, risky, and ambiguous transitions | Risky to barracks back corridor |
-| Chokepoints for faction control and stealth alternatives | Front door and back alley are explicit chokepoints |
+| Chokepoints for institution control and stealth alternatives | Front door and back alley are explicit chokepoints |
 | Recovery adjacency after failure or arrest | Low, intentional pressure node |
 
 ## Keep or cut review

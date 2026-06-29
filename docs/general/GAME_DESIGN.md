@@ -8,8 +8,8 @@ ms.date: 2026-06-27
 
 You wake in an alley off a foreign town square market. No one speaks your language. Every moment you
 spend failing to match expected local behavior raises suspicion. Get caught and you die. Learn to mimic
-social norms, choose faction-signaling actions, gift, befriend, and survive while navigating competing
-faction expectations.
+social norms, choose social-signaling actions, gift, befriend, and survive while navigating competing
+institution expectations.
 
 The hidden premise is that you are an AI learning to function among humans. The player should discover
 this only near the end, but all mechanics should reinforce that learning arc from the start.
@@ -25,7 +25,7 @@ flowchart TD
     subgraph CORE ["CORE LOOP"]
         B[market_exploration]
         C[stealth_mode]
-        D[faction_signal_action]
+        D[institution_signal_action]
     end
 
     subgraph SUSPICION ["SUSPICION ESCALATION"]
@@ -55,8 +55,8 @@ flowchart TD
         S[need_food]
     end
 
-    subgraph FACTION ["FACTION TENSION"]
-        T[faction_alignment_shift]
+    subgraph INSTITUTION ["COMMUNITY TENSION"]
+        T[institution_alignment_shift]
     end
 
     subgraph CAREERS ["CAREER BRANCHES"]
@@ -85,10 +85,10 @@ flowchart TD
     I -->|restart| A
 
     D -->|offer gift| J
-    D -->|witnessed by opposing faction| E
+    D -->|witnessed by opposing institution| E
     D -->|continue| B
     D -->|hide| C
-    D -->|faction trust 50+| T
+    D -->|institution trust 50+| T
 
     J -->|accepted| K
     J -->|rejected| L
@@ -135,12 +135,12 @@ flowchart TB
 
 ### Phase 2: Signal and Interpret
 
-Choose visible social actions to test faction reactions. The same action can improve trust with one
+Choose visible social actions to test institution reactions. The same action can improve trust with one
 group and increase suspicion with another. Gifts remain a secondary repair and relationship tool.
 
 ```mermaid
 flowchart TB
-    B1[Choose action: study or pray] --> B2[Witness checks faction values]
+    B1[Choose action: study or pray] --> B2[Witness checks institution values]
     B2 --> B3{Who saw it?}
     B3 -->|Church witness study| B4[Church suspicion +5, cap +20]
     B3 -->|Academia witness study| B5[Academia trust +7]
@@ -168,7 +168,7 @@ flowchart TB
 
 ### Phase 4: Survival Loop
 
-Day and night cycle of earning food through work, favors, and faction access while avoiding patrols.
+Day and night cycle of earning food through work, favors, and institution access while avoiding patrols.
 Without shelter there is a 60% chance of arrest each night.
 
 ```mermaid
@@ -210,7 +210,7 @@ flowchart TB
 The game tracks two connected pressure systems:
 
 * Individual suspicion per NPC: who personally distrusts you.
-* Faction alert per faction: how organized that group is against you.
+* Community alert per institution: how organized that group is against you.
 
 ### Individual suspicion thresholds (per NPC)
 
@@ -221,24 +221,24 @@ The game tracks two connected pressure systems:
 | 60 | Guard begins chase |
 | 80 | Arrested |
 
-### Faction alert thresholds (per faction)
+### Community alert thresholds (per institution)
 
 | Threshold | Effect |
 |-----------|--------|
 | 0 to 24 | Baseline monitoring |
 | 25 to 44 | Increased gossip and witness checks |
-| 45 to 64 | Faction scrutiny events and spot questioning |
+| 45 to 64 | Community scrutiny events and spot questioning |
 | 65 to 84 | Coordinated response, patrol density increases |
 | 85 to 100 | Emergency doctrine, hard access restrictions |
 
 ### Persistent accuser escalation (Phase 3 unlock)
 
-One NPC can become a recurring threat even when faction alert temporarily cools.
+One NPC can become a recurring threat even when community alert temporarily cools.
 
 | Stage | Trigger | Behavior |
 |-------|---------|----------|
 | Vocal accuser | NPC reaches 70+ suspicion twice in 3 days | Publicly reports your actions and amplifies rumors |
-| Vendetta (Phase 3) | Same NPC reaches 80+ after a faction cooldown | Tails you, interprets ambiguous actions as hostile |
+| Vendetta (Phase 3) | Same NPC reaches 80+ after an institution cooldown | Tails you, interprets ambiguous actions as hostile |
 | Coalition builder (Phase 3) | Vendetta persists 2+ days | Recruits 2 to 4 NPCs into an anti-player group |
 
 ### Anti-loop recovery rules
@@ -246,7 +246,7 @@ One NPC can become a recurring threat even when faction alert temporarily cools.
 To prevent unwinnable spirals, vendetta and coalition states require social resolution options:
 
 * Two witnessed conformity successes reduce accuser strike count by 1.
-* One trusted sponsor vouch removes coalition status if faction alert is below 50.
+* One trusted sponsor vouch removes coalition status if community alert is below 50.
 * Public restitution event clears vendetta if witnessed by the accuser and one neutral NPC.
 * Stealth can buy time but cannot fully clear vendetta on its own.
 
@@ -271,9 +271,9 @@ To prevent unwinnable spirals, vendetta and coalition states require social reso
 | Accuser reaches strike threshold | Escalates stage |
 | Public restitution witnessed | -1 accuser stage |
 
-### Faction gate thresholds
+### Authority gate thresholds
 
-| Faction | Threshold | Effect |
+| Institution | Threshold | Effect |
 |---------|-----------|--------|
 | Church suspicion | 20 | Religious dialogue options reduced |
 | Church suspicion | 50 | Church entry blocked |

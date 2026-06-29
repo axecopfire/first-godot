@@ -26,7 +26,7 @@ estimated_reading_time: 5
 | Short fiction intent | Public center where social norms are most visible and most enforced |
 | Primary gameplay role | Social pressure |
 | Secondary gameplay role | Language learning |
-| Risk profile and rationale | High due to witness density, faction crossover, and visible actions |
+| Risk profile and rationale | High due to witness density, institution crossover, and visible actions |
 | Intended player loops supported | First contact, observed action, gift gamble, trust gain |
 | Explicit Phase 1 mechanic unblocked | Individual suspicion accumulation with witness context |
 
@@ -41,7 +41,7 @@ estimated_reading_time: 5
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Merchants, laborers, guards, travelers, neutral villagers |
+| Expected witness roles and institutions | Merchants, laborers, guards, travelers, neutral villagers |
 | Always-on versus conditional witnesses | Merchants are near-constant; guards and travelers vary by time and event |
 | Dominant line-of-sight lanes and cover pockets | Open fountain approaches are exposed; stall edges create temporary cover pockets |
 | Socially appropriate, suspicious, and severe actions | Appropriate: browse, greet, buy. Suspicious: loitering near goods, rapid lane switching. Severe: theft witnessed by multiple NPCs |
@@ -55,7 +55,7 @@ estimated_reading_time: 5
 | Allowed entry conditions | Daytime public access |
 | Discouraged entry conditions | Night access without task, repeated loops near same stall |
 | Forbidden entry conditions | Active theft or prior incident under guard watch |
-| Time-of-day, weather, faction deltas | Evening lowers density but increases anomaly visibility |
+| Time-of-day, weather, institution deltas | Evening lowers density but increases anomaly visibility |
 | Sponsorship or token required for low-friction entry | Trusted merchant sponsorship lowers interpretation severity |
 | Language or social knowledge requirement | Basic greeting and exchange patterns reduce mismatch deltas |
 | Context-inappropriate actions and deltas | Touching goods without permission, interrupting trade flow, entering private stall space |
@@ -68,7 +68,7 @@ estimated_reading_time: 5
 | Route hierarchy intent | Primary hub that routes all early loops |
 | Dead-end risk for core loops | None if all exits remain available |
 | Safe, risky, and ambiguous transitions | Safe to alley and tailor paths; risky to warehouse and barracks lanes |
-| Chokepoints for faction control and stealth alternatives | East lane chokepoint near warehouse should be guard-observable |
+| Chokepoints for institution control and stealth alternatives | East lane chokepoint near warehouse should be guard-observable |
 | Recovery adjacency after failure or arrest | Alley and church route provide immediate recovery path |
 
 ## Keep or cut review

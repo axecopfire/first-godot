@@ -51,8 +51,8 @@ Answer for each existing location first, then each net-new location proposal.
 | Question | Answer |
 |---|---|
 | Location name and short fiction intent | |
-| Parent faction zone (who defines local social norms here) | |
-| Primary gameplay role (social pressure, safe recovery, high enforcement, language learning, labor economy, faction gate) | |
+| Parent institution zone (who defines local social norms here) | |
+| Primary gameplay role (social pressure, safe recovery, high enforcement, language learning, labor economy, authority gate) | |
 | Secondary gameplay role | |
 | Risk profile (low, medium, high) and why | |
 | Intended player loop supported (first contact, stealth recovery, observed action, gift gamble, trust gain, night decision) | |
@@ -60,7 +60,7 @@ Answer for each existing location first, then each net-new location proposal.
 
 ## Section B: Witness and visibility model
 
-1. Who are the expected witnesses in this location by role and faction?
+1. Who are the expected witnesses in this location by role and institution?
 2. Which witness types are always present, and which are conditional by time or event?
 3. Where are the dominant line-of-sight lanes, and where is meaningful cover?
 4. Which actions are socially appropriate, suspicious, or severe in this location?
@@ -70,7 +70,7 @@ Answer for each existing location first, then each net-new location proposal.
 ## Section C: Entry, access, and social appropriateness bands
 
 1. What are the allowed, discouraged, and forbidden entry conditions?
-2. What changes based on time-of-day, weather, or faction state?
+2. What changes based on time-of-day, weather, or institution state?
 3. Which NPC, token, or sponsorship is required for low-friction entry?
 4. What language level or social knowledge is required to avoid mismatch penalties?
 5. Which player actions are context-inappropriate here, and what deltas should they trigger?
@@ -80,7 +80,7 @@ Answer for each existing location first, then each net-new location proposal.
 1. Which locations connect directly to this one, and what is the intended route hierarchy?
 2. Does this location create a dead end for any core loop branch?
 3. Which transition should feel safe, risky, or ambiguous, and why?
-4. Where should chokepoints exist for faction control and for stealth alternatives?
+4. Where should chokepoints exist for institution control and for stealth alternatives?
 5. Which adjacency supports recovery after a failure or arrest state?
 6. What route options preserve pacing between social, stealth, and survival contexts?
 
@@ -93,7 +93,7 @@ Use this section only after Section 0 is complete.
 | Additional stealth lane selected | |
 | Additional social interior selected | |
 | Additional labor sub-zone selected | |
-| Additional faction-controlled chokepoint selected | |
+| Additional institution-controlled chokepoint selected | |
 | Why these four were prioritized over alternatives | |
 | Dependencies required from NPC architecture and map integration workstreams | |
 

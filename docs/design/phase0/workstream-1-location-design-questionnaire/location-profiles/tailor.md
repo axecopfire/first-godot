@@ -41,7 +41,7 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Tailor primary witness, occasional local customers |
+| Expected witness roles and institutions | Tailor primary witness, occasional local customers |
 | Always-on versus conditional witnesses | Mostly single witness, sparse conditional witnesses |
 | Dominant line-of-sight lanes and cover pockets | Compact room with immediate line of sight |
 | Socially appropriate, suspicious, and severe actions | Appropriate: request repairs, offer materials. Suspicious: rummaging in inventory. Severe: theft |
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Day and early evening |
 | Discouraged entry conditions | Late-night repeated visits |
 | Forbidden entry conditions | Forced back-room entry |
-| Time-of-day, weather, faction deltas | Late hours increase social anomaly interpretation |
+| Time-of-day, weather, institution deltas | Late hours increase social anomaly interpretation |
 | Sponsorship or token required for low-friction entry | Maryam trust relationship |
 | Language or social knowledge requirement | Basic etiquette and request framing |
 | Context-inappropriate actions and deltas | Touching finished garments, ignoring queue cues |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | Quiet branch off high-pressure routes |
 | Dead-end risk for core loops | Low |
 | Safe, risky, and ambiguous transitions | Safe to church route, ambiguous to market re-entry |
-| Chokepoints for faction control and stealth alternatives | Back route can support stealth alternative |
+| Chokepoints for institution control and stealth alternatives | Back route can support stealth alternative |
 | Recovery adjacency after failure or arrest | Useful recovery pivot before returning to market |
 
 ## Keep or cut review

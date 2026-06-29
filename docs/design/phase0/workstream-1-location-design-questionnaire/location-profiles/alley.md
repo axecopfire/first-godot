@@ -41,7 +41,7 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Occasional passerby and patrol spillover |
+| Expected witness roles and institutions | Occasional passerby and patrol spillover |
 | Always-on versus conditional witnesses | Mostly conditional by patrol schedule |
 | Dominant line-of-sight lanes and cover pockets | Long narrow sightline with wall cover on sides |
 | Socially appropriate, suspicious, and severe actions | Appropriate: transit and rest. Suspicious: repeated lurking near market mouth. Severe: active pursuit into alley |
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Always |
 | Discouraged entry conditions | Long stationary behavior near choke exits |
 | Forbidden entry conditions | None |
-| Time-of-day, weather, faction deltas | Night increases patrol relevance at alley mouth |
+| Time-of-day, weather, institution deltas | Night increases patrol relevance at alley mouth |
 | Sponsorship or token required for low-friction entry | None |
 | Language or social knowledge requirement | Minimal |
 | Context-inappropriate actions and deltas | None severe; low deltas for loitering patterns |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | Recovery buffer and stealth lane |
 | Dead-end risk for core loops | Low if both ends remain navigable |
 | Safe, risky, and ambiguous transitions | Safe by default, ambiguous when patrol escalates |
-| Chokepoints for faction control and stealth alternatives | Alley mouth should remain key observation threshold |
+| Chokepoints for institution control and stealth alternatives | Alley mouth should remain key observation threshold |
 | Recovery adjacency after failure or arrest | Primary early loop recovery adjacency |
 
 ## Keep or cut review

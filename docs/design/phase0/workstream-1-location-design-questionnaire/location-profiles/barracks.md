@@ -24,7 +24,7 @@ estimated_reading_time: 4
 | Question | Answer |
 |---|---|
 | Short fiction intent | Central enforcement node and arrest consequence anchor |
-| Primary gameplay role | Faction gate |
+| Primary gameplay role | Authority gate |
 | Secondary gameplay role | High enforcement |
 | Risk profile and rationale | High by design with strongest consequence visibility |
 | Intended player loops supported | Observed action, arrest, recovery restart |
@@ -41,7 +41,7 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Guard personnel and detainees |
+| Expected witness roles and institutions | Guard personnel and detainees |
 | Always-on versus conditional witnesses | Guard witness density always high |
 | Dominant line-of-sight lanes and cover pockets | Entry and common room highly controlled, minimal cover |
 | Socially appropriate, suspicious, and severe actions | Appropriate: escorted entry. Suspicious: loitering near arms. Severe: intrusion or theft |
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Escort, summons, or sanctioned delivery |
 | Discouraged entry conditions | Unsponsored approach |
 | Forbidden entry conditions | Unauthorized entry |
-| Time-of-day, weather, faction deltas | Always enforced, stronger at night |
+| Time-of-day, weather, institution deltas | Always enforced, stronger at night |
 | Sponsorship or token required for low-friction entry | Official summons or trusted intermediary |
 | Language or social knowledge requirement | Clear compliance cues |
 | Context-inappropriate actions and deltas | Weapon interaction, refusal to comply, perimeter breach |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | Enforcement endpoint |
 | Dead-end risk for core loops | Intentional dead-end under arrest state |
 | Safe, risky, and ambiguous transitions | Risky from warehouse and market spillover |
-| Chokepoints for faction control and stealth alternatives | Entrances should remain hard control points |
+| Chokepoints for institution control and stealth alternatives | Entrances should remain hard control points |
 | Recovery adjacency after failure or arrest | Directly feeds reset and recovery loop |
 
 ## Keep or cut review

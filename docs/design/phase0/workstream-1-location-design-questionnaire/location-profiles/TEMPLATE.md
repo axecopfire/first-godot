@@ -17,7 +17,7 @@ estimated_reading_time: 6
 |---|---|
 | Location name | |
 | Location key | |
-| Parent faction zone | |
+| Parent institution zone | |
 | Baseline type (`Existing` or `Net-new`) | |
 | Current status (`Keep`, `Keep with revision`, `Candidate cut`, `Deferred`) | |
 
@@ -43,7 +43,7 @@ estimated_reading_time: 6
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | |
+| Expected witness roles and institutions | |
 | Always-on versus conditional witnesses | |
 | Dominant line-of-sight lanes and cover pockets | |
 | Socially appropriate, suspicious, and severe actions | |
@@ -57,7 +57,7 @@ estimated_reading_time: 6
 | Allowed entry conditions | |
 | Discouraged entry conditions | |
 | Forbidden entry conditions | |
-| Time-of-day, weather, faction deltas | |
+| Time-of-day, weather, institution deltas | |
 | Sponsorship or token required for low-friction entry | |
 | Language or social knowledge requirement | |
 | Context-inappropriate actions and deltas | |
@@ -70,7 +70,7 @@ estimated_reading_time: 6
 | Route hierarchy intent | |
 | Dead-end risk for core loops | |
 | Safe, risky, and ambiguous transitions | |
-| Chokepoints for faction control and stealth alternatives | |
+| Chokepoints for institution control and stealth alternatives | |
 | Recovery adjacency after failure or arrest | |
 
 ## Keep or cut review

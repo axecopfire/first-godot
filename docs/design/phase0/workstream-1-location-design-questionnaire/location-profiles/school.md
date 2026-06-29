@@ -41,7 +41,7 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Teacher, children, occasional parent witnesses |
+| Expected witness roles and institutions | Teacher, children, occasional parent witnesses |
 | Always-on versus conditional witnesses | Teacher persistent in daytime; others schedule-dependent |
 | Dominant line-of-sight lanes and cover pockets | Open single-room line-of-sight with little physical cover |
 | Socially appropriate, suspicious, and severe actions | Appropriate: attentive participation. Suspicious: wandering during lesson. Severe: theft or disruption |
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Daytime instructional periods |
 | Discouraged entry conditions | Entering during lesson without invitation |
 | Forbidden entry conditions | Night entry or disruptive intrusion |
-| Time-of-day, weather, faction deltas | Afternoon lower witness density and lower social risk |
+| Time-of-day, weather, institution deltas | Afternoon lower witness density and lower social risk |
 | Sponsorship or token required for low-friction entry | Teacher sponsorship |
 | Language or social knowledge requirement | Basic learning-mode signals |
 | Context-inappropriate actions and deltas | Aggressive pacing, grabbing chalkboard items, interrupting learners |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | Learning waypoint in north-quarter cluster |
 | Dead-end risk for core loops | Low |
 | Safe, risky, and ambiguous transitions | Safe from workshop; ambiguous when arriving under guard tail |
-| Chokepoints for faction control and stealth alternatives | No heavy chokepoints intended |
+| Chokepoints for institution control and stealth alternatives | No heavy chokepoints intended |
 | Recovery adjacency after failure or arrest | Moderate as low-pressure reset with progression gain |
 
 ## Keep or cut review

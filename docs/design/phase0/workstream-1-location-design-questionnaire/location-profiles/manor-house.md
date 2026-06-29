@@ -25,10 +25,10 @@ estimated_reading_time: 4
 |---|---|
 | Short fiction intent | Late-game authority interior and reveal-sensitive narrative space |
 | Primary gameplay role | High enforcement |
-| Secondary gameplay role | Faction gate |
+| Secondary gameplay role | Authority gate |
 | Risk profile and rationale | High due to strict access and narrative consequence weight |
 | Intended player loops supported | Trust gain, night decision, endgame audience |
-| Explicit Phase 1 mechanic unblocked | Access progression contracts tied to trust and faction interpretation |
+| Explicit Phase 1 mechanic unblocked | Access progression contracts tied to trust and institution interpretation |
 
 ## Premise and guardrail checks
 
@@ -41,7 +41,7 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Lord household, stewards, elite visitors |
+| Expected witness roles and institutions | Lord household, stewards, elite visitors |
 | Always-on versus conditional witnesses | Staff always present once unlocked |
 | Dominant line-of-sight lanes and cover pockets | Interior corridors create controlled surveillance geometry |
 | Socially appropriate, suspicious, and severe actions | Appropriate: invited audience behavior. Suspicious: unsanctioned movement. Severe: private chamber intrusion |
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Invitation or explicit quest progression |
 | Discouraged entry conditions | Unescorted movement beyond designated area |
 | Forbidden entry conditions | Forced entry |
-| Time-of-day, weather, faction deltas | Mostly state-driven, less weather-dependent |
+| Time-of-day, weather, institution deltas | Mostly state-driven, less weather-dependent |
 | Sponsorship or token required for low-friction entry | Formal audience token or steward approval |
 | Language or social knowledge requirement | High protocol literacy |
 | Context-inappropriate actions and deltas | Touching restricted objects, breaking audience etiquette |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | Final authority interior behind layered gates |
 | Dead-end risk for core loops | Intended for late progression |
 | Safe, risky, and ambiguous transitions | Risky by default without explicit access |
-| Chokepoints for faction control and stealth alternatives | Interior thresholds should encode rank access |
+| Chokepoints for institution control and stealth alternatives | Interior thresholds should encode rank access |
 | Recovery adjacency after failure or arrest | Minimal |
 
 ## Keep or cut review

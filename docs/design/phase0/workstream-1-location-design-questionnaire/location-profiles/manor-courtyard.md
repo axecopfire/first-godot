@@ -24,7 +24,7 @@ estimated_reading_time: 4
 | Question | Answer |
 |---|---|
 | Short fiction intent | Transitional authority threshold before inner access |
-| Primary gameplay role | Faction gate |
+| Primary gameplay role | Authority gate |
 | Secondary gameplay role | Social pressure |
 | Risk profile and rationale | High due to authority concentration and gate control |
 | Intended player loops supported | Trust gain, observed action, night decision |
@@ -41,7 +41,7 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Manor staff, gate personnel, visiting petitioners |
+| Expected witness roles and institutions | Manor staff, gate personnel, visiting petitioners |
 | Always-on versus conditional witnesses | Gate witness always on in active periods |
 | Dominant line-of-sight lanes and cover pockets | Courtyard largely visible with limited structural cover |
 | Socially appropriate, suspicious, and severe actions | Appropriate: escorted petition. Suspicious: unsanctioned wandering. Severe: perimeter breach |
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Sponsored daytime access |
 | Discouraged entry conditions | Unsponsored loitering |
 | Forbidden entry conditions | Gate breach |
-| Time-of-day, weather, faction deltas | Night access heavily constrained |
+| Time-of-day, weather, institution deltas | Night access heavily constrained |
 | Sponsorship or token required for low-friction entry | Munir or equivalent authority sponsorship |
 | Language or social knowledge requirement | Formal register and protocol compliance |
 | Context-inappropriate actions and deltas | Crossing restricted lines, addressing authority improperly |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | Late-loop gate before final authority interior |
 | Dead-end risk for core loops | Medium if access unlock timing is too late |
 | Safe, risky, and ambiguous transitions | Ambiguous from fields, risky toward house |
-| Chokepoints for faction control and stealth alternatives | Main gate and house threshold are hard chokepoints |
+| Chokepoints for institution control and stealth alternatives | Main gate and house threshold are hard chokepoints |
 | Recovery adjacency after failure or arrest | Low by design |
 
 ## Keep or cut review

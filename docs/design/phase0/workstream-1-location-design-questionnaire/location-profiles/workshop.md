@@ -41,12 +41,12 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Artisan owner, occasional patrons, nearby scholars |
+| Expected witness roles and institutions | Artisan owner, occasional patrons, nearby scholars |
 | Always-on versus conditional witnesses | Primary witness constant during work hours |
 | Dominant line-of-sight lanes and cover pockets | Main bench visible, storage and back shelves semi-private |
 | Socially appropriate, suspicious, and severe actions | Appropriate: ask, observe, assist. Suspicious: touching materials uninvited. Severe: stealing books or crafted items |
 | Threshold visibility priority (35, 60, 80) | 35 as first warning location for cultural mismatch |
-| Immediate NPC reactions by threshold | 35: corrective instruction. 60: refusal of access. 80: report to faction witness |
+| Immediate NPC reactions by threshold | 35: corrective instruction. 60: refusal of access. 80: report to institution witness |
 
 ## Entry and access contracts
 
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Daytime with open-work posture |
 | Discouraged entry conditions | Entering back room without relationship |
 | Forbidden entry conditions | Forced access during closed hours |
-| Time-of-day, weather, faction deltas | Closed at night with higher mismatch penalty on intrusion |
+| Time-of-day, weather, institution deltas | Closed at night with higher mismatch penalty on intrusion |
 | Sponsorship or token required for low-friction entry | Zahra trust and reputation token |
 | Language or social knowledge requirement | Early vocabulary and gesture protocols |
 | Context-inappropriate actions and deltas | Tool misuse, interrupting firing cycle, removing books |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | Learning cluster anchor |
 | Dead-end risk for core loops | None |
 | Safe, risky, and ambiguous transitions | Safe from church, ambiguous from market when under scrutiny |
-| Chokepoints for faction control and stealth alternatives | Doorway is social, not militarized, checkpoint |
+| Chokepoints for institution control and stealth alternatives | Doorway is social, not militarized, checkpoint |
 | Recovery adjacency after failure or arrest | Moderate recovery by skillful re-entry behavior |
 
 ## Keep or cut review

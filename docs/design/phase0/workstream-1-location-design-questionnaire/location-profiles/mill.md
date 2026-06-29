@@ -41,7 +41,7 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Miller primary witness, occasional carriers |
+| Expected witness roles and institutions | Miller primary witness, occasional carriers |
 | Always-on versus conditional witnesses | Primary daytime witness, sparse at night |
 | Dominant line-of-sight lanes and cover pockets | Open machinery floor with noise masking movement |
 | Socially appropriate, suspicious, and severe actions | Appropriate: assist or wait for task. Suspicious: after-hours entry. Severe: supply theft |
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Daytime work periods |
 | Discouraged entry conditions | Late idle occupation |
 | Forbidden entry conditions | Night entry without trust relationship |
-| Time-of-day, weather, faction deltas | Night sharply increases suspicion interpretation |
+| Time-of-day, weather, institution deltas | Night sharply increases suspicion interpretation |
 | Sponsorship or token required for low-friction entry | Miller invitation or work assignment |
 | Language or social knowledge requirement | Work-request language and waiting norms |
 | Context-inappropriate actions and deltas | Interfering with milling cycle, entering private quarters |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | South-side alternative to blacksmith branch |
 | Dead-end risk for core loops | Low |
 | Safe, risky, and ambiguous transitions | Safe by day, ambiguous by night |
-| Chokepoints for faction control and stealth alternatives | Water crossings can become movement contracts |
+| Chokepoints for institution control and stealth alternatives | Water crossings can become movement contracts |
 | Recovery adjacency after failure or arrest | Useful as a daytime reset route |
 
 ## Keep or cut review

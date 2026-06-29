@@ -41,7 +41,7 @@ estimated_reading_time: 4
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Blacksmith, apprentice, passing laborers |
+| Expected witness roles and institutions | Blacksmith, apprentice, passing laborers |
 | Always-on versus conditional witnesses | Blacksmith mostly always on during day |
 | Dominant line-of-sight lanes and cover pockets | Open forge front is visible; side storage offers partial cover |
 | Socially appropriate, suspicious, and severe actions | Appropriate: assist tasks, request tools. Suspicious: idle hovering near valuables. Severe: weapon theft |
@@ -55,7 +55,7 @@ estimated_reading_time: 4
 | Allowed entry conditions | Daytime active workshop |
 | Discouraged entry conditions | Night lingering |
 | Forbidden entry conditions | Unauthorized after-hours access |
-| Time-of-day, weather, faction deltas | Night raises anomaly penalty |
+| Time-of-day, weather, institution deltas | Night raises anomaly penalty |
 | Sponsorship or token required for low-friction entry | Apprentice referral |
 | Language or social knowledge requirement | Worksite etiquette vocabulary |
 | Context-inappropriate actions and deltas | Touching forged goods, crossing active workspace boundary |
@@ -68,7 +68,7 @@ estimated_reading_time: 4
 | Route hierarchy intent | South labor branch from market hub |
 | Dead-end risk for core loops | Low |
 | Safe, risky, and ambiguous transitions | Safe when labor flow is active |
-| Chokepoints for faction control and stealth alternatives | Entry mouth can host occasional witness checks |
+| Chokepoints for institution control and stealth alternatives | Entry mouth can host occasional witness checks |
 | Recovery adjacency after failure or arrest | Medium recovery through tolerated work identity |
 
 ## Keep or cut review

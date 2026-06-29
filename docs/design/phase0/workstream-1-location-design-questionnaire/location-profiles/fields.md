@@ -41,7 +41,7 @@ estimated_reading_time: 5
 
 | Prompt | Answer |
 |---|---|
-| Expected witness roles and factions | Field manager, workers, occasional patrols |
+| Expected witness roles and institutions | Field manager, workers, occasional patrols |
 | Always-on versus conditional witnesses | Manager and workers by day, few at night |
 | Dominant line-of-sight lanes and cover pockets | Open sight lines in pasture, variable crop cover in plots |
 | Socially appropriate, suspicious, and severe actions | Appropriate: field labor. Suspicious: idling near resources. Severe: sabotage or theft |
@@ -55,7 +55,7 @@ estimated_reading_time: 5
 | Allowed entry conditions | Daytime open access with labor intent |
 | Discouraged entry conditions | Repeated entry without contribution |
 | Forbidden entry conditions | Destructive actions |
-| Time-of-day, weather, faction deltas | Harvest windows and weather shift witness density |
+| Time-of-day, weather, institution deltas | Harvest windows and weather shift witness density |
 | Sponsorship or token required for low-friction entry | Field manager approval |
 | Language or social knowledge requirement | Basic labor terminology and compliance cues |
 | Context-inappropriate actions and deltas | Taking tools, interrupting channels, crossing protected plots |
@@ -68,7 +68,7 @@ estimated_reading_time: 5
 | Route hierarchy intent | Outer-loop branch for labor and stealth alternatives |
 | Dead-end risk for core loops | Low |
 | Safe, risky, and ambiguous transitions | Safe in low patrol windows, risky near manor approach |
-| Chokepoints for faction control and stealth alternatives | Road and canal crossings serve as natural chokepoints |
+| Chokepoints for institution control and stealth alternatives | Road and canal crossings serve as natural chokepoints |
 | Recovery adjacency after failure or arrest | Strong recovery path via low-density routes |
 
 ## Keep or cut review
