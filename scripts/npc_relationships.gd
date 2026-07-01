@@ -127,37 +127,37 @@ const DWELLINGS := {
 	"home_market_row": {
 		"id": "home_market_row",
 		"label": "Market Row House",
-		"zone": "market",
+		"zone": "dwelling_market_row",
 		"residents": ["Yusuf", "Amina"],
 	},
 	"home_workshop_court": {
 		"id": "home_workshop_court",
 		"label": "Workshop Court House",
-		"zone": "workshop",
+		"zone": "dwelling_workshop_court",
 		"residents": ["Samira", "Zahra"],
 	},
 	"home_smithy_loft": {
 		"id": "home_smithy_loft",
 		"label": "Smithy Loft",
-		"zone": "blacksmith",
+		"zone": "dwelling_smithy_loft",
 		"residents": ["Ibrahim", "Tarik", "Capitan Rodrigo"],
 	},
 	"home_warehouse_quarters": {
 		"id": "home_warehouse_quarters",
 		"label": "Warehouse Quarters",
-		"zone": "warehouse",
+		"zone": "dwelling_warehouse_quarters",
 		"residents": ["Abbas", "Rafiq", "Salim", "Nura"],
 	},
 	"home_field_house": {
 		"id": "home_field_house",
 		"label": "Field House",
-		"zone": "fields",
+		"zone": "dwelling_field_house",
 		"residents": ["Old Hamid", "Qadir", "Maryam"],
 	},
 	"home_school_residence": {
 		"id": "home_school_residence",
 		"label": "School Residence",
-		"zone": "school",
+		"zone": "dwelling_school_residence",
 		"residents": ["Maestro al-Rashid", "Father Domingo"],
 	},
 }

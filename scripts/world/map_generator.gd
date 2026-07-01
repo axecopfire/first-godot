@@ -24,6 +24,12 @@ const ZONES := {
 	"workshop": Rect2i(36, 5, 8, 7),
 	"school": Rect2i(55, 5, 9, 7),
 	"tailor": Rect2i(41, 14, 6, 5),
+	"dwelling_market_row": Rect2i(58, 14, 6, 5),
+	"dwelling_workshop_court": Rect2i(33, 13, 6, 5),
+	"dwelling_smithy_loft": Rect2i(45, 36, 6, 6),
+	"dwelling_warehouse_quarters": Rect2i(79, 22, 7, 6),
+	"dwelling_field_house": Rect2i(18, 31, 7, 6),
+	"dwelling_school_residence": Rect2i(64, 12, 6, 5),
 	"blacksmith": Rect2i(36, 36, 8, 7),
 	"mill": Rect2i(53, 36, 8, 7),
 	"warehouse": Rect2i(67, 21, 11, 9),
@@ -42,6 +48,12 @@ const ZONE_SUSPICION := {
 	"workshop": 0.0,
 	"school": 0.0,
 	"tailor": 0.0,
+	"dwelling_market_row": -0.3,
+	"dwelling_workshop_court": -0.3,
+	"dwelling_smithy_loft": -0.2,
+	"dwelling_warehouse_quarters": 0.1,
+	"dwelling_field_house": -0.2,
+	"dwelling_school_residence": -0.4,
 	"blacksmith": 0.0,
 	"mill": 0.0,
 	"warehouse": 1.0,
@@ -63,6 +75,8 @@ func build(parent: Node2D) -> void:
 	_place_market_stalls(parent)
 	_place_decorations(parent)
 	_place_building_furniture(parent)
+	_place_dwelling_signs(parent)
+	_place_dwelling_lights(parent)
 	_build_walls(parent)
 	_build_water_collisions(parent)
 	_build_manor_gate(parent)
@@ -115,20 +129,33 @@ func _generate_map() -> void:
 	_fill_rect(Rect2i(63, 24, 5, 4), Tile.DIRT)         # warehouse lane (east)
 	_fill_rect(Rect2i(15, 26, 23, 3), Tile.DIRT)        # west road across fields
 	_fill_rect(Rect2i(67, 29, 11, 2), Tile.DIRT)        # alley behind warehouse/barracks
+	_fill_rect(Rect2i(58, 18, 11, 2), Tile.DIRT)        # north dwellings lane
+	_fill_rect(Rect2i(46, 36, 2, 7), Tile.DIRT)         # smithy loft path
+	_fill_rect(Rect2i(77, 24, 2, 2), Tile.DIRT)         # warehouse quarters connector
+	_fill_rect(Rect2i(21, 37, 2, 2), Tile.DIRT)         # field house connector
+	_fill_rect(Rect2i(66, 17, 1, 2), Tile.DIRT)         # school residence doorway connector
+	_fill_rect(Rect2i(47, 35, 1, 2), Tile.DIRT)         # smithy loft doorway connector
+	_fill_rect(Rect2i(79, 24, 1, 2), Tile.DIRT)         # warehouse quarters doorway connector
 
 	# Building shells.
 	_place_building(ZONES["church"], Vector2i(30, 12), Tile.WOOD)
 	_place_building(ZONES["workshop"], Vector2i(39, 11), Tile.WOOD)
 	_place_building(ZONES["school"], Vector2i(59, 11), Tile.WOOD)
 	_place_building(ZONES["tailor"], Vector2i(46, 16), Tile.WOOD)
+	_place_building(ZONES["dwelling_market_row"], Vector2i(60, 18), Tile.WOOD)
+	_place_building(ZONES["dwelling_workshop_court"], Vector2i(36, 17), Tile.WOOD)
+	_place_building(ZONES["dwelling_school_residence"], Vector2i(66, 16), Tile.WOOD)
 	# Tailor back door (north) into church garden.
 	map_data[14][43] = Tile.DIRT
 	_place_building(ZONES["blacksmith"], Vector2i(39, 36), Tile.WOOD)
+	_place_building(ZONES["dwelling_smithy_loft"], Vector2i(47, 36), Tile.WOOD)
 	_place_building(ZONES["mill"], Vector2i(56, 36), Tile.WOOD)
 	_place_building(ZONES["warehouse"], Vector2i(67, 25), Tile.WOOD)
+	_place_building(ZONES["dwelling_warehouse_quarters"], Vector2i(79, 25), Tile.WOOD)
 	# Warehouse back exit east into the alley.
 	map_data[28][77] = Tile.WOOD
 	_place_building(ZONES["barracks"], Vector2i(67, 35), Tile.WOOD)
+	_place_building(ZONES["dwelling_field_house"], Vector2i(21, 36), Tile.WOOD)
 
 	# Church herb garden behind the church (small grass patch).
 	_fill_rect(Rect2i(28, 1, 5, 3), Tile.GRASS)
@@ -377,6 +404,20 @@ func _place_building_furniture(parent: Node2D) -> void:
 	_add_furniture_item(furnishings, chair_tex, Vector2(11, 26), Vector2(8, 8), Vector2(1, 1))
 	_add_furniture_item(furnishings, cabinet_tex, Vector2(8, 28), Vector2(48, 6), Vector2(4, 1))
 
+	# Family dwellings: simple interiors so homes read as lived-in spaces.
+	_add_furniture_item(furnishings, bed_tex, Vector2(59, 15), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, cabinet_tex, Vector2(61, 15), Vector2(48, 6), Vector2(4, 1))
+	_add_furniture_item(furnishings, bed_tex, Vector2(34, 14), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, shelf_tex, Vector2(36, 14), Vector2(8, 42), Vector2(2, 3))
+	_add_furniture_item(furnishings, bed_tex, Vector2(46, 37), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, footlocker_tex, Vector2(48, 39), Vector2(16, 8), Vector2(2, 2))
+	_add_furniture_item(furnishings, bed_tex, Vector2(80, 23), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, crate_tex, Vector2(83, 24), Vector2(12, 12), Vector2(2, 2))
+	_add_furniture_item(furnishings, bed_tex, Vector2(19, 32), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, cabinet_tex, Vector2(22, 35), Vector2(48, 6), Vector2(4, 1))
+	_add_furniture_item(furnishings, bed_tex, Vector2(65, 13), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, desk_tex, Vector2(67, 14), Vector2(18, 6), Vector2(3, 2))
+
 func _add_furniture_item(
 	parent: Node2D,
 	tex: Texture2D,
@@ -420,6 +461,85 @@ func _add_decor_col(parent: Node2D, tex: Texture2D, pos: Vector2, col_size: Vect
 	shape.shape = rect
 	body.add_child(shape)
 	parent.add_child(body)
+
+func _place_dwelling_signs(parent: Node2D) -> void:
+	var signs := Node2D.new()
+	signs.name = "DwellingSigns"
+	parent.add_child(signs)
+
+	var sign_specs := [
+		{"text": "MARKET ROW", "zone": "dwelling_market_row"},
+		{"text": "WORKSHOP COURT", "zone": "dwelling_workshop_court"},
+		{"text": "SMITHY LOFT", "zone": "dwelling_smithy_loft"},
+		{"text": "WAREHOUSE QUARTERS", "zone": "dwelling_warehouse_quarters"},
+		{"text": "FIELD HOUSE", "zone": "dwelling_field_house"},
+		{"text": "SCHOOL RESIDENCE", "zone": "dwelling_school_residence"},
+	]
+
+	for spec in sign_specs:
+		var zone_name := str(spec.get("zone", ""))
+		if not ZONES.has(zone_name):
+			continue
+
+		var zone: Rect2i = ZONES[zone_name]
+		var center := Vector2(
+			(zone.position.x + zone.size.x * 0.5) * TILE_SIZE,
+			(zone.position.y - 0.75) * TILE_SIZE
+		)
+
+		var label := Label.new()
+		label.text = str(spec.get("text", "HOME"))
+		label.position = center + Vector2(-42, -8)
+		label.add_theme_font_size_override("font_size", 8)
+		label.add_theme_color_override("font_color", Color(1.0, 0.93, 0.68, 0.95))
+		label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.95))
+		label.add_theme_constant_override("shadow_offset_x", 1)
+		label.add_theme_constant_override("shadow_offset_y", 1)
+		signs.add_child(label)
+
+func _place_dwelling_lights(parent: Node2D) -> void:
+	var lights := Node2D.new()
+	lights.name = "DwellingLights"
+	parent.add_child(lights)
+
+	var lantern_texture := _create_lantern_light_texture(64)
+	for zone_name in [
+		"dwelling_market_row",
+		"dwelling_workshop_court",
+		"dwelling_smithy_loft",
+		"dwelling_warehouse_quarters",
+		"dwelling_field_house",
+		"dwelling_school_residence",
+	]:
+		if not ZONES.has(zone_name):
+			continue
+
+		var zone: Rect2i = ZONES[zone_name]
+		var door_tile := Vector2(
+			zone.position.x + zone.size.x * 0.5,
+			zone.position.y + zone.size.y - 1
+		)
+		var light := PointLight2D.new()
+		light.texture = lantern_texture
+		light.texture_scale = 1.2
+		light.color = Color(1.0, 0.78, 0.38, 0.85)
+		light.energy = 0.9
+		light.position = (door_tile + Vector2(0.0, 0.5)) * TILE_SIZE
+		lights.add_child(light)
+
+func _create_lantern_light_texture(size: int) -> Texture2D:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var center := Vector2(size * 0.5, size * 0.5)
+	var max_dist := center.length()
+
+	for y in range(size):
+		for x in range(size):
+			var dist := Vector2(x, y).distance_to(center)
+			var t: float = clamp(1.0 - (dist / max_dist), 0.0, 1.0)
+			var alpha: float = t * t
+			img.set_pixel(x, y, Color(1, 1, 1, alpha))
+
+	return ImageTexture.create_from_image(img)
 
 func _build_walls(parent: Node2D) -> void:
 	var walls := Node2D.new()
