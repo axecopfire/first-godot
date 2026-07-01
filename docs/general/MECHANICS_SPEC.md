@@ -63,10 +63,11 @@ Suspicion is social assimilation pressure first, enforcement pressure second.
 | Individual NPC suspicion | Each NPC tracks own suspicion and trust from witnessed behavior | Phase 1 |
 | Witnessing events | NPCs remember positive and negative actions | Phase 1 |
 | Event severity classification | Actions classify into suspicion or trust deltas | Phase 1 |
-| Rumor propagation | Severe events can be shared; minor events stay local | Phase 2 |
+| Rumor propagation | High and critical events emit village-class rumor packets reaching all active witnesses; low and medium events stay local | Phase 1 |
 | Second-hand reputation | NPCs can shift stance based on trusted reports | Phase 2 |
+| Ally vouching | Trusted allies can intervene and vouch to reduce suspicion during escalation | Phase 3 |
 | Stealth state | Stealth reduces visibility and witnessing probability | Phase 1 |
-| Threshold reactions | Suspicion 35 plus follow, 60 plus chase, 80 plus arrest | Phase 1 |
+| Threshold reactions | Suspicion 35: timer-based zone-locked follow, ends on line-of-sight break or zone exit, severity can escalate to local support calls; suspicion 60: zone-local chase and same-zone support calls; suspicion 80: instant arrest on overlap | Phase 1 |
 | Suspicion reset rules | Arrest resets suspicion to baseline, preserves learning state | Phase 1 |
 | Trust building through witnessing | Repeated visible conformity lowers suspicion and raises trust | Phase 2 |
 
@@ -133,9 +134,10 @@ Career progression remains in scope, but without institution simulation.
 | Proposal | Why it matters | Suggested scope |
 |---|---|---|
 | Awareness cones and hearing radius | Makes stealth skill-based | Light and sound checks per NPC |
-| Group alert propagation | Makes mistakes feel systemic | Shared alert state among nearby NPCs |
+| Group alert propagation | Makes mistakes feel systemic | Shared alert state among nearby NPCs within the same zone |
 | Guard patrol schedules | Creates readable risk windows | Time-based route graph |
 | Cooldown and de-escalation | Prevents perpetual chase states | Decay timers and safe-zone logic |
+| Ally vouching | Gives a future social-support path during escalation | Trusted allies in the same zone can intervene and vouch |
 
 ### Economy and scarcity
 
