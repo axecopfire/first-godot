@@ -37,6 +37,7 @@ func _ready() -> void:
 	_create_ui()
 	_setup_bell_audio()
 	_update_day_night(0.0)
+	_update_npc_schedules(0.0, true)
 
 func _process(delta: float) -> void:
 	day_timer += delta
@@ -141,6 +142,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(43, 24),
 			"lines": ["Welcome, traveler!\nThe finest silks from the East!", "Perhaps a jeweled dagger\ncatches your eye?", "Come back anytime!"],
 			"range": 25.0,
+			"morning_hour": 8,
+			"evening_hour": 18,
 		},
 		{
 			"name": "Amina",
@@ -149,6 +152,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(57, 24),
 			"lines": ["Fresh bread! Still warm\nfrom the oven!", "Try my honey cakes,\nbest in the kingdom!", "The secret is in the yeast..."],
 			"range": 25.0,
+			"morning_hour": 5,
+			"evening_hour": 18,
 		},
 		{
 			"name": "Samira",
@@ -157,6 +162,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(57, 32),
 			"lines": ["Herbs and potions,\ncures for what ails ye!", "This tincture will ward\noff the plague... probably.", "Lavender for luck,\nthyme for truth!"],
 			"range": 20.0,
+			"morning_hour": 7,
+			"evening_hour": 18,
 		},
 		{
 			"name": "Old Hamid",
@@ -165,6 +172,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(43, 32),
 			"lines": ["The goats know me,\nand I know them.", "A donkey will outwork\nany horse, mark my words.", "Mind the smell, friend."],
 			"range": 0.0,
+			"morning_hour": 6,
+			"evening_hour": 18,
 		},
 		# --- Blacksmith ---
 		{
@@ -174,6 +183,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(39, 39),
 			"lines": ["Need a blade sharpened?", "This steel was forged in\ndragonfire! ...Well, regular fire.", "Watch your fingers\naround the anvil!"],
 			"range": 18.0,
+			"morning_hour": 7,
+			"evening_hour": 18,
 		},
 		{
 			"name": "Tarik",
@@ -182,6 +193,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(41, 35),
 			"lines": ["Ibrahim wants me to\nrun another errand.", "The bellows never rest.", "One day I'll forge my own\nblade. One day."],
 			"range": 60.0,
+			"morning_hour": 7,
+			"evening_hour": 18,
 		},
 		# --- Mill ---
 		{
@@ -191,6 +204,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(56, 39),
 			"lines": ["The wheel turns,\nthe flour falls.", "Mind the dust — it gets\neverywhere.", "I sing to the stones.\nThey listen better than people."],
 			"range": 0.0,
+			"morning_hour": 5,
+			"evening_hour": 18,
 		},
 		# --- Warehouse ---
 		{
@@ -200,6 +215,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(72, 25),
 			"lines": ["Don't touch the sacks.", "Every grain is counted.", "I see everything in here.\nRemember that."],
 			"range": 30.0,
+			"morning_hour": 8,
+			"evening_hour": 18,
 		},
 		{
 			"name": "Salim",
@@ -208,6 +225,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(70, 26),
 			"lines": ["Hauling, hauling,\nalways hauling.", "Rafiq counts twice. Then\nhe counts again.", "My back will give out\nbefore the harvest does."],
 			"range": 40.0,
+			"morning_hour": 7,
+			"evening_hour": 18,
 		},
 		{
 			"name": "Nura",
@@ -216,6 +235,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(74, 27),
 			"lines": ["The patrol schedule is\non the barracks wall.", "I've memorized every\nguard rotation, you know.", "Don't ask how I know\nwhen they switch."],
 			"range": 40.0,
+			"morning_hour": 8,
+			"evening_hour": 18,
 		},
 		# --- Barracks ---
 		{
@@ -225,6 +246,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(71, 35),
 			"lines": ["State your business.", "I keep this village safe.\nDon't get in my way.", "If you fall foul of the law,\nyou'll meet me again."],
 			"range": 25.0,
+			"morning_hour": 6,
+			"evening_hour": 18,
 		},
 		# --- Church ---
 		{
@@ -234,6 +257,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(30, 9),
 			"lines": ["Peace be upon you,\ntraveler.", "All are welcome at this altar,\nwhatever their tongue.", "Light a candle, rest your feet."],
 			"range": 0.0,
+			"morning_hour": 6,
+			"evening_hour": 18,
 		},
 		# --- Workshop ---
 		{
@@ -243,6 +268,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(40, 8),
 			"lines": ["Mind the kiln —\nshe bites.", "Geometry is the language\nof beauty.", "I have books, if you want\nto see worlds beyond this one."],
 			"range": 12.0,
+			"morning_hour": 8,
+			"evening_hour": 18,
 		},
 		# --- School ---
 		{
@@ -252,6 +279,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(59, 8),
 			"lines": ["The chalkboard remembers\nwhat children forget.", "Every script tells a story.\nWhich is yours?", "Sit. Learn. There is time."],
 			"range": 0.0,
+			"morning_hour": 7,
+			"evening_hour": 18,
 		},
 		# --- Tailor ---
 		{
@@ -261,6 +290,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(43, 16),
 			"lines": ["Mind the pins on the floor.", "I work best by lamplight.", "Take this scrap, if it suits.\nWinter is coming."],
 			"range": 0.0,
+			"morning_hour": 8,
+			"evening_hour": 18,
 		},
 		# --- Fields ---
 		{
@@ -270,6 +301,8 @@ func _spawn_npcs() -> void:
 			"pos": Vector2(26, 36),
 			"lines": ["Idle hands aren't welcome\nin my fields.", "Pick up a sickle or move on.", "The acequia waits for no one."],
 			"range": 60.0,
+			"morning_hour": 6,
+			"evening_hour": 18,
 		},
 	]
 
@@ -345,19 +378,21 @@ func _spawn_npcs() -> void:
 		npc.dialogue_lines = base_lines
 		npc.set_meta("relationship_profile", NpcRelationships.get_profile(display_name))
 		npc.set_meta("dwelling_profile", NpcRelationships.get_dwelling_for_npc(display_name))
-		npc.wander_range = cfg["range"]
+		npc.set_schedule(int(cfg.get("morning_hour", 7)), int(cfg.get("evening_hour", 18)))
 		npc.set_home_position(_resolve_npc_home_position(display_name, cfg["pos"]))
+		if cfg.has("work_pos"):
+			npc.set_work_position(cfg["work_pos"])
 
 		npcs_node.add_child(npc)
 
-func _update_npc_schedules(cycle_progress: float) -> void:
+func _update_npc_schedules(cycle_progress: float, snap_to_schedule := false) -> void:
 	var npcs_node := get_node_or_null("NPCs")
 	if npcs_node == null:
 		return
 
 	for npc in npcs_node.get_children():
 		if npc.has_method("set_day_cycle_progress"):
-			npc.set_day_cycle_progress(cycle_progress)
+			npc.set_day_cycle_progress(cycle_progress, snap_to_schedule)
 
 func _create_zone_labels() -> void:
 	## Creates location name labels positioned at the center of each zone.
@@ -515,7 +550,8 @@ func _on_dev_time_selected(index: int) -> void:
 
 	var progress := day_timer / DAY_DURATION_SECONDS
 	_update_day_night(progress)
-	_update_npc_schedules(progress)
+	var should_snap_to_home := hour >= 21 or hour < 6
+	_update_npc_schedules(progress, should_snap_to_home)
 
 func _create_inv_panel_style() -> StyleBoxFlat:
 	var style = StyleBoxFlat.new()

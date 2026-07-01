@@ -1,18 +1,19 @@
 extends CharacterBody2D
 
 @export var wander_speed := 40.0
-@export var wander_range := 80.0
 @export var entity_name := "Villager"
 @export var npc_display_name := "Villager"
 @export var npc_profession := "Villager"
 @export var dialogue_lines: PackedStringArray = ["Welcome to the market!", "Fine goods for sale!"]
 @export var night_return_speed_multiplier := 1.25
-@export var night_hours_start := 21
-@export var night_hours_end := 6
+@export var morning_depart_hour := 7
+@export var evening_return_hour := 18
+@export var work_position := Vector2.ZERO
 
 var home_position := Vector2.ZERO
 var has_home_position := false
-var is_night_schedule_active := false
+var has_work_position := false
+var daily_schedule: Array[Vector2] = []
 
 var sprite: Sprite2D
 var label: Label
@@ -28,16 +29,17 @@ var nearby_player: Node2D = null
 var active_dialogue: PackedStringArray = []
 
 var start_position := Vector2.ZERO
-var wander_target := Vector2.ZERO
-var wander_timer := 0.0
 var is_player_nearby := false
 var showing_dialogue := false
 var current_line := 0
 
 func _ready() -> void:
 	start_position = global_position
-	home_position = start_position
-	_pick_new_wander_target()
+	if not has_home_position:
+		home_position = start_position
+		has_home_position = true
+	if work_position != Vector2.ZERO:
+		has_work_position = true
 
 	sprite = get_node_or_null("Sprite2D")
 	label = get_node_or_null("Label")
@@ -58,32 +60,22 @@ func _ready() -> void:
 		interaction_area.body_entered.connect(_on_interaction_area_body_entered)
 		interaction_area.body_exited.connect(_on_interaction_area_body_exited)
 
+	_generate_daily_schedule()
+	if daily_schedule.size() > 0:
+		_current_scheduled_position = daily_schedule[0]
+
 func _physics_process(delta: float) -> void:
 	if showing_dialogue:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		return
 
-	if is_night_schedule_active and has_home_position:
-		var home_dir := home_position - global_position
-		if home_dir.length() < 5.0:
-			velocity = Vector2.ZERO
-		else:
-			velocity = home_dir.normalized() * wander_speed * night_return_speed_multiplier
-			if sprite:
-				sprite.flip_h = velocity.x < 0
+	# Move towards the scheduled position for the current hour
+	var scheduled_position = _get_scheduled_position()
+	var dir = (scheduled_position - global_position)
 
-		move_and_slide()
-		return
-
-	wander_timer -= delta
-	if wander_timer <= 0:
-		_pick_new_wander_target()
-
-	var dir = (wander_target - global_position)
-	if dir.length() < 5:
+	if dir.length() < 5.0:
 		velocity = Vector2.ZERO
-		_pick_new_wander_target()
 	else:
 		velocity = dir.normalized() * wander_speed
 		if sprite:
@@ -95,24 +87,44 @@ func set_home_position(pos: Vector2) -> void:
 	home_position = pos
 	has_home_position = true
 
-func set_day_cycle_progress(cycle_progress: float) -> void:
+func set_schedule(morning_hour: int, evening_hour: int) -> void:
+	morning_depart_hour = clampi(morning_hour, 0, 23)
+	evening_return_hour = clampi(evening_hour, 0, 23)
+	_generate_daily_schedule()
+
+func set_work_position(pos: Vector2) -> void:
+	work_position = pos
+	has_work_position = true
+	_generate_daily_schedule()
+
+func _generate_daily_schedule() -> void:
+	daily_schedule.clear()
+	var work_location := work_position if has_work_position else home_position
+	
+	for hour in range(24):
+		if hour >= morning_depart_hour and hour < evening_return_hour:
+			# Day hours: go to work location
+			daily_schedule.append(work_location)
+		else:
+			# Night hours: at home
+			daily_schedule.append(home_position)
+
+func _get_scheduled_position() -> Vector2:
+	return _current_scheduled_position
+
+var _current_scheduled_position := Vector2.ZERO
+
+func set_day_cycle_progress(cycle_progress: float, snap_to_schedule := false) -> void:
 	var hour: int = int(cycle_progress * 24.0) % 24
-	var should_be_night := hour >= night_hours_start or hour < night_hours_end
-	if should_be_night == is_night_schedule_active:
-		return
 
-	is_night_schedule_active = should_be_night
-	if not is_night_schedule_active:
-		# Reset wander timing so NPCs immediately resume daytime roaming.
-		wander_timer = 0.0
-		_pick_new_wander_target()
+	if hour < daily_schedule.size():
+		_current_scheduled_position = daily_schedule[hour]
+	else:
+		_current_scheduled_position = start_position
 
-func _pick_new_wander_target() -> void:
-	wander_target = start_position + Vector2(
-		randf_range(-wander_range, wander_range),
-		randf_range(-wander_range, wander_range)
-	)
-	wander_timer = randf_range(2.0, 5.0)
+	if snap_to_schedule:
+		global_position = _current_scheduled_position
+		velocity = Vector2.ZERO
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and is_player_nearby:
