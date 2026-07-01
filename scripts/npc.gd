@@ -86,6 +86,7 @@ func _physics_process(delta: float) -> void:
 func set_home_position(pos: Vector2) -> void:
 	home_position = pos
 	has_home_position = true
+	_generate_daily_schedule()
 
 func set_schedule(morning_hour: int, evening_hour: int) -> void:
 	morning_depart_hour = clampi(morning_hour, 0, 23)
@@ -99,7 +100,7 @@ func set_work_position(pos: Vector2) -> void:
 
 func _generate_daily_schedule() -> void:
 	daily_schedule.clear()
-	var work_location := work_position if has_work_position else home_position
+	var work_location := _get_work_location()
 	
 	for hour in range(24):
 		if hour >= morning_depart_hour and hour < evening_return_hour:
@@ -108,6 +109,11 @@ func _generate_daily_schedule() -> void:
 		else:
 			# Night hours: at home
 			daily_schedule.append(home_position)
+
+func _get_work_location() -> Vector2:
+	if has_work_position:
+		return work_position
+	return start_position
 
 func _get_scheduled_position() -> Vector2:
 	return _current_scheduled_position
@@ -125,6 +131,22 @@ func set_day_cycle_progress(cycle_progress: float, snap_to_schedule := false) ->
 	if snap_to_schedule:
 		global_position = _current_scheduled_position
 		velocity = Vector2.ZERO
+
+func get_schedule_debug_status(hour: int) -> String:
+	var work_location := _get_work_location()
+	var in_work_window := hour >= morning_depart_hour and hour < evening_return_hour
+	var planned_state := "WORK" if in_work_window else "HOME"
+
+	var target_state := "HOME"
+	if _current_scheduled_position.distance_to(work_location) < 1.0:
+		target_state = "WORK"
+	elif _current_scheduled_position.distance_to(home_position) >= 1.0:
+		target_state = "TRANSIT"
+
+	var same_work_and_home := work_location.distance_to(home_position) < 1.0
+	var display_hour := clampi(hour, 0, 23)
+	var merged_flag := " [work=home]" if same_work_and_home else ""
+	return "%02d %s (%s): plan=%s target=%s [m%02d-e%02d]%s" % [display_hour, npc_display_name, npc_profession, planned_state, target_state, morning_depart_hour, evening_return_hour, merged_flag]
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and is_player_nearby:

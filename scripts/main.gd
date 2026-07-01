@@ -5,6 +5,7 @@ extends Node2D
 
 const TILE_SIZE := MapGenerator.TILE_SIZE
 const DAY_DURATION_SECONDS := 300.0
+const ENABLE_SCHEDULE_DEBUG_UI := OS.is_debug_build()
 
 var map_generator: MapGenerator
 var player: CharacterBody2D
@@ -12,6 +13,7 @@ var camera: Camera2D
 var inventory_label: Label
 var drop_hint_label: Label
 var time_label: Label
+var schedule_debug_label: Label
 var zone_labels: Dictionary = {}
 var dev_time_dropdown: OptionButton
 var day_night_overlay: ColorRect
@@ -28,6 +30,7 @@ const _TOLL_INTERVAL := 1.1  # seconds between strikes
 func _ready() -> void:
 	map_generator = MapGenerator.new()
 	map_generator.build(self)
+	_setup_web_keyboard_focus()
 	_create_zone_labels()
 	_create_player()
 	_place_pickup_items()
@@ -39,6 +42,42 @@ func _ready() -> void:
 	_update_day_night(0.0)
 	_update_npc_schedules(0.0, true)
 
+func _setup_web_keyboard_focus() -> void:
+	if not OS.has_feature("web"):
+		return
+
+	# Keep keyboard focus on the canvas in web exports so movement keys are
+	# captured even after clicking around the page UI.
+	JavaScriptBridge.eval("""
+		(function () {
+			if (window.__mm_input_focus_setup) {
+				return;
+			}
+			window.__mm_input_focus_setup = true;
+
+			var canvas = document.getElementById('canvas') || document.querySelector('canvas');
+			if (!canvas) {
+				return;
+			}
+
+			if (canvas.tabIndex < 0) {
+				canvas.tabIndex = 0;
+			}
+
+			var focusCanvas = function () {
+				try {
+					canvas.focus({ preventScroll: true });
+				} catch (e) {
+					canvas.focus();
+				}
+			};
+
+			window.addEventListener('pointerdown', focusCanvas, { passive: true });
+			window.addEventListener('keydown', focusCanvas, { passive: true });
+			focusCanvas();
+		})();
+	""")
+
 func _process(delta: float) -> void:
 	day_timer += delta
 	while day_timer >= DAY_DURATION_SECONDS:
@@ -48,6 +87,8 @@ func _process(delta: float) -> void:
 	_update_day_night(progress)
 	_tick_bell(progress, delta)
 	_update_npc_schedules(progress)
+	if ENABLE_SCHEDULE_DEBUG_UI:
+		_update_schedule_debug_ui(progress)
 
 ## Hours that trigger the bell and how many times it strikes.
 ## 1 = dawn, 2 = noon, 3 = evening, 4 = night — player can count to place themselves in the day.
@@ -82,19 +123,10 @@ func _setup_bell_audio() -> void:
 	bell_player.name = "BellPlayer"
 	bell_player.bus = "Master"
 	bell_player.volume_db = 0.0
-	var stream = AudioStreamWAV.new()
-	var file = FileAccess.open("res://audio/bell_toll.wav", FileAccess.READ)
-	if file == null:
+	var stream := load("res://audio/bell_toll.wav") as AudioStream
+	if stream == null:
 		push_warning("bell_toll.wav not found — bell audio disabled")
 		return
-	# Skip 44-byte PCM WAV header, read raw 16-bit mono samples
-	file.seek(44)
-	var raw: PackedByteArray = file.get_buffer(file.get_length() - 44)
-	file.close()
-	stream.format = AudioStreamWAV.FORMAT_16_BITS
-	stream.stereo = false
-	stream.mix_rate = 44100
-	stream.data = raw
 	bell_player.stream = stream
 	add_child(bell_player)
 
@@ -124,8 +156,8 @@ func _create_player() -> void:
 	camera.zoom = Vector2(3, 3)
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 8.0
-	camera.make_current()
 	player.add_child(camera)
+	camera.make_current.call_deferred()
 	player.inventory_changed.connect(_on_inventory_changed)
 
 func _spawn_npcs() -> void:
@@ -324,7 +356,7 @@ func _spawn_npcs() -> void:
 
 		var sprite = Sprite2D.new()
 		sprite.name = "Sprite2D"
-		sprite.texture = ImageTexture.create_from_image(Image.load_from_file(cfg["texture"]))
+		sprite.texture = TextureCache.get_texture(cfg["texture"])
 		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		npc.add_child(sprite)
 
@@ -500,10 +532,22 @@ func _create_ui() -> void:
 	time_label.add_theme_constant_override("shadow_offset_y", 1)
 	canvas.add_child(time_label)
 
+	if ENABLE_SCHEDULE_DEBUG_UI:
+		schedule_debug_label = Label.new()
+		schedule_debug_label.name = "ScheduleDebugLabel"
+		schedule_debug_label.position = Vector2(10, 78)
+		schedule_debug_label.add_theme_font_size_override("font_size", 11)
+		schedule_debug_label.add_theme_color_override("font_color", Color(0.85, 1.0, 0.85, 0.95))
+		schedule_debug_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.8))
+		schedule_debug_label.add_theme_constant_override("shadow_offset_x", 1)
+		schedule_debug_label.add_theme_constant_override("shadow_offset_y", 1)
+		canvas.add_child(schedule_debug_label)
+
 	dev_time_dropdown = OptionButton.new()
 	dev_time_dropdown.name = "DevTimeDropdown"
 	dev_time_dropdown.position = Vector2(10, 56)
 	dev_time_dropdown.custom_minimum_size = Vector2(210, 0)
+	dev_time_dropdown.focus_mode = Control.FOCUS_NONE
 	for i in range(_DEV_TIME_PRESETS.size()):
 		var preset = _DEV_TIME_PRESETS[i]
 		dev_time_dropdown.add_item(preset["label"], i)
@@ -546,12 +590,37 @@ func _on_dev_time_selected(index: int) -> void:
 
 	var preset = _DEV_TIME_PRESETS[index]
 	var hour: int = int(preset["hour"])
+	_set_time_to_hour(hour)
+
+func _set_time_to_hour(hour: int) -> void:
 	day_timer = (float(hour) / 24.0) * DAY_DURATION_SECONDS
 
 	var progress := day_timer / DAY_DURATION_SECONDS
 	_update_day_night(progress)
 	var should_snap_to_home := hour >= 21 or hour < 6
 	_update_npc_schedules(progress, should_snap_to_home)
+	if ENABLE_SCHEDULE_DEBUG_UI:
+		_update_schedule_debug_ui(progress)
+
+func _update_schedule_debug_ui(cycle_progress: float) -> void:
+	if not ENABLE_SCHEDULE_DEBUG_UI:
+		return
+
+	if schedule_debug_label == null:
+		return
+
+	var npcs_node := get_node_or_null("NPCs")
+	if npcs_node == null:
+		schedule_debug_label.text = "Schedule Debug: NPC node missing"
+		return
+
+	var hour: int = int(cycle_progress * 24.0) % 24
+	var lines := PackedStringArray(["Schedule Debug (%02d:00)" % [hour]])
+	for npc in npcs_node.get_children():
+		if npc.has_method("get_schedule_debug_status"):
+			lines.append(npc.get_schedule_debug_status(hour))
+
+	schedule_debug_label.text = "\n".join(lines)
 
 func _create_inv_panel_style() -> StyleBoxFlat:
 	var style = StyleBoxFlat.new()
@@ -631,6 +700,33 @@ func _on_inventory_changed() -> void:
 		drop_hint_label.text = "Q to drop last item"
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		var key_event := event as InputEventKey
+		if key_event.pressed and not key_event.echo:
+			var preset_index := -1
+			match key_event.keycode:
+				KEY_1:
+					preset_index = 0
+				KEY_2:
+					preset_index = 1
+				KEY_3:
+					preset_index = 2
+				KEY_4:
+					preset_index = 3
+				KEY_5:
+					preset_index = 4
+				KEY_6:
+					preset_index = 5
+				KEY_7:
+					preset_index = 6
+			if preset_index >= 0 and preset_index < _DEV_TIME_PRESETS.size():
+				if dev_time_dropdown != null:
+					dev_time_dropdown.select(preset_index)
+				var preset = _DEV_TIME_PRESETS[preset_index]
+				_set_time_to_hour(int(preset["hour"]))
+				get_viewport().set_input_as_handled()
+				return
+
 	if event.is_action_pressed("drop_item") and player != null:
 		var inv = player.get_inventory()
 		if inv.size() > 0:
