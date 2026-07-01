@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal inventory_changed
 
-const SPEED = 200.0
+const SPEED = 100.0
 
 var inventory: Array[String] = []
 var sprite: Sprite2D

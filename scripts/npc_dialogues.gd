@@ -2,7 +2,7 @@ class_name NpcDialogues
 extends RefCounted
 
 static func configure(npc: CharacterBody2D) -> void:
-	match npc.npc_name:
+	match npc.npc_profession:
 		"Merchant":
 			npc.greeting_items = "Well now, let me see\nwhat you've got there..."
 			npc.greeting_all = "By the Eastern stars!\nYou carry quite the collection!"

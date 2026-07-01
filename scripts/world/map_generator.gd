@@ -62,6 +62,7 @@ func build(parent: Node2D) -> void:
 	_draw_map(parent)
 	_place_market_stalls(parent)
 	_place_decorations(parent)
+	_place_building_furniture(parent)
 	_build_walls(parent)
 	_build_water_collisions(parent)
 	_build_manor_gate(parent)
@@ -293,6 +294,112 @@ func _place_decorations(parent: Node2D) -> void:
 	ws.shape = wc
 	wb.add_child(ws)
 	decor.add_child(wb)
+
+func _place_building_furniture(parent: Node2D) -> void:
+	var barrel_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/barrel.png"))
+	var crate_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/crate.png"))
+	var altar_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_altar.png"))
+	var pew_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_pew.png"))
+	var bell_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_bell.png"))
+	var kiln_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_kiln.png"))
+	var workbench_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_workbench.png"))
+	var blackboard_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_blackboard.png"))
+	var desk_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_desk.png"))
+	var cutting_table_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_cutting_table.png"))
+	var forge_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_forge.png"))
+	var anvil_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_anvil.png"))
+	var tool_rack_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_tool_rack.png"))
+	var shelf_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_shelf.png"))
+	var grain_bin_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_grain_bin.png"))
+	var bed_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_bed.png"))
+	var footlocker_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_footlocker.png"))
+	var dining_table_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_dining_table.png"))
+	var chair_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_chair.png"))
+	var cabinet_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_cabinet.png"))
+
+	var furnishings := Node2D.new()
+	furnishings.name = "BuildingFurniture"
+	parent.add_child(furnishings)
+
+	# Church: altar, pew rows, and bell beside the altar.
+	_add_furniture_item(furnishings, altar_tex, Vector2(29, 6), Vector2(26, 10), Vector2(0, 2))
+	for pew_row in [8, 9, 10]:
+		_add_furniture_item(furnishings, pew_tex, Vector2(27, pew_row), Vector2(40, 6), Vector2(4, 2))
+	_add_furniture_item(furnishings, bell_tex, Vector2(32, 6), Vector2(10, 14), Vector2(2, 3))
+
+	# Workshop: kiln block, long bench, and storage stack.
+	_add_furniture_item(furnishings, kiln_tex, Vector2(37, 6), Vector2(18, 18), Vector2(3, 3))
+	_add_furniture_item(furnishings, workbench_tex, Vector2(39, 6), Vector2(40, 8), Vector2(4, 2))
+	_add_decor_col(furnishings, crate_tex, Vector2(42 * TILE_SIZE, 9 * TILE_SIZE), Vector2(12, 12))
+
+	# School: blackboard and desk rows.
+	_add_furniture_item(furnishings, blackboard_tex, Vector2(58, 6), Vector2.ZERO, Vector2.ZERO)
+	for row in [7, 8, 9]:
+		_add_furniture_item(furnishings, desk_tex, Vector2(57, row), Vector2(18, 6), Vector2(3, 2))
+		_add_furniture_item(furnishings, desk_tex, Vector2(60, row), Vector2(18, 6), Vector2(3, 2))
+
+	# Tailor: cutting table and colored cloth rolls.
+	_add_furniture_item(furnishings, cutting_table_tex, Vector2(42, 15), Vector2(36, 8), Vector2(4, 2))
+	_add_decor(furnishings, crate_tex, Vector2(42 * TILE_SIZE + 2, 17 * TILE_SIZE))
+
+	# Blacksmith: forge, anvil, and tool rack.
+	_add_furniture_item(furnishings, forge_tex, Vector2(37, 37), Vector2(20, 20), Vector2(3, 3))
+	_add_furniture_item(furnishings, anvil_tex, Vector2(39, 39), Vector2(12, 8), Vector2(2, 2))
+	_add_furniture_item(furnishings, tool_rack_tex, Vector2(41, 37), Vector2(12, 42), Vector2(2, 3))
+
+	# Mill: grain bins and stacked sacks.
+	_add_furniture_item(furnishings, grain_bin_tex, Vector2(54, 37), Vector2(14, 14), Vector2(3, 3))
+	_add_furniture_item(furnishings, grain_bin_tex, Vector2(56, 37), Vector2(14, 14), Vector2(3, 3))
+	_add_decor_col(furnishings, barrel_tex, Vector2(59 * TILE_SIZE, 37 * TILE_SIZE), Vector2(10, 12))
+	_add_decor_col(furnishings, barrel_tex, Vector2(59 * TILE_SIZE, 41 * TILE_SIZE), Vector2(10, 12))
+
+	# Warehouse: shelving aisles and stock clusters.
+	_add_furniture_item(furnishings, shelf_tex, Vector2(69, 22), Vector2(8, 88), Vector2(2, 4))
+	_add_furniture_item(furnishings, shelf_tex, Vector2(72, 22), Vector2(8, 88), Vector2(2, 4))
+	_add_furniture_item(furnishings, shelf_tex, Vector2(75, 22), Vector2(8, 88), Vector2(2, 4))
+	_add_decor_col(furnishings, crate_tex, Vector2(68 * TILE_SIZE, 22 * TILE_SIZE), Vector2(12, 12))
+	_add_decor_col(furnishings, crate_tex, Vector2(76 * TILE_SIZE, 22 * TILE_SIZE), Vector2(12, 12))
+	_add_decor_col(furnishings, barrel_tex, Vector2(68 * TILE_SIZE, 28 * TILE_SIZE), Vector2(10, 12))
+	_add_decor_col(furnishings, barrel_tex, Vector2(76 * TILE_SIZE, 28 * TILE_SIZE), Vector2(10, 12))
+
+	# Barracks: bunk rows and central footlocker.
+	_add_furniture_item(furnishings, bed_tex, Vector2(69, 32), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, bed_tex, Vector2(69, 33), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, bed_tex, Vector2(72, 32), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, bed_tex, Vector2(72, 33), Vector2(24, 10), Vector2(3, 2))
+	_add_furniture_item(furnishings, footlocker_tex, Vector2(71, 36), Vector2(16, 8), Vector2(2, 2))
+
+	# Manor house: dining table, chairs, and side cabinet.
+	_add_furniture_item(furnishings, dining_table_tex, Vector2(8, 25), Vector2(36, 14), Vector2(4, 2))
+	_add_furniture_item(furnishings, chair_tex, Vector2(8, 25), Vector2(8, 8), Vector2(1, 1))
+	_add_furniture_item(furnishings, chair_tex, Vector2(11, 25), Vector2(8, 8), Vector2(1, 1))
+	_add_furniture_item(furnishings, chair_tex, Vector2(8, 26), Vector2(8, 8), Vector2(1, 1))
+	_add_furniture_item(furnishings, chair_tex, Vector2(11, 26), Vector2(8, 8), Vector2(1, 1))
+	_add_furniture_item(furnishings, cabinet_tex, Vector2(8, 28), Vector2(48, 6), Vector2(4, 1))
+
+func _add_furniture_item(
+	parent: Node2D,
+	tex: Texture2D,
+	tile_pos: Vector2,
+	col_size: Vector2,
+	col_offset: Vector2
+) -> void:
+	var px_pos := tile_pos * TILE_SIZE
+	_add_decor(parent, tex, px_pos)
+
+	if col_size == Vector2.ZERO:
+		return
+
+	var body := StaticBody2D.new()
+	body.position = px_pos + col_offset + col_size * 0.5
+	body.collision_layer = 4
+	body.collision_mask = 0
+	var shape := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = col_size
+	shape.shape = rect
+	body.add_child(shape)
+	parent.add_child(body)
 
 func _add_decor(parent: Node2D, tex: Texture2D, pos: Vector2) -> void:
 	var spr := Sprite2D.new()
