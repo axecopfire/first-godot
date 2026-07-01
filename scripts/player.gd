@@ -17,9 +17,8 @@ func _ready() -> void:
 	_load_player_texture()
 
 func _load_player_texture() -> void:
-	if FileAccess.file_exists("res://textures/player.png"):
-		var img = Image.load_from_file("res://textures/player.png")
-		player_texture = ImageTexture.create_from_image(img)
+	player_texture = TextureCache.player
+	if player_texture:
 		_update_sprite_frame()
 
 func _physics_process(delta: float) -> void:

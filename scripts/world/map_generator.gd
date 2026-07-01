@@ -91,7 +91,18 @@ func get_zone_at(world_pos: Vector2) -> String:
 	return ""
 
 func _load_textures() -> void:
-	var tiles_img := Image.load_from_file("res://textures/tiles.png")
+	# Load tiles texture from the global cache
+	var tiles_texture = TextureCache.tiles
+	if tiles_texture == null:
+		push_error("TextureCache.tiles is null - textures may not have been generated")
+		return
+	
+	# Extract individual tile textures from the cached tile sheet
+	var tiles_img = tiles_texture.get_image()
+	if tiles_img == null:
+		push_error("Could not extract image from cached tiles texture")
+		return
+		
 	for i in range(TILE_COUNT):
 		var tile_img := Image.create(TILE_SIZE, TILE_SIZE, false, Image.FORMAT_RGBA8)
 		tile_img.blit_rect(tiles_img, Rect2i(i * TILE_SIZE, 0, TILE_SIZE, TILE_SIZE), Vector2i.ZERO)
@@ -240,7 +251,7 @@ func _draw_map(parent: Node2D) -> void:
 			map_node.add_child(sprite)
 
 func _place_market_stalls(parent: Node2D) -> void:
-	var stall_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/market_stall.png"))
+	var stall_tex = TextureCache.get_texture("res://textures/market_stall.png")
 	var stall_positions := [
 		Vector2(40, 22), Vector2(54, 22),
 		Vector2(40, 30), Vector2(54, 30),
@@ -270,10 +281,10 @@ func _place_market_stalls(parent: Node2D) -> void:
 		stalls.add_child(body)
 
 func _place_decorations(parent: Node2D) -> void:
-	var barrel_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/barrel.png"))
-	var crate_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/crate.png"))
-	var well_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/well.png"))
-	var fountain_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/fountain.png"))
+	var barrel_tex = TextureCache.get_texture("res://textures/barrel.png")
+	var crate_tex = TextureCache.get_texture("res://textures/crate.png")
+	var well_tex = TextureCache.get_texture("res://textures/well.png")
+	var fountain_tex = TextureCache.get_texture("res://textures/fountain.png")
 
 	var decor := Node2D.new()
 	decor.name = "Decorations"
@@ -323,26 +334,26 @@ func _place_decorations(parent: Node2D) -> void:
 	decor.add_child(wb)
 
 func _place_building_furniture(parent: Node2D) -> void:
-	var barrel_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/barrel.png"))
-	var crate_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/crate.png"))
-	var altar_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_altar.png"))
-	var pew_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_pew.png"))
-	var bell_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_bell.png"))
-	var kiln_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_kiln.png"))
-	var workbench_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_workbench.png"))
-	var blackboard_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_blackboard.png"))
-	var desk_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_desk.png"))
-	var cutting_table_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_cutting_table.png"))
-	var forge_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_forge.png"))
-	var anvil_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_anvil.png"))
-	var tool_rack_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_tool_rack.png"))
-	var shelf_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_shelf.png"))
-	var grain_bin_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_grain_bin.png"))
-	var bed_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_bed.png"))
-	var footlocker_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_footlocker.png"))
-	var dining_table_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_dining_table.png"))
-	var chair_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_chair.png"))
-	var cabinet_tex := ImageTexture.create_from_image(Image.load_from_file("res://textures/furniture_cabinet.png"))
+	var barrel_tex = TextureCache.get_texture("res://textures/barrel.png")
+	var crate_tex = TextureCache.get_texture("res://textures/crate.png")
+	var altar_tex = TextureCache.get_texture("res://textures/furniture_altar.png")
+	var pew_tex = TextureCache.get_texture("res://textures/furniture_pew.png")
+	var bell_tex = TextureCache.get_texture("res://textures/furniture_bell.png")
+	var kiln_tex = TextureCache.get_texture("res://textures/furniture_kiln.png")
+	var workbench_tex = TextureCache.get_texture("res://textures/furniture_workbench.png")
+	var blackboard_tex = TextureCache.get_texture("res://textures/furniture_blackboard.png")
+	var desk_tex = TextureCache.get_texture("res://textures/furniture_desk.png")
+	var cutting_table_tex = TextureCache.get_texture("res://textures/furniture_cutting_table.png")
+	var forge_tex = TextureCache.get_texture("res://textures/furniture_forge.png")
+	var anvil_tex = TextureCache.get_texture("res://textures/furniture_anvil.png")
+	var tool_rack_tex = TextureCache.get_texture("res://textures/furniture_tool_rack.png")
+	var shelf_tex = TextureCache.get_texture("res://textures/furniture_shelf.png")
+	var grain_bin_tex = TextureCache.get_texture("res://textures/furniture_grain_bin.png")
+	var bed_tex = TextureCache.get_texture("res://textures/furniture_bed.png")
+	var footlocker_tex = TextureCache.get_texture("res://textures/furniture_footlocker.png")
+	var dining_table_tex = TextureCache.get_texture("res://textures/furniture_dining_table.png")
+	var chair_tex = TextureCache.get_texture("res://textures/furniture_chair.png")
+	var cabinet_tex = TextureCache.get_texture("res://textures/furniture_cabinet.png")
 
 	var furnishings := Node2D.new()
 	furnishings.name = "BuildingFurniture"
