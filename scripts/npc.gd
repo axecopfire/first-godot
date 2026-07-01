@@ -14,6 +14,7 @@ var home_position := Vector2.ZERO
 var has_home_position := false
 var has_work_position := false
 var daily_schedule: Array[Vector2] = []
+var brain: NpcBrain
 
 var sprite: Sprite2D
 var label: Label
@@ -32,6 +33,10 @@ var start_position := Vector2.ZERO
 var is_player_nearby := false
 var showing_dialogue := false
 var current_line := 0
+var _cycle_progress := 0.0
+var _world_state: Dictionary = {}
+var _last_action := ""
+var _last_action_reason := ""
 
 func _ready() -> void:
 	start_position = global_position
@@ -64,6 +69,8 @@ func _ready() -> void:
 	if daily_schedule.size() > 0:
 		_current_scheduled_position = daily_schedule[0]
 
+	brain = NpcBrain.new(abs(hash(entity_name)))
+
 func _physics_process(delta: float) -> void:
 	if showing_dialogue:
 		velocity = Vector2.ZERO
@@ -71,6 +78,23 @@ func _physics_process(delta: float) -> void:
 		return
 
 	# Move towards the scheduled position for the current hour
+	if brain != null:
+		var decision := brain.tick(
+			delta,
+			_cycle_progress,
+			global_position,
+			home_position,
+			_get_work_location(),
+			morning_depart_hour,
+			evening_return_hour,
+			_world_state,
+			is_player_nearby,
+			_has_friendly_tie()
+		)
+		_current_scheduled_position = decision.get("target", _current_scheduled_position)
+		_last_action = str(decision.get("action", ""))
+		_last_action_reason = str(decision.get("reason", ""))
+
 	var scheduled_position = _get_scheduled_position()
 	var dir = (scheduled_position - global_position)
 
@@ -120,13 +144,16 @@ func _get_scheduled_position() -> Vector2:
 
 var _current_scheduled_position := Vector2.ZERO
 
-func set_day_cycle_progress(cycle_progress: float, snap_to_schedule := false) -> void:
-	var hour: int = int(cycle_progress * 24.0) % 24
+func set_day_cycle_progress(cycle_progress: float, snap_to_schedule := false, world_state: Dictionary = {}) -> void:
+	_cycle_progress = cycle_progress
+	_world_state = world_state
 
-	if hour < daily_schedule.size():
-		_current_scheduled_position = daily_schedule[hour]
-	else:
-		_current_scheduled_position = start_position
+	if brain == null:
+		var hour: int = int(cycle_progress * 24.0) % 24
+		if hour < daily_schedule.size():
+			_current_scheduled_position = daily_schedule[hour]
+		else:
+			_current_scheduled_position = start_position
 
 	if snap_to_schedule:
 		global_position = _current_scheduled_position
@@ -146,7 +173,21 @@ func get_schedule_debug_status(hour: int) -> String:
 	var same_work_and_home := work_location.distance_to(home_position) < 1.0
 	var display_hour := clampi(hour, 0, 23)
 	var merged_flag := " [work=home]" if same_work_and_home else ""
-	return "%02d %s (%s): plan=%s target=%s [m%02d-e%02d]%s" % [display_hour, npc_display_name, npc_profession, planned_state, target_state, morning_depart_hour, evening_return_hour, merged_flag]
+	var action_fragment := ""
+	if _last_action != "":
+		action_fragment = " action=%s" % [_last_action]
+	if _last_action_reason != "":
+		action_fragment += " %s" % [_last_action_reason]
+	return "%02d %s (%s): plan=%s target=%s [m%02d-e%02d]%s%s" % [display_hour, npc_display_name, npc_profession, planned_state, target_state, morning_depart_hour, evening_return_hour, merged_flag, action_fragment]
+
+func _has_friendly_tie() -> bool:
+	if not has_meta("relationship_profile"):
+		return false
+	var profile = get_meta("relationship_profile")
+	if typeof(profile) != TYPE_DICTIONARY:
+		return false
+	var friendly: Dictionary = profile.get("friendly", {})
+	return friendly.has("npc")
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and is_player_nearby:

@@ -90,18 +90,8 @@ func _process(delta: float) -> void:
 	if ENABLE_SCHEDULE_DEBUG_UI:
 		_update_schedule_debug_ui(progress)
 
-## Hours that trigger the bell and how many times it strikes.
-## 1 = dawn, 2 = noon, 3 = evening, 4 = night — player can count to place themselves in the day.
-const _BELL_SCHEDULE: Dictionary = { 6: 1, 12: 2, 18: 3, 21: 4 }
-const _DEV_TIME_PRESETS := [
-	{"label": "Set Time: Dawn (06:00)", "hour": 6},
-	{"label": "Set Time: Morning (09:00)", "hour": 9},
-	{"label": "Set Time: Noon (12:00)", "hour": 12},
-	{"label": "Set Time: Afternoon (15:00)", "hour": 15},
-	{"label": "Set Time: Evening (18:00)", "hour": 18},
-	{"label": "Set Time: Night (21:00)", "hour": 21},
-	{"label": "Set Time: Midnight (00:00)", "hour": 0},
-]
+const _BELL_SCHEDULE: Dictionary = ScheduleConfig.BELL_SCHEDULE
+const _DEV_TIME_PRESETS = ScheduleConfig.DEV_TIME_PRESETS
 
 func _tick_bell(progress: float, delta: float) -> void:
 	var current_hour: int = int(progress * 24.0) % 24
@@ -410,7 +400,8 @@ func _spawn_npcs() -> void:
 		npc.dialogue_lines = base_lines
 		npc.set_meta("relationship_profile", NpcRelationships.get_profile(display_name))
 		npc.set_meta("dwelling_profile", NpcRelationships.get_dwelling_for_npc(display_name))
-		npc.set_schedule(int(cfg.get("morning_hour", 7)), int(cfg.get("evening_hour", 18)))
+		var work_hours := ScheduleConfig.get_npc_work_hours(display_name)
+		npc.set_schedule(int(work_hours["morning_hour"]), int(work_hours["evening_hour"]))
 		npc.set_home_position(_resolve_npc_home_position(display_name, cfg["pos"]))
 		if cfg.has("work_pos"):
 			npc.set_work_position(cfg["work_pos"])
@@ -421,10 +412,22 @@ func _update_npc_schedules(cycle_progress: float, snap_to_schedule := false) -> 
 	var npcs_node := get_node_or_null("NPCs")
 	if npcs_node == null:
 		return
+	var hour: int = int(cycle_progress * 24.0) % 24
+	var market_zone: Rect2i = MapGenerator.ZONES.get("market", Rect2i(0, 0, 1, 1))
+	var social_hub_position := Vector2(
+		(market_zone.position.x + market_zone.size.x * 0.5) * TILE_SIZE,
+		(market_zone.position.y + market_zone.size.y * 0.5) * TILE_SIZE
+	)
+	var world_state := {
+		"hour": hour,
+		"day": day_number,
+		"bell_pending_tolls": _pending_tolls,
+		"social_hub_position": social_hub_position,
+	}
 
 	for npc in npcs_node.get_children():
 		if npc.has_method("set_day_cycle_progress"):
-			npc.set_day_cycle_progress(cycle_progress, snap_to_schedule)
+			npc.set_day_cycle_progress(cycle_progress, snap_to_schedule, world_state)
 
 func _create_zone_labels() -> void:
 	## Creates location name labels positioned at the center of each zone.
