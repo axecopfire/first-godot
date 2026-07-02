@@ -99,6 +99,18 @@ func _physics_process(delta: float) -> void:
 		_last_goal = str(decision.get("goal", ""))
 		_last_plan_step = str(decision.get("plan_step", ""))
 
+		if decision.get("new_decision", false):
+			NpcTelemetry.log_decision({
+				"npc_id": entity_name,
+				"profession": npc_profession,
+				"day": int(_world_state.get("day", 1)),
+				"hour": int(_cycle_progress * 24.0) % 24,
+				"active_goal": _last_goal,
+				"routine": _last_action,
+				"trigger": str(decision.get("trigger", "cooldown_expired")),
+				"rationale": _last_action_reason,
+			})
+
 	var scheduled_position = _get_scheduled_position()
 	var dir = (scheduled_position - global_position)
 

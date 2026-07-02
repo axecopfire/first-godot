@@ -26,6 +26,10 @@ var _goap_cached_world_key := ""
 var _goap_cached_goal := ""
 var _last_socialized_hour := -99
 
+## Telemetry: set true for one tick whenever _reconsider_action_goap runs.
+var _decision_made_this_tick := false
+var _last_trigger := ""
+
 func _init(seed_value: int = 0) -> void:
 	if seed_value == 0:
 		seed_value = int(Time.get_unix_time_from_system())
@@ -44,6 +48,7 @@ func tick(
 	is_player_nearby: bool,
 	has_friendly_tie: bool
 ) -> Dictionary:
+	_decision_made_this_tick = false
 	_decision_cooldown = maxf(_decision_cooldown - delta, 0.0)
 	if _decision_cooldown <= 0.0:
 		_reconsider_action_goap(
@@ -67,6 +72,8 @@ func tick(
 		"reason": _current_reason,
 		"goal": _goap_current_goal,
 		"plan_step": _goap_current_plan[0] if _goap_current_plan.size() > 0 else "",
+		"new_decision": _decision_made_this_tick,
+		"trigger": _last_trigger,
 	}
 
 func _reconsider_action_goap(
@@ -110,6 +117,8 @@ func _reconsider_action_goap(
 		_current_target = home_position
 		_current_reason = "goap h%02d goal=%s fallback=GoHome" % [hour, _goap_current_goal]
 		_decision_cooldown = _rng.randf_range(4.5, 8.5)
+		_decision_made_this_tick = true
+		_last_trigger = "cooldown_expired"
 		return
 
 	var step_name := _goap_current_plan[0]
@@ -118,6 +127,8 @@ func _reconsider_action_goap(
 	_current_target = _target_for_step(step_name, current_position, home_position, work_position, social_hub)
 	_current_reason = "goap h%02d goal=%s step=%s" % [hour, _goap_current_goal, step_name]
 	_decision_cooldown = _rng.randf_range(4.5, 8.5)
+	_decision_made_this_tick = true
+	_last_trigger = "cooldown_expired"
 
 func _init_goap_actions() -> void:
 	_goap_actions = [
