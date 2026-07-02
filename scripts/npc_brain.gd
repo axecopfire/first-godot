@@ -192,7 +192,7 @@ func _build_world_facts(
 	var at_home := current_position.distance_to(home_position) <= 8.0
 	var at_work := current_position.distance_to(work_position) <= 8.0
 	var at_social_hub := current_position.distance_to(social_hub) <= 8.0
-	var recently_socialized := abs(hour - _last_socialized_hour) <= 2
+	var recently_socialized: bool = abs(hour - _last_socialized_hour) <= 2
 
 	return {
 		"in_work_window": in_work_window,
