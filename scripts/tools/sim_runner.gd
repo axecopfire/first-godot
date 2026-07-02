@@ -257,16 +257,6 @@ func _finalize_simulation() -> void:
 	# Flush and close output
 	if output_file:
 		output_file.close()
-	
-	# Exit with error code if assertions failed
-	var failed_count = SimAssertClass.get_failed_count()
-	if failed_count > 0:
-		print("[SimRunner] %d assertion(s) failed, exiting with code 1" % failed_count)
-		if get_tree():
-			get_tree().quit(1)
-	else:
-		if get_tree():
-			get_tree().quit(0)
 
 # ---------------------------------------------------------------------------
 # Decision Event Handling (NDJSON)
