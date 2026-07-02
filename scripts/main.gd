@@ -4,9 +4,9 @@ extends Node2D
 ## NPCs, items, and HUD on top.
 
 const TILE_SIZE := MapGenerator.TILE_SIZE
-const DAY_DURATION_SECONDS := 300.0
 var ENABLE_SCHEDULE_DEBUG_UI := OS.is_debug_build()
 
+var world_state: WorldStateManager
 var map_generator: MapGenerator
 var player: CharacterBody2D
 var camera: Camera2D
@@ -17,17 +17,12 @@ var schedule_debug_label: Label
 var zone_labels: Dictionary = {}
 var dev_time_dropdown: OptionButton
 var day_night_overlay: ColorRect
-var day_number: int = 1
-var day_timer: float = 0.0
-
-## Bell-toll state
-var bell_player: AudioStreamPlayer
-var _last_bell_hour: int = -1
-var _pending_tolls: int = 0
-var _toll_cooldown: float = 0.0
-const _TOLL_INTERVAL := 1.1  # seconds between strikes
 
 func _ready() -> void:
+	world_state = WorldStateManager.new()
+	world_state.name = "WorldState"
+	add_child(world_state)
+	world_state.setup_bell_audio()
 	map_generator = MapGenerator.new()
 	map_generator.build(self)
 	_setup_web_keyboard_focus()
@@ -38,7 +33,6 @@ func _ready() -> void:
 	_setup_npc_dialogues()
 	_create_day_night_overlay()
 	_create_ui()
-	_setup_bell_audio()
 	_update_day_night(0.0)
 	_update_npc_schedules(0.0, true)
 
@@ -79,46 +73,14 @@ func _setup_web_keyboard_focus() -> void:
 	""")
 
 func _process(delta: float) -> void:
-	day_timer += delta
-	while day_timer >= DAY_DURATION_SECONDS:
-		day_timer -= DAY_DURATION_SECONDS
-		day_number += 1
-	var progress := day_timer / DAY_DURATION_SECONDS
+	world_state.tick(delta)
+	var progress := world_state.get_cycle_progress()
 	_update_day_night(progress)
-	_tick_bell(progress, delta)
 	_update_npc_schedules(progress)
 	if ENABLE_SCHEDULE_DEBUG_UI:
 		_update_schedule_debug_ui(progress)
 
-const _BELL_SCHEDULE: Dictionary = ScheduleConfig.BELL_SCHEDULE
 const _DEV_TIME_PRESETS = ScheduleConfig.DEV_TIME_PRESETS
-
-func _tick_bell(progress: float, delta: float) -> void:
-	var current_hour: int = int(progress * 24.0) % 24
-	if current_hour != _last_bell_hour:
-		_last_bell_hour = current_hour
-		if _BELL_SCHEDULE.has(current_hour):
-			_pending_tolls += _BELL_SCHEDULE[current_hour]
-			_toll_cooldown = 0.0
-
-	if _pending_tolls > 0:
-		_toll_cooldown -= delta
-		if _toll_cooldown <= 0.0:
-			bell_player.play()
-			_pending_tolls -= 1
-			_toll_cooldown = _TOLL_INTERVAL
-
-func _setup_bell_audio() -> void:
-	bell_player = AudioStreamPlayer.new()
-	bell_player.name = "BellPlayer"
-	bell_player.bus = "Master"
-	bell_player.volume_db = 0.0
-	var stream := load("res://audio/bell_toll.wav") as AudioStream
-	if stream == null:
-		push_warning("bell_toll.wav not found — bell audio disabled")
-		return
-	bell_player.stream = stream
-	add_child(bell_player)
 
 func _create_player() -> void:
 	player = CharacterBody2D.new()
@@ -412,22 +374,16 @@ func _update_npc_schedules(cycle_progress: float, snap_to_schedule := false) -> 
 	var npcs_node := get_node_or_null("NPCs")
 	if npcs_node == null:
 		return
-	var hour: int = int(cycle_progress * 24.0) % 24
 	var market_zone: Rect2i = MapGenerator.ZONES.get("market", Rect2i(0, 0, 1, 1))
 	var social_hub_position := Vector2(
 		(market_zone.position.x + market_zone.size.x * 0.5) * TILE_SIZE,
 		(market_zone.position.y + market_zone.size.y * 0.5) * TILE_SIZE
 	)
-	var world_state := {
-		"hour": hour,
-		"day": day_number,
-		"bell_pending_tolls": _pending_tolls,
-		"social_hub_position": social_hub_position,
-	}
+	var world_state_dict := world_state.get_world_state(social_hub_position)
 
 	for npc in npcs_node.get_children():
 		if npc.has_method("set_day_cycle_progress"):
-			npc.set_day_cycle_progress(cycle_progress, snap_to_schedule, world_state)
+			npc.set_day_cycle_progress(cycle_progress, snap_to_schedule, world_state_dict)
 
 func _create_zone_labels() -> void:
 	## Creates location name labels positioned at the center of each zone.
@@ -579,13 +535,7 @@ func _update_day_night(cycle_progress: float) -> void:
 		day_night_overlay.color = Color(0.08, 0.12, 0.25, night_alpha)
 
 	if time_label != null:
-		time_label.text = "Day %d | %s" % [day_number, _format_clock_time(cycle_progress)]
-
-func _format_clock_time(cycle_progress: float) -> String:
-	var total_minutes: int = int(floor(cycle_progress * 24.0 * 60.0))
-	var hours: int = int(total_minutes / 60) % 24
-	var minutes: int = total_minutes % 60
-	return "%02d:%02d" % [hours, minutes]
+		time_label.text = "Day %d | %s" % [world_state.day_number, world_state.format_clock_time()]
 
 func _on_dev_time_selected(index: int) -> void:
 	if index < 0 or index >= _DEV_TIME_PRESETS.size():
@@ -596,9 +546,9 @@ func _on_dev_time_selected(index: int) -> void:
 	_set_time_to_hour(hour)
 
 func _set_time_to_hour(hour: int) -> void:
-	day_timer = (float(hour) / 24.0) * DAY_DURATION_SECONDS
+	world_state.set_time_to_hour(hour)
 
-	var progress := day_timer / DAY_DURATION_SECONDS
+	var progress := world_state.get_cycle_progress()
 	_update_day_night(progress)
 	var should_snap_to_home := hour >= 21 or hour < 6
 	_update_npc_schedules(progress, should_snap_to_home)
