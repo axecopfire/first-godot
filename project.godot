@@ -72,6 +72,7 @@ drop_item={
 [autoload]
 
 TextureCache="*res://scripts/texture_cache.gd"
+NpcTelemetry="*res://scripts/npc_telemetry.gd"
 
 [rendering]
 
