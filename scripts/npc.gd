@@ -37,6 +37,8 @@ var _cycle_progress := 0.0
 var _world_state: Dictionary = {}
 var _last_action := ""
 var _last_action_reason := ""
+var _last_goal := ""
+var _last_plan_step := ""
 
 func _ready() -> void:
 	start_position = global_position
@@ -94,6 +96,8 @@ func _physics_process(delta: float) -> void:
 		_current_scheduled_position = decision.get("target", _current_scheduled_position)
 		_last_action = str(decision.get("action", ""))
 		_last_action_reason = str(decision.get("reason", ""))
+		_last_goal = str(decision.get("goal", ""))
+		_last_plan_step = str(decision.get("plan_step", ""))
 
 	var scheduled_position = _get_scheduled_position()
 	var dir = (scheduled_position - global_position)
@@ -178,6 +182,10 @@ func get_schedule_debug_status(hour: int) -> String:
 		action_fragment = " action=%s" % [_last_action]
 	if _last_action_reason != "":
 		action_fragment += " %s" % [_last_action_reason]
+	if _last_goal != "":
+		action_fragment += " goal=%s" % [_last_goal]
+	if _last_plan_step != "":
+		action_fragment += " step=%s" % [_last_plan_step]
 	return "%02d %s (%s): plan=%s target=%s [m%02d-e%02d]%s%s" % [display_hour, npc_display_name, npc_profession, planned_state, target_state, morning_depart_hour, evening_return_hour, merged_flag, action_fragment]
 
 func _has_friendly_tie() -> bool:

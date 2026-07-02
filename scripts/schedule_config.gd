@@ -38,7 +38,7 @@ const NPC_WORK_HOURS: Dictionary = {
 }
 
 static func get_npc_work_hours(npc_name: String) -> Dictionary:
-	var hours := NPC_WORK_HOURS.get(npc_name, {})
+	var hours: Dictionary = NPC_WORK_HOURS.get(npc_name, {}) as Dictionary
 	return {
 		"morning_hour": int(hours.get("morning_hour", DEFAULT_MORNING_HOUR)),
 		"evening_hour": int(hours.get("evening_hour", DEFAULT_EVENING_HOUR)),

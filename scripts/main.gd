@@ -5,7 +5,7 @@ extends Node2D
 
 const TILE_SIZE := MapGenerator.TILE_SIZE
 const DAY_DURATION_SECONDS := 300.0
-const ENABLE_SCHEDULE_DEBUG_UI := OS.is_debug_build()
+var ENABLE_SCHEDULE_DEBUG_UI := OS.is_debug_build()
 
 var map_generator: MapGenerator
 var player: CharacterBody2D
