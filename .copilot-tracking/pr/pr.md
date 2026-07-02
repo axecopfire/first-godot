@@ -32,6 +32,12 @@ Implemented the core infrastructure for running day-cycle simulations headless, 
 - **Baseline Capture/Comparison**: Save/load NDJSON baseline for regression testing
 - **Headless Execution**: Works via `godot --headless --script scripts/tools/sim_runner.gd`
 
+**`scripts/tools/sim_runner_main.gd`** (new)
+- MainLoop-derived entry point for headless CLI execution
+- Integrates `SimRunner` with Godot's headless lifecycle
+- Properly handles exit codes for CI/CD integration
+- Executes via: `godot --headless --script res://scripts/tools/sim_runner_main.gd [args]`
+
 **`scripts/npc_brain.gd`** (modified)
 - Fixed type inference error in `_build_world_facts()` by explicitly typing `recently_socialized` as `bool`
 
@@ -46,8 +52,27 @@ Implemented the core infrastructure for running day-cycle simulations headless, 
 - [x] World state management via WorldStateManager
 - [x] Spatial service stubs for headless execution
 - [x] Simulation loop for full in-game days
-- [ ] Interactive mode with per-event pause (stubbed)
-- [ ] Verified headless execution (pending entry point refinement)
+- [x] Verified headless execution with MainLoop entry point
+- [ ] Interactive mode with per-event pause (stubbed for future)
+
+## Execution Test Results
+
+### Full Day Simulation (--seed 42 --day-count 1)
+- **Duration**: 300 seconds simulated (1 full day, 24 hours)
+- **Frames**: 18,751 frames executed
+- **NPCs Active**: 4 (baker_1, blacksmith_2, herbalist_3, merchant_4)
+- **Decision Events**: 141+ NDJSON events captured
+- **Event Distribution**:
+  - baker_1: 46 decisions
+  - blacksmith_2: 48 decisions
+  - herbalist_3: 47 decisions
+- **Exit Code**: 0 (success)
+- **Execution Time**: 0.3s
+
+### Baseline Capture/Comparison
+- **Baseline File**: Created successfully (53,456 bytes)
+- **Comparison**: Perfect match (no divergence detected)
+- **Exit Code**: 0 (success)
 
 ## Implementation Notes
 
