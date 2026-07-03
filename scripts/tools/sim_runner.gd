@@ -7,6 +7,7 @@
 ##   --day-count <count>        Number of in-game days to simulate
 ##   --config <path>            JSON config file with roster, world state, etc.
 ##   --output <path>            Write NDJSON output to file (default: stdout)
+##   --assert-script <path>     Script that runs assertions at decision points
 ##   --interactive              Pause at each decision event
 ##   --capture <baseline>       Save output to baseline file
 ##   --compare <baseline>       Compare output against baseline (default)
@@ -31,6 +32,7 @@ var config: Dictionary = {
 	"npc_roster": ["baker", "blacksmith", "herbalist"],
 	"world_state": {},
 	"output_file": null,  # null means stdout
+	"assert_script": null,
 	"interactive_mode": false,
 	"baseline_mode": null,  # "capture" or "compare"
 	"baseline_file": null,
@@ -40,6 +42,7 @@ var output_file: FileAccess = null
 var decision_events: Array = []
 var frame_count: int = 0
 var simulation_running: bool = false
+var assert_scenario: RefCounted = null
 
 # World components
 var world_state: Node = null  # WorldStateManager instance
@@ -51,19 +54,23 @@ var npcs: Dictionary = {}
 
 func _ready() -> void:
 	print("[SimRunner] Starting headless simulation...")
+	SimAssertClass.reset()
 	_parse_command_line_arguments()
 	_initialize_simulation()
 	_run_simulation()
 	_finalize_simulation()
+	var exit_code = SimAssertClass.exit_if_failed()
 	if get_tree():
-		get_tree().quit(0)
+		get_tree().quit(exit_code)
 
 # ---------------------------------------------------------------------------
 # Configuration and Setup
 # ---------------------------------------------------------------------------
 
 func _parse_command_line_arguments() -> void:
-	var args = OS.get_cmdline_args()
+	var args = OS.get_cmdline_user_args()
+	if args.is_empty():
+		args = OS.get_cmdline_args()
 	var i = 0
 	
 	while i < args.size():
@@ -86,6 +93,10 @@ func _parse_command_line_arguments() -> void:
 				i += 1
 				if i < args.size():
 					config.output_file = args[i]
+			"--assert-script":
+				i += 1
+				if i < args.size():
+					config.assert_script = args[i]
 			"--interactive":
 				config.interactive_mode = true
 			"--capture":
@@ -146,6 +157,7 @@ func _initialize_simulation() -> void:
 	
 	# Create and configure NPCs
 	_spawn_npcs_for_simulation()
+	_load_assert_scenario()
 	
 	# Apply initial world state overrides
 	if config.world_state.has("day_number"):
@@ -154,6 +166,28 @@ func _initialize_simulation() -> void:
 		world_state.set_time_to_hour(config.world_state.start_hour)
 	
 	print("[SimRunner] Simulation initialized with %d NPCs" % npcs.size())
+
+func _load_assert_scenario() -> void:
+	if not config.assert_script:
+		return
+
+	var loaded = load(config.assert_script)
+	if loaded == null:
+		print("[SimRunner] ERROR: Could not load assertion scenario: %s" % config.assert_script)
+		return
+
+	if not (loaded is Script):
+		print("[SimRunner] ERROR: Assertion scenario is not a script: %s" % config.assert_script)
+		return
+
+	assert_scenario = loaded.new()
+	if assert_scenario == null:
+		print("[SimRunner] ERROR: Could not instantiate assertion scenario: %s" % config.assert_script)
+		return
+
+	print("[SimRunner] Loaded assertion scenario: %s" % config.assert_script)
+	if assert_scenario.has_method("on_start"):
+		assert_scenario.on_start(self, SimAssertClass)
 
 func _spawn_npcs_for_simulation() -> void:
 	var social_hub_pos = Vector2(10, 10)  # Default; can be overridden
@@ -253,11 +287,17 @@ func _finalize_simulation() -> void:
 		print("[SimRunner] Baseline captured to: %s" % config.baseline_file)
 	elif config.baseline_mode == "compare":
 		_compare_baseline(config.baseline_file)
+
+	if assert_scenario and assert_scenario.has_method("on_complete"):
+		SimAssertClass.set_context({"phase": "on_complete"})
+		assert_scenario.on_complete(self, SimAssertClass)
 	
 	# Flush and close output
 	if output_file:
 		output_file.close()
 		output_file = null
+
+	assert_scenario = null
 	
 	# Clear NPC references so RefCounted brains are released
 	npcs.clear()
@@ -298,6 +338,16 @@ func emit_decision_event(event: Dictionary) -> void:
 	if config.interactive_mode:
 		_print_decision_summary(event)
 		_wait_for_input()
+
+	if assert_scenario and assert_scenario.has_method("on_decision"):
+		SimAssertClass.set_context({
+			"day": event.get("day", -1),
+			"hour": event.get("hour", -1),
+			"npc_id": event.get("npc_id", ""),
+			"goal": event.get("active_goal", ""),
+			"action": event.get("action", "")
+		})
+		assert_scenario.on_decision(event, self, SimAssertClass)
 
 func _print_decision_summary(event: Dictionary) -> void:
 	var summary = "[Day %d, Hour %d] NPC: %s (%s)\n" % [
