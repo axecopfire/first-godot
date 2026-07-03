@@ -272,8 +272,9 @@ func _update_npc_brain(npc_brain) -> void:
 			"trigger": decision.get("trigger", ""),
 			"action": decision.get("action", ""),
 			"reason": decision.get("reason", ""),
-			"goal_score": 0.0,  # TODO: Extract from brain if available
-			"challenger_score": 0.0,  # TODO: Extract from brain if available
+			"goal_score": float(decision.get("goal_score", 0.0)),
+			"challenger_score": float(decision.get("challenger_score", 0.0)),
+			"hysteresis_decision": bool(decision.get("hysteresis_decision", false)),
 		}
 		emit_decision_event(event)
 		npc_data.last_decision = decision
