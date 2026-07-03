@@ -3,7 +3,7 @@
 ## This script serves as the MainLoop entry point for `godot --headless --script sim_runner_main.gd`
 ## It initializes and runs the simulation harness.
 
-extends MainLoop
+extends SceneTree
 
 var sim_runner: Node = null
 var should_exit: bool = false
@@ -12,6 +12,8 @@ var frame_count: int = 0
 
 func _initialize() -> void:
 	print("[SimRunnerMain] Initializing MainLoop...")
+	var SimAssertClass = preload("res://scripts/tools/sim_assert.gd")
+	SimAssertClass.reset()
 	# Load and create the simulator
 	var SimRunnerClass = preload("res://scripts/tools/sim_runner.gd")
 	sim_runner = SimRunnerClass.new()
@@ -39,12 +41,10 @@ func _run_simulation() -> void:
 		
 		# Check for assertion failures
 		var SimAssertClass = preload("res://scripts/tools/sim_assert.gd")
-		if SimAssertClass.get_failed_count() > 0:
-			exit_code = 1
-		else:
-			exit_code = 0
+		exit_code = SimAssertClass.exit_if_failed()
+		quit(exit_code)
 		
-		print("[SimRunnerMain] Simulation complete, exiting...")
+		print("[SimRunnerMain] Simulation complete, exiting with code %d..." % exit_code)
 		sim_runner.free()
 		sim_runner = null
 
