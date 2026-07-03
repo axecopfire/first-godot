@@ -45,5 +45,7 @@ func _run_simulation() -> void:
 			exit_code = 0
 		
 		print("[SimRunnerMain] Simulation complete, exiting...")
+		sim_runner.free()
+		sim_runner = null
 
 

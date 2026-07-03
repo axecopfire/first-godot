@@ -257,6 +257,15 @@ func _finalize_simulation() -> void:
 	# Flush and close output
 	if output_file:
 		output_file.close()
+		output_file = null
+	
+	# Clear NPC references so RefCounted brains are released
+	npcs.clear()
+	
+	# Free world state node (extends Node, requires explicit free in headless)
+	if world_state and is_instance_valid(world_state):
+		world_state.free()
+		world_state = null
 
 # ---------------------------------------------------------------------------
 # Decision Event Handling (NDJSON)
