@@ -8,6 +8,13 @@ const ROOT_RESTDAY := "PerformRestDay"
 const ROOT_SOCIAL := "PerformSocialWindow"
 
 const _MAX_RECURSION_DEPTH := 16
+const _MAX_EXPANSIONS := 32
+
+const REASON_OK := "ok"
+const REASON_UNKNOWN_TASK := "unknown_task"
+const REASON_NO_VALID_METHOD := "no_valid_method"
+const REASON_DEPTH_LIMIT_EXCEEDED := "depth_limit_exceeded"
+const REASON_EXPANSION_LIMIT_EXCEEDED := "expansion_limit_exceeded"
 
 const _PRIMITIVE_ACTIONS: Array[String] = [
 	"GoToWork",
@@ -18,8 +25,10 @@ const _PRIMITIVE_ACTIONS: Array[String] = [
 
 var _methods_by_task: Dictionary = {}
 
-func _init() -> void:
+func _init(methods_override: Dictionary = {}) -> void:
 	_methods_by_task = _build_default_library()
+	if not methods_override.is_empty():
+		_methods_by_task = methods_override.duplicate(true)
 
 func get_root_tasks() -> Array[String]:
 	return [ROOT_WORKDAY, ROOT_RESTDAY, ROOT_SOCIAL]
@@ -70,15 +79,26 @@ func validate_library() -> Dictionary:
 		"issues": issues,
 	}
 
-func decompose(root_task: String, context: Dictionary) -> Dictionary:
+func decompose(root_task: String, context: Dictionary, options: Dictionary = {}) -> Dictionary:
 	var primitives: Array[String] = []
 	var method_trace: Array[Dictionary] = []
-	var success := _decompose_task(root_task, context, primitives, method_trace, 0)
+	var bounds := _resolve_bounds(options)
+	var state := {
+		"expansion_count": 0,
+		"max_expansions": bounds["max_expansions"],
+		"max_depth": bounds["max_depth"],
+		"reason_code": REASON_OK,
+	}
+	var success := _decompose_task(root_task, context, primitives, method_trace, 0, state)
 	return {
 		"root": root_task,
 		"success": success,
 		"primitive_sequence": primitives,
 		"method_trace": method_trace,
+		"reason_code": str(state.get("reason_code", REASON_OK)),
+		"expansion_count": int(state.get("expansion_count", 0)),
+		"max_expansions": int(state.get("max_expansions", _MAX_EXPANSIONS)),
+		"max_depth": int(state.get("max_depth", _MAX_RECURSION_DEPTH)),
 	}
 
 func _decompose_task(
@@ -86,54 +106,90 @@ func _decompose_task(
 	context: Dictionary,
 	primitives: Array[String],
 	method_trace: Array[Dictionary],
-	depth: int
+	depth: int,
+	state: Dictionary
 ) -> bool:
-	if depth > _MAX_RECURSION_DEPTH:
+	if depth > int(state.get("max_depth", _MAX_RECURSION_DEPTH)):
+		state["reason_code"] = REASON_DEPTH_LIMIT_EXCEEDED
 		return false
 
+	var expansion_count := int(state.get("expansion_count", 0))
+	if expansion_count >= int(state.get("max_expansions", _MAX_EXPANSIONS)):
+		state["reason_code"] = REASON_EXPANSION_LIMIT_EXCEEDED
+		return false
+	state["expansion_count"] = expansion_count + 1
+
 	if task_name in _PRIMITIVE_ACTIONS:
+		state["reason_code"] = REASON_OK
 		primitives.append(task_name)
 		return true
 
 	var methods := methods_for_task(task_name)
 	if methods.is_empty():
+		state["reason_code"] = REASON_UNKNOWN_TASK
 		return false
 
-	for method in methods:
-		if not _method_applies(method, context):
-			continue
+	var candidates := _candidate_methods(methods, context)
+	if candidates.is_empty():
+		state["reason_code"] = REASON_NO_VALID_METHOD
+		return false
+
+	var last_reason := REASON_NO_VALID_METHOD
+	for method in candidates:
 
 		var primitive_checkpoint := primitives.size()
 		var trace_checkpoint := method_trace.size()
 		method_trace.append({
 			"task": task_name,
 			"method": str(method.get("name", "")),
+			"is_fallback": bool(method.get("is_fallback", false)),
 		})
 
 		var subtasks_raw: Array = method.get("subtasks", [])
 		var all_subtasks_ok := true
 		for subtask in subtasks_raw:
-			if not _decompose_task(subtask, context, primitives, method_trace, depth + 1):
+			if not _decompose_task(subtask, context, primitives, method_trace, depth + 1, state):
 				all_subtasks_ok = false
 				break
 
 		if all_subtasks_ok:
+			state["reason_code"] = REASON_OK
 			return true
+
+		last_reason = str(state.get("reason_code", REASON_NO_VALID_METHOD))
 
 		primitives.resize(primitive_checkpoint)
 		method_trace.resize(trace_checkpoint)
 
+	state["reason_code"] = last_reason
 	return false
 
 func _method_applies(method: Dictionary, context: Dictionary) -> bool:
-	if bool(method.get("is_fallback", false)):
-		return true
-
 	var conditions: Dictionary = method.get("conditions", {})
 	for key in conditions.keys():
 		if context.get(key, null) != conditions[key]:
 			return false
 	return true
+
+func _candidate_methods(methods: Array[Dictionary], context: Dictionary) -> Array[Dictionary]:
+	var applicable: Array[Dictionary] = []
+	var fallbacks: Array[Dictionary] = []
+	for method in methods:
+		if bool(method.get("is_fallback", false)):
+			fallbacks.append(method)
+			continue
+		if _method_applies(method, context):
+			applicable.append(method)
+
+	if not applicable.is_empty():
+		return applicable
+	return fallbacks
+
+func _resolve_bounds(options: Dictionary) -> Dictionary:
+	return {
+		"max_depth": int(options.get("max_depth", _MAX_RECURSION_DEPTH)),
+		"max_expansions": int(options.get("max_expansions", _MAX_EXPANSIONS)),
+	}
 
 func _build_default_library() -> Dictionary:
 	return {
