@@ -1,4 +1,4 @@
-## Smoke tests for NPC brain hybrid dispatch boundary (issue #10).
+## Smoke tests for NPC brain integrated dispatch flow (issue #11).
 extends SceneTree
 
 const NpcBrainClass = preload("res://scripts/npc_brain.gd")
@@ -66,12 +66,12 @@ func _test_primitive_precondition_failure_replans() -> void:
 	)
 
 	# Bell turns on (without nearby player) so SocializeAtHub precondition fails,
-	# forcing corrective GOAP replanning by precondition_failure trigger.
+	# forcing corrective reevaluation by precondition_failure trigger.
 	var corrected := _tick(brain, 21, {
 		"bell_pending_tolls": 1,
 	}, false, true)
 	SimAssert.assert_equal(str(corrected.get("trigger", "")), "precondition_failure",
-		"primitive precondition failure must trigger corrective GOAP reevaluation"
+		"primitive precondition failure must trigger corrective reevaluation"
 	)
 	SimAssert.assert_true(bool(corrected.get("new_decision", false)),
 		"precondition failure path must emit a new decision"

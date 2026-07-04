@@ -24,10 +24,7 @@ var _current_target := Vector2.ZERO
 var _current_reason := ""
 
 var _goap_actions: Array[Dictionary] = []
-var _goap_current_plan: Array[String] = []
 var _goap_current_goal := ""
-var _goap_cached_world_key := ""
-var _goap_cached_goal := ""
 var _htn_library
 var _htn_root := ""
 var _htn_method := ""
@@ -136,7 +133,6 @@ func _reconsider_action_goap(
 	var hard_reevaluation := _is_hard_reevaluation(trigger, facts)
 	var goal := _select_goal(facts, hard_reevaluation)
 	_goap_current_goal = goal.get("name", "")
-	_goap_current_plan = _plan_for_goal(facts, goal, _GOAP_MAX_DEPTH)
 
 	if _goap_current_goal == "":
 		_set_home_fallback(hour, home_position, trigger)
@@ -151,9 +147,6 @@ func _reconsider_action_goap(
 	if bool(htn_result.get("success", false)) and not htn_primitives.is_empty():
 		_htn_primitives = htn_primitives
 		_htn_method = _first_method_name(htn_result.get("method_trace", []))
-	elif not _goap_current_plan.is_empty():
-		_htn_primitives = _goap_current_plan.duplicate()
-		_htn_method = "fallback_goap_plan"
 	else:
 		_set_home_fallback(hour, home_position, trigger)
 		return
@@ -469,77 +462,6 @@ func _best_alternative_goal(goals: Array[Dictionary], goal_name: String) -> Dict
 			return goal
 	return {}
 
-func _plan_for_goal(initial_facts: Dictionary, goal: Dictionary, max_depth: int) -> Array[String]:
-	var desired: Dictionary = goal.get("desired", {})
-	if _goal_is_satisfied(initial_facts, desired):
-		return []
-
-	var open_list: Array[Dictionary] = [{
-		"facts": initial_facts,
-		"cost": 0.0,
-		"steps": PackedStringArray(),
-	}]
-	var visited: Dictionary = {}
-	var best_plan: Array[String] = []
-	var best_cost := INF
-
-	while not open_list.is_empty():
-		_open_list_sort(open_list)
-		var node: Dictionary = open_list.pop_front()
-		var node_facts: Dictionary = node.get("facts", {})
-		var node_cost: float = float(node.get("cost", INF))
-		var node_steps: PackedStringArray = node.get("steps", PackedStringArray())
-
-		if node_steps.size() > max_depth:
-			continue
-
-		if _goal_is_satisfied(node_facts, desired):
-			if node_cost < best_cost:
-				best_cost = node_cost
-				best_plan = _packed_steps_to_array(node_steps)
-			continue
-
-		if node_cost >= best_cost:
-			continue
-
-		for action in _goap_actions:
-			if not _matches_conditions(node_facts, action.get("pre", {})):
-				continue
-
-			var next_facts := _apply_effects(node_facts, action.get("effects", {}))
-			var next_steps := node_steps.duplicate()
-			next_steps.append(str(action.get("name", "")))
-			var next_cost := node_cost + float(action.get("cost", 1.0))
-			var signature := _world_signature(next_facts) + "|" + ",".join(next_steps)
-
-			if visited.has(signature) and float(visited[signature]) <= next_cost:
-				continue
-
-			visited[signature] = next_cost
-			open_list.append({
-				"facts": next_facts,
-				"cost": next_cost,
-				"steps": next_steps,
-			})
-
-	return best_plan
-
-func _open_list_sort(open_list: Array[Dictionary]) -> void:
-	open_list.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var ca := float(a.get("cost", INF))
-		var cb := float(b.get("cost", INF))
-		if ca == cb:
-			var sa: PackedStringArray = a.get("steps", PackedStringArray())
-			var sb: PackedStringArray = b.get("steps", PackedStringArray())
-			if sa.size() == sb.size():
-				return ",".join(sa) < ",".join(sb)
-			return sa.size() < sb.size()
-		return ca < cb
-	)
-
-func _goal_is_satisfied(facts: Dictionary, desired: Dictionary) -> bool:
-	return _matches_conditions(facts, desired)
-
 func _matches_conditions(facts: Dictionary, conditions: Dictionary) -> bool:
 	for key in conditions.keys():
 		if facts.get(key, null) != conditions[key]:
@@ -551,20 +473,6 @@ func _apply_effects(facts: Dictionary, effects: Dictionary) -> Dictionary:
 	for key in effects.keys():
 		merged[key] = effects[key]
 	return merged
-
-func _packed_steps_to_array(steps: PackedStringArray) -> Array[String]:
-	var materialized: Array[String] = []
-	for step in steps:
-		materialized.append(step)
-	return materialized
-
-func _world_signature(facts: Dictionary) -> String:
-	var keys := facts.keys()
-	keys.sort()
-	var parts := PackedStringArray()
-	for key in keys:
-		parts.append("%s=%s" % [str(key), str(facts[key])])
-	return "|".join(parts)
 
 func _goap_step_to_runtime_action(step_name: String) -> String:
 	match step_name:
