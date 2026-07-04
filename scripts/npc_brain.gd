@@ -25,6 +25,9 @@ var _goap_current_goal := ""
 var _goap_cached_world_key := ""
 var _goap_cached_goal := ""
 var _last_socialized_hour := -99
+var _last_goal_score := 0.0
+var _last_challenger_score := 0.0
+var _last_hysteresis_retained := false
 
 ## Telemetry: set true for one tick whenever _reconsider_action_goap runs.
 var _decision_made_this_tick := false
@@ -71,6 +74,9 @@ func tick(
 		"target": _current_target,
 		"reason": _current_reason,
 		"goal": _goap_current_goal,
+		"goal_score": _last_goal_score,
+		"challenger_score": _last_challenger_score,
+		"hysteresis_decision": _last_hysteresis_retained,
 		"plan_step": _goap_current_plan[0] if _goap_current_plan.size() > 0 else "",
 		"new_decision": _decision_made_this_tick,
 		"trigger": _last_trigger,
@@ -102,7 +108,8 @@ func _reconsider_action_goap(
 		has_friendly_tie
 	)
 
-	var goal := _select_goal(facts)
+	var hard_reevaluation := bool(facts.get("bell_pending", false)) and bool(facts.get("player_nearby", false))
+	var goal := _select_goal(facts, hard_reevaluation)
 	_goap_current_goal = goal.get("name", "")
 	var world_key := _world_signature(facts)
 
@@ -111,6 +118,15 @@ func _reconsider_action_goap(
 		_goap_cached_world_key = world_key
 		_goap_cached_goal = _goap_current_goal
 
+	if _goap_current_plan.is_empty() and _goal_is_satisfied(facts, goal.get("desired", {})):
+		_current_action = _goal_to_runtime_action(goal.get("name", ""))
+		_current_target = _target_for_goal(goal.get("name", ""), current_position, home_position, work_position, social_hub)
+		_current_reason = "goap h%02d goal=%s satisfied" % [hour, _goap_current_goal]
+		_decision_cooldown = _rng.randf_range(4.5, 8.5)
+		_decision_made_this_tick = true
+		_last_trigger = "hard_reevaluation" if hard_reevaluation else "cooldown_expired"
+		return
+
 	if _goap_current_plan.is_empty():
 		# Safety fallback inside GOAP-only mode: default to home if no plan is found.
 		_current_action = ACTION_HOME
@@ -118,7 +134,7 @@ func _reconsider_action_goap(
 		_current_reason = "goap h%02d goal=%s fallback=GoHome" % [hour, _goap_current_goal]
 		_decision_cooldown = _rng.randf_range(4.5, 8.5)
 		_decision_made_this_tick = true
-		_last_trigger = "cooldown_expired"
+		_last_trigger = "hard_reevaluation" if hard_reevaluation else "cooldown_expired"
 		return
 
 	var step_name := _goap_current_plan[0]
@@ -128,7 +144,7 @@ func _reconsider_action_goap(
 	_current_reason = "goap h%02d goal=%s step=%s" % [hour, _goap_current_goal, step_name]
 	_decision_cooldown = _rng.randf_range(4.5, 8.5)
 	_decision_made_this_tick = true
-	_last_trigger = "cooldown_expired"
+	_last_trigger = "hard_reevaluation" if hard_reevaluation else "cooldown_expired"
 
 func _init_goap_actions() -> void:
 	_goap_actions = [
@@ -205,49 +221,141 @@ func _build_world_facts(
 		"recently_socialized": recently_socialized,
 	}
 
-func _select_goal(facts: Dictionary) -> Dictionary:
+func _select_goal(facts: Dictionary, hard_reevaluation: bool = false) -> Dictionary:
+	var goals := _build_goap_goal_catalog(facts)
+	if goals.is_empty():
+		_last_goal_score = 0.0
+		_last_challenger_score = 0.0
+		_last_hysteresis_retained = false
+		return {}
+
+	var scored_goals: Array[Dictionary] = []
+	for goal in goals:
+		var raw_score := _score_goal(goal)
+		var effective_score := raw_score
+		if not hard_reevaluation and _goap_current_goal != "" and str(goal.get("name", "")) != _goap_current_goal:
+			effective_score -= float(goal.get("switch_penalty", 0.0))
+
+		var scored_goal: Dictionary = goal.duplicate(true)
+		scored_goal["score"] = raw_score
+		scored_goal["effective_score"] = effective_score
+		scored_goals.append(scored_goal)
+
+	_sort_scored_goals(scored_goals)
+
+	var current_goal := _find_goal_by_name(scored_goals, _goap_current_goal)
+	var challenger_goal := _best_alternative_goal(scored_goals, _goap_current_goal)
+
+	if hard_reevaluation or current_goal.is_empty():
+		var selected_goal: Dictionary = scored_goals[0]
+		_last_goal_score = float(selected_goal.get("effective_score", 0.0))
+		_last_challenger_score = float(challenger_goal.get("effective_score", 0.0))
+		_last_hysteresis_retained = false
+		return selected_goal
+
+	var current_score := float(current_goal.get("effective_score", 0.0))
+	var challenger_score := float(challenger_goal.get("effective_score", -INF))
+	var hysteresis_margin := float(current_goal.get("hysteresis", 0.0))
+
+	if challenger_goal.is_empty() or challenger_score <= current_score + hysteresis_margin:
+		_last_goal_score = current_score
+		_last_challenger_score = 0.0 if challenger_goal.is_empty() else challenger_score
+		_last_hysteresis_retained = not challenger_goal.is_empty() and challenger_score > current_score
+		return current_goal
+
+	_last_goal_score = challenger_score
+	_last_challenger_score = current_score
+	_last_hysteresis_retained = false
+	return challenger_goal
+
+func _build_goap_goal_catalog(facts: Dictionary) -> Array[Dictionary]:
 	var goals: Array[Dictionary] = []
-	if bool(facts.get("in_work_window", false)):
+	var in_work_window := bool(facts.get("in_work_window", false))
+	var at_work := bool(facts.get("at_work", false))
+	var at_home := bool(facts.get("at_home", false))
+	var bell_pending := bool(facts.get("bell_pending", false))
+	var player_nearby := bool(facts.get("player_nearby", false))
+	var has_friendly_tie := bool(facts.get("has_friendly_tie", false))
+	var recently_socialized := bool(facts.get("recently_socialized", false))
+
+	if in_work_window:
 		goals.append({
 			"name": "maintain_role_routine",
-			"priority": 4,
 			"desired": {"at_work": true},
+			"base": 3.0,
+			"urgency": 2.0 if not at_work else 1.0,
+			"social": 0.0,
+			"economic": 1.4,
+			"cooldown": 0.0,
+			"switch_penalty": 0.5,
+			"hysteresis": 0.6,
 		})
 	else:
 		goals.append({
 			"name": "maintain_rest_routine",
-			"priority": 4,
 			"desired": {"at_home": true},
+			"base": 3.0,
+			"urgency": 2.0 if not at_home else 1.0,
+			"social": 0.0,
+			"economic": 0.1,
+			"cooldown": 0.0,
+			"switch_penalty": 0.4,
+			"hysteresis": 0.5,
 		})
 
 	goals.append({
 		"name": "maintain_social_assimilation",
-		"priority": 3,
 		"desired": {"recently_socialized": true},
+		"base": 3.2,
+		"urgency": 1.8 if not recently_socialized else 0.4,
+		"social": 2.0 if has_friendly_tie and player_nearby else (1.2 if has_friendly_tie else (0.8 if player_nearby else 0.0)),
+		"economic": 0.2 if not in_work_window else 0.0,
+		"cooldown": 2.0 if recently_socialized else 0.0,
+		"switch_penalty": 0.4,
+		"hysteresis": 0.4,
 	})
 
-	if bool(facts.get("bell_pending", false)) and bool(facts.get("player_nearby", false)):
-		goals.append({
-			"name": "avoid_attention_spike",
-			"priority": 5,
-			"desired": {"at_home": true},
-		})
-	else:
-		goals.append({
-			"name": "avoid_attention_spike",
-			"priority": 2,
-			"desired": {"at_social_hub": false},
-		})
+	goals.append({
+		"name": "avoid_attention_spike",
+		"desired": {"at_home": true} if bell_pending and player_nearby else {"at_social_hub": false},
+		"base": 2.5,
+		"urgency": 4.0 if bell_pending and player_nearby else (1.2 if bell_pending else 0.2),
+		"social": 2.2 if bell_pending and player_nearby else (0.8 if player_nearby else 0.0),
+		"economic": -0.5 if in_work_window else 0.0,
+		"cooldown": 0.0,
+		"switch_penalty": 0.2,
+		"hysteresis": 0.2,
+	})
 
+	return goals
+
+func _score_goal(goal: Dictionary) -> float:
+	return float(goal.get("base", 0.0)) + float(goal.get("urgency", 0.0)) + float(goal.get("social", 0.0)) + float(goal.get("economic", 0.0)) - float(goal.get("cooldown", 0.0))
+
+func _sort_scored_goals(goals: Array[Dictionary]) -> void:
 	goals.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		var pa := int(a.get("priority", 0))
-		var pb := int(b.get("priority", 0))
-		if pa == pb:
-			return str(a.get("name", "")) < str(b.get("name", ""))
-		return pa > pb
+		var ea := float(a.get("effective_score", -INF))
+		var eb := float(b.get("effective_score", -INF))
+		if ea == eb:
+			var sa := float(a.get("score", -INF))
+			var sb := float(b.get("score", -INF))
+			if sa == sb:
+				return str(a.get("name", "")) < str(b.get("name", ""))
+			return sa > sb
+		return ea > eb
 	)
 
-	return goals[0]
+func _find_goal_by_name(goals: Array[Dictionary], goal_name: String) -> Dictionary:
+	for goal in goals:
+		if str(goal.get("name", "")) == goal_name:
+			return goal
+	return {}
+
+func _best_alternative_goal(goals: Array[Dictionary], goal_name: String) -> Dictionary:
+	for goal in goals:
+		if str(goal.get("name", "")) != goal_name:
+			return goal
+	return {}
 
 func _plan_for_goal(initial_facts: Dictionary, goal: Dictionary, max_depth: int) -> Array[String]:
 	var desired: Dictionary = goal.get("desired", {})
@@ -276,7 +384,7 @@ func _plan_for_goal(initial_facts: Dictionary, goal: Dictionary, max_depth: int)
 		if _goal_is_satisfied(node_facts, desired):
 			if node_cost < best_cost:
 				best_cost = node_cost
-				best_plan = Array(node_steps)
+				best_plan = _packed_steps_to_array(node_steps)
 			continue
 
 		if node_cost >= best_cost:
@@ -332,6 +440,12 @@ func _apply_effects(facts: Dictionary, effects: Dictionary) -> Dictionary:
 		merged[key] = effects[key]
 	return merged
 
+func _packed_steps_to_array(steps: PackedStringArray) -> Array[String]:
+	var materialized: Array[String] = []
+	for step in steps:
+		materialized.append(step)
+	return materialized
+
 func _world_signature(facts: Dictionary) -> String:
 	var keys := facts.keys()
 	keys.sort()
@@ -352,6 +466,34 @@ func _goap_step_to_runtime_action(step_name: String) -> String:
 			return ACTION_WANDER
 		_:
 			return ACTION_HOME
+
+func _goal_to_runtime_action(goal_name: String) -> String:
+	match goal_name:
+		"maintain_role_routine":
+			return ACTION_WORK
+		"maintain_rest_routine", "avoid_attention_spike":
+			return ACTION_HOME
+		"maintain_social_assimilation":
+			return ACTION_SOCIALIZE
+		_:
+			return ACTION_HOME
+
+func _target_for_goal(
+	goal_name: String,
+	current_position: Vector2,
+	home_position: Vector2,
+	work_position: Vector2,
+	social_hub: Vector2
+) -> Vector2:
+	match goal_name:
+		"maintain_role_routine":
+			return work_position
+		"maintain_rest_routine", "avoid_attention_spike":
+			return home_position
+		"maintain_social_assimilation":
+			return social_hub
+		_:
+			return current_position
 
 func _target_for_step(
 	step_name: String,
