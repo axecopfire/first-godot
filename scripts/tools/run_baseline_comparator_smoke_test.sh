@@ -2,14 +2,7 @@
 
 set -euo pipefail
 
-GODOT_PATH="${GODOT_PATH:-/Applications/Godot.app/Contents/MacOS/Godot}"
 THRESHOLD="${1:-1}"
-
-if [[ ! -x "$GODOT_PATH" ]]; then
-  echo "Error: Godot executable not found at $GODOT_PATH"
-  echo "Set GODOT_PATH to your Godot binary path and try again."
-  exit 1
-fi
 
 ARTIFACTS_ROOT="$PWD/.artifacts/baseline-comparator"
 RUN_ID="$(date +%Y%m%d-%H%M%S)"
@@ -36,7 +29,7 @@ EOF
 
 echo "Running capture mode..."
 set +e
-"$GODOT_PATH" --headless --path "$PWD" --script scripts/tools/baseline_regression_comparator.gd -- \
+godot --headless --path "$PWD" --script scripts/tools/baseline_regression_comparator.gd -- \
   --capture --input "$BASE_EVENTS" --baseline "$BASELINE_FILE" 2>&1 | tee "$CAPTURE_LOG"
 CAPTURE_EXIT=${PIPESTATUS[0]}
 set -e
@@ -51,7 +44,7 @@ fi
 echo
 echo "Running compare mode (threshold=$THRESHOLD)..."
 set +e
-"$GODOT_PATH" --headless --path "$PWD" --script scripts/tools/baseline_regression_comparator.gd -- \
+godot --headless --path "$PWD" --script scripts/tools/baseline_regression_comparator.gd -- \
   --input "$NEW_EVENTS" --baseline "$BASELINE_FILE" --threshold "$THRESHOLD" 2>&1 | tee "$COMPARE_LOG"
 COMPARE_EXIT=${PIPESTATUS[0]}
 set -e
