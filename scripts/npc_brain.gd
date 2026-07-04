@@ -1,6 +1,8 @@
 class_name NpcBrain
 extends RefCounted
 
+const HtnLibraryClass = preload("res://scripts/ai/htn_library.gd")
+
 const ACTION_HOME := "home"
 const ACTION_WORK := "work"
 const ACTION_SOCIALIZE := "socialize"
@@ -12,6 +14,8 @@ const GOAP_ACTION_SOCIALIZE_AT_HUB := "SocializeAtHub"
 const GOAP_ACTION_WANDER_LOCAL := "WanderLocal"
 
 const _GOAP_MAX_DEPTH := 3
+const _HTN_MAX_DEPTH := 16
+const _HTN_MAX_EXPANSIONS := 32
 
 var _rng := RandomNumberGenerator.new()
 var _decision_cooldown := 0.0
@@ -24,6 +28,12 @@ var _goap_current_plan: Array[String] = []
 var _goap_current_goal := ""
 var _goap_cached_world_key := ""
 var _goap_cached_goal := ""
+var _htn_library
+var _htn_root := ""
+var _htn_method := ""
+var _htn_primitives: Array[String] = []
+var _last_observed_hour := -1
+var _last_bell_pending := false
 var _last_socialized_hour := -99
 var _last_goal_score := 0.0
 var _last_challenger_score := 0.0
@@ -38,6 +48,7 @@ func _init(seed_value: int = 0) -> void:
 		seed_value = int(Time.get_unix_time_from_system())
 	_rng.seed = seed_value
 	_init_goap_actions()
+	_htn_library = HtnLibraryClass.new()
 
 func tick(
 	delta: float,
@@ -53,46 +64,7 @@ func tick(
 ) -> Dictionary:
 	_decision_made_this_tick = false
 	_decision_cooldown = maxf(_decision_cooldown - delta, 0.0)
-	if _decision_cooldown <= 0.0:
-		_reconsider_action_goap(
-			cycle_progress,
-			current_position,
-			home_position,
-			work_position,
-			morning_depart_hour,
-			evening_return_hour,
-			world_state,
-			is_player_nearby,
-			has_friendly_tie
-		)
 
-	if _current_action == ACTION_SOCIALIZE:
-		_last_socialized_hour = int(cycle_progress * 24.0) % 24
-
-	return {
-		"action": _current_action,
-		"target": _current_target,
-		"reason": _current_reason,
-		"goal": _goap_current_goal,
-		"goal_score": _last_goal_score,
-		"challenger_score": _last_challenger_score,
-		"hysteresis_decision": _last_hysteresis_retained,
-		"plan_step": _goap_current_plan[0] if _goap_current_plan.size() > 0 else "",
-		"new_decision": _decision_made_this_tick,
-		"trigger": _last_trigger,
-	}
-
-func _reconsider_action_goap(
-	cycle_progress: float,
-	current_position: Vector2,
-	home_position: Vector2,
-	work_position: Vector2,
-	morning_depart_hour: int,
-	evening_return_hour: int,
-	world_state: Dictionary,
-	is_player_nearby: bool,
-	has_friendly_tie: bool
-) -> void:
 	var hour: int = int(cycle_progress * 24.0) % 24
 	var social_hub: Vector2 = world_state.get("social_hub_position", (home_position + work_position) * 0.5)
 	var facts := _build_world_facts(
@@ -108,43 +80,183 @@ func _reconsider_action_goap(
 		has_friendly_tie
 	)
 
-	var hard_reevaluation := bool(facts.get("bell_pending", false)) and bool(facts.get("player_nearby", false))
+	var trigger := _classify_trigger(hour, facts)
+	if _should_replan_for_trigger(trigger):
+		_reconsider_action_goap(
+			hour,
+			current_position,
+			home_position,
+			work_position,
+			social_hub,
+			facts,
+			trigger
+		)
+	elif not _htn_primitives.is_empty():
+		_apply_executor_primitive(
+			_htn_primitives[0],
+			hour,
+			current_position,
+			home_position,
+			work_position,
+			social_hub,
+			"steady_state"
+		)
+
+	_last_observed_hour = hour
+	_last_bell_pending = bool(facts.get("bell_pending", false))
+
+	if _current_action == ACTION_SOCIALIZE:
+		_last_socialized_hour = int(cycle_progress * 24.0) % 24
+
+	return {
+		"action": _current_action,
+		"target": _current_target,
+		"reason": _current_reason,
+		"goal": _goap_current_goal,
+		"goal_score": _last_goal_score,
+		"challenger_score": _last_challenger_score,
+		"hysteresis_decision": _last_hysteresis_retained,
+		"plan_step": _htn_primitives[0] if _htn_primitives.size() > 0 else "",
+		"htn_root": _htn_root,
+		"method": _htn_method,
+		"primitive_sequence": _htn_primitives.duplicate(),
+		"new_decision": _decision_made_this_tick,
+		"trigger": _last_trigger,
+	}
+
+func _reconsider_action_goap(
+	hour: int,
+	current_position: Vector2,
+	home_position: Vector2,
+	work_position: Vector2,
+	social_hub: Vector2,
+	facts: Dictionary,
+	trigger: String
+) -> void:
+	var hard_reevaluation := _is_hard_reevaluation(trigger, facts)
 	var goal := _select_goal(facts, hard_reevaluation)
 	_goap_current_goal = goal.get("name", "")
-	var world_key := _world_signature(facts)
+	_goap_current_plan = _plan_for_goal(facts, goal, _GOAP_MAX_DEPTH)
 
-	if _goap_cached_world_key != world_key or _goap_cached_goal != _goap_current_goal or _goap_current_plan.is_empty():
-		_goap_current_plan = _plan_for_goal(facts, goal, _GOAP_MAX_DEPTH)
-		_goap_cached_world_key = world_key
-		_goap_cached_goal = _goap_current_goal
-
-	if _goap_current_plan.is_empty() and _goal_is_satisfied(facts, goal.get("desired", {})):
-		_current_action = _goal_to_runtime_action(goal.get("name", ""))
-		_current_target = _target_for_goal(goal.get("name", ""), current_position, home_position, work_position, social_hub)
-		_current_reason = "goap h%02d goal=%s satisfied" % [hour, _goap_current_goal]
-		_decision_cooldown = _rng.randf_range(4.5, 8.5)
-		_decision_made_this_tick = true
-		_last_trigger = "hard_reevaluation" if hard_reevaluation else "cooldown_expired"
+	if _goap_current_goal == "":
+		_set_home_fallback(hour, home_position, trigger)
 		return
 
-	if _goap_current_plan.is_empty():
-		# Safety fallback inside GOAP-only mode: default to home if no plan is found.
-		_current_action = ACTION_HOME
-		_current_target = home_position
-		_current_reason = "goap h%02d goal=%s fallback=GoHome" % [hour, _goap_current_goal]
-		_decision_cooldown = _rng.randf_range(4.5, 8.5)
-		_decision_made_this_tick = true
-		_last_trigger = "hard_reevaluation" if hard_reevaluation else "cooldown_expired"
+	_htn_root = _intent_to_htn_root(_goap_current_goal)
+	var htn_result: Dictionary = _htn_library.decompose(_htn_root, facts, {
+		"max_depth": _HTN_MAX_DEPTH,
+		"max_expansions": _HTN_MAX_EXPANSIONS,
+	})
+	var htn_primitives := _materialize_string_array(htn_result.get("primitive_sequence", []))
+	if bool(htn_result.get("success", false)) and not htn_primitives.is_empty():
+		_htn_primitives = htn_primitives
+		_htn_method = _first_method_name(htn_result.get("method_trace", []))
+	elif not _goap_current_plan.is_empty():
+		_htn_primitives = _goap_current_plan.duplicate()
+		_htn_method = "fallback_goap_plan"
+	else:
+		_set_home_fallback(hour, home_position, trigger)
 		return
 
-	var step_name := _goap_current_plan[0]
-	var mapped_action := _goap_step_to_runtime_action(step_name)
-	_current_action = mapped_action
-	_current_target = _target_for_step(step_name, current_position, home_position, work_position, social_hub)
-	_current_reason = "goap h%02d goal=%s step=%s" % [hour, _goap_current_goal, step_name]
+	var step_name := _htn_primitives[0]
+	_apply_executor_primitive(step_name, hour, current_position, home_position, work_position, social_hub, trigger)
 	_decision_cooldown = _rng.randf_range(4.5, 8.5)
 	_decision_made_this_tick = true
-	_last_trigger = "hard_reevaluation" if hard_reevaluation else "cooldown_expired"
+	_last_trigger = trigger
+
+func _classify_trigger(hour: int, facts: Dictionary) -> String:
+	var bell_pending := bool(facts.get("bell_pending", false))
+	var player_nearby := bool(facts.get("player_nearby", false))
+	if bell_pending and player_nearby:
+		return "hard_reevaluation"
+	if _last_observed_hour < 0:
+		return "bootstrap"
+	if not _htn_primitives.is_empty() and not _primitive_preconditions_satisfied(_htn_primitives[0], facts):
+		return "hard_reevaluation" if player_nearby else "precondition_failure"
+	if bell_pending and not _last_bell_pending:
+		return "bell_toll"
+	if hour != _last_observed_hour:
+		return "hour_change"
+	if _htn_primitives.is_empty():
+		return "plan_exhausted"
+	if _decision_cooldown <= 0.0:
+		return "cooldown_expired"
+	return ""
+
+func _should_replan_for_trigger(trigger: String) -> bool:
+	if trigger == "":
+		return false
+	if trigger == "cooldown_expired":
+		return _decision_cooldown <= 0.0
+	return true
+
+func _is_hard_reevaluation(trigger: String, facts: Dictionary) -> bool:
+	if trigger == "hard_reevaluation":
+		return true
+	if trigger == "precondition_failure":
+		return bool(facts.get("bell_pending", false)) and bool(facts.get("player_nearby", false))
+	return false
+
+func _primitive_preconditions_satisfied(step_name: String, facts: Dictionary) -> bool:
+	var action := _goap_action_by_name(step_name)
+	if action.is_empty():
+		return true
+	return _matches_conditions(facts, action.get("pre", {}))
+
+func _goap_action_by_name(action_name: String) -> Dictionary:
+	for action in _goap_actions:
+		if str(action.get("name", "")) == action_name:
+			return action
+	return {}
+
+func _intent_to_htn_root(intent: String) -> String:
+	if intent == "avoid_attention_spike":
+		return HtnLibraryClass.ROOT_RESTDAY
+	return _htn_library.root_for_intent(intent)
+
+func _materialize_string_array(raw_values: Array) -> Array[String]:
+	var typed: Array[String] = []
+	for value in raw_values:
+		typed.append(str(value))
+	return typed
+
+func _first_method_name(method_trace: Array) -> String:
+	if method_trace.is_empty():
+		return ""
+	if typeof(method_trace[0]) != TYPE_DICTIONARY:
+		return ""
+	return str(method_trace[0].get("method", ""))
+
+func _set_home_fallback(hour: int, home_position: Vector2, trigger: String) -> void:
+	_htn_primitives = []
+	_htn_root = ""
+	_htn_method = ""
+	_current_action = ACTION_HOME
+	_current_target = home_position
+	_current_reason = "dispatch h%02d goal=%s fallback=GoHome" % [hour, _goap_current_goal]
+	_decision_cooldown = _rng.randf_range(4.5, 8.5)
+	_decision_made_this_tick = true
+	_last_trigger = trigger
+
+func _apply_executor_primitive(
+	step_name: String,
+	hour: int,
+	current_position: Vector2,
+	home_position: Vector2,
+	work_position: Vector2,
+	social_hub: Vector2,
+	trigger: String
+) -> void:
+	_current_action = _goap_step_to_runtime_action(step_name)
+	_current_target = _target_for_step(step_name, current_position, home_position, work_position, social_hub)
+	_current_reason = "dispatch h%02d goal=%s root=%s method=%s step=%s" % [
+		hour,
+		_goap_current_goal,
+		_htn_root,
+		_htn_method,
+		step_name,
+	]
+	_last_trigger = trigger
 
 func _init_goap_actions() -> void:
 	_goap_actions = [

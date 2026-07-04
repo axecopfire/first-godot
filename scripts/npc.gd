@@ -108,6 +108,9 @@ func _physics_process(delta: float) -> void:
 				"active_goal": _last_goal,
 				"routine": _last_action,
 				"trigger": str(decision.get("trigger", "cooldown_expired")),
+				"htn_root": str(decision.get("htn_root", "")),
+				"method": str(decision.get("method", "")),
+				"primitive_sequence": decision.get("primitive_sequence", []),
 				"rationale": _last_action_reason,
 			})
 
