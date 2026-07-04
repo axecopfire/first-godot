@@ -3,10 +3,11 @@ extends Node2D
 ## Main scene — composes the village from `MapGenerator` and spawns the player,
 ## NPCs, items, and HUD on top.
 
+const WorldStateManagerScript = preload("res://scripts/world/world_state_manager.gd")
 const TILE_SIZE := MapGenerator.TILE_SIZE
 var ENABLE_SCHEDULE_DEBUG_UI := OS.is_debug_build()
 
-var world_state: WorldStateManager
+var world_state
 var map_generator: MapGenerator
 var player: CharacterBody2D
 var camera: Camera2D
@@ -19,7 +20,7 @@ var dev_time_dropdown: OptionButton
 var day_night_overlay: ColorRect
 
 func _ready() -> void:
-	world_state = WorldStateManager.new()
+	world_state = WorldStateManagerScript.new()
 	world_state.name = "WorldState"
 	add_child(world_state)
 	world_state.setup_bell_audio()
@@ -74,7 +75,7 @@ func _setup_web_keyboard_focus() -> void:
 
 func _process(delta: float) -> void:
 	world_state.tick(delta)
-	var progress := world_state.get_cycle_progress()
+	var progress: float = world_state.get_cycle_progress()
 	_update_day_night(progress)
 	_update_npc_schedules(progress)
 	if ENABLE_SCHEDULE_DEBUG_UI:
@@ -379,7 +380,7 @@ func _update_npc_schedules(cycle_progress: float, snap_to_schedule := false) -> 
 		(market_zone.position.x + market_zone.size.x * 0.5) * TILE_SIZE,
 		(market_zone.position.y + market_zone.size.y * 0.5) * TILE_SIZE
 	)
-	var world_state_dict := world_state.get_world_state(social_hub_position)
+	var world_state_dict: Dictionary = world_state.get_world_state(social_hub_position)
 
 	for npc in npcs_node.get_children():
 		if npc.has_method("set_day_cycle_progress"):
@@ -548,7 +549,7 @@ func _on_dev_time_selected(index: int) -> void:
 func _set_time_to_hour(hour: int) -> void:
 	world_state.set_time_to_hour(hour)
 
-	var progress := world_state.get_cycle_progress()
+	var progress: float = world_state.get_cycle_progress()
 	_update_day_night(progress)
 	var should_snap_to_home := hour >= 21 or hour < 6
 	_update_npc_schedules(progress, should_snap_to_home)
